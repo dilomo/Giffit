@@ -1,4 +1,7 @@
-﻿using System;
+﻿//    < Gifit - a animated gif creation tool >
+//    Copyright (C) 2021, Anton D. Kerezov, All rights reserved.
+
+using System;
 using System.Drawing;
 using System.Drawing.Imaging;
 using System.Drawing.Drawing2D;
@@ -75,6 +78,8 @@ namespace BumpKit
         {
             using (var gifStream = new MemoryStream())
             {
+                EncoderParameters ec = new EncoderParameters();
+                
                 img.Save(gifStream, ImageFormat.Gif);
                 if (_isFirstImage) // Steal the global color table info
                 {
@@ -170,7 +175,6 @@ namespace BumpKit
             }
 
             _stream.WriteByte(0); // Terminator
-
         }
 
         private void WriteByte(int value)

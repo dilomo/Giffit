@@ -1,3 +1,6 @@
+//    < Gifit - a animated gif creation tool >
+//    Copyright (C) 2021, Anton D. Kerezov, All rights reserved.
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -17,7 +20,7 @@ namespace BasicGiffer
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new BasicGiffer());
+            Application.Run(new Gifit());
         }
     }
 }

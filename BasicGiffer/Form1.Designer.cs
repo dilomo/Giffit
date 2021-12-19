@@ -1,7 +1,7 @@
 ﻿
 namespace BasicGiffer
 {
-    partial class BasicGiffer
+    partial class Gifit
     {
         /// <summary>
         ///  Required designer variable.
@@ -30,7 +30,7 @@ namespace BasicGiffer
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(BasicGiffer));
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Gifit));
             this.pbImage = new System.Windows.Forms.PictureBox();
             this.contextM = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.playToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,10 +68,9 @@ namespace BasicGiffer
             // pbImage
             // 
             this.pbImage.BackColor = System.Drawing.SystemColors.Window;
-            this.pbImage.BackgroundImage = global::BasicGiffer.Properties.Resources.drop2;
+            this.pbImage.BackgroundImage = global::Gifit.Properties.Resources.drop2;
             this.pbImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
-            this.pbImage.ContextMenuStrip = this.contextM;
             this.pbImage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbImage.Location = new System.Drawing.Point(3, 4);
             this.pbImage.Name = "pbImage";
@@ -283,7 +282,7 @@ namespace BasicGiffer
             this.btnPlay.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnPlay.Enabled = false;
             this.btnPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPlay.Image = global::BasicGiffer.Properties.Resources.play__Custom_;
+            this.btnPlay.Image = global::Gifit.Properties.Resources.play__Custom_;
             this.btnPlay.Location = new System.Drawing.Point(300, 3);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(44, 38);
@@ -297,7 +296,7 @@ namespace BasicGiffer
             this.btnStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStop.Enabled = false;
             this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnStop.Image = global::BasicGiffer.Properties.Resources.stop__Custom_;
+            this.btnStop.Image = global::Gifit.Properties.Resources.stop__Custom_;
             this.btnStop.Location = new System.Drawing.Point(350, 3);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(44, 38);
@@ -340,7 +339,7 @@ namespace BasicGiffer
             this.btnLoop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnLoop.Enabled = false;
             this.btnLoop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLoop.Image = global::BasicGiffer.Properties.Resources.loop__Custom_;
+            this.btnLoop.Image = global::Gifit.Properties.Resources.loop__Custom_;
             this.btnLoop.Location = new System.Drawing.Point(400, 3);
             this.btnLoop.Name = "btnLoop";
             this.btnLoop.Size = new System.Drawing.Size(44, 38);
@@ -350,7 +349,6 @@ namespace BasicGiffer
             // 
             // tbFrames
             // 
-            this.tbFrames.ContextMenuStrip = this.contextM;
             this.tbFrames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbFrames.Enabled = false;
             this.tbFrames.Location = new System.Drawing.Point(3, 388);
@@ -382,7 +380,7 @@ namespace BasicGiffer
             this.ofd.RestoreDirectory = true;
             this.ofd.Title = "Import Images";
             // 
-            // BasicGiffer
+            // Gifit
             // 
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
@@ -394,7 +392,7 @@ namespace BasicGiffer
             this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(1920, 1200);
             this.MinimumSize = new System.Drawing.Size(650, 540);
-            this.Name = "BasicGiffer";
+            this.Name = "Gifit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Gifit";
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.BasicGiffer_DragDrop);
@@ -424,11 +422,6 @@ namespace BasicGiffer
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
         private System.Windows.Forms.TrackBar tbFrames;
         private System.Windows.Forms.Label lblResult;
-        private System.Windows.Forms.ContextMenuStrip contextM;
-        private System.Windows.Forms.ToolStripMenuItem playToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem repeatToolStripMenuItem;
-        private System.Windows.Forms.ToolStripMenuItem pauseToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.SaveFileDialog saveGIF;
         private System.Windows.Forms.Timer tAnimation;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel3;
@@ -440,6 +433,11 @@ namespace BasicGiffer
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.NumericUpDown nudRepeat;
         private System.Windows.Forms.OpenFileDialog ofd;
+        private System.Windows.Forms.ContextMenuStrip contextM;
+        private System.Windows.Forms.ToolStripMenuItem playToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem pauseToolStripMenuItem;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
+        private System.Windows.Forms.ToolStripMenuItem repeatToolStripMenuItem;
     }
 }
 
