@@ -1,5 +1,8 @@
-﻿//    < Gifit - a animated gif creation tool >
-//    Copyright (C) 2021, Anton D. Kerezov, All rights reserved.
+﻿/* Copyright (C) 2021, Anton D. Kerezov, All rights reserved.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Anton Kerezov <ankere@gmail.com>, December 2021
+ */
 
 using System;
 using System.Collections.Generic;
@@ -33,7 +36,7 @@ namespace BasicGiffer
 
         private void tbFrames_ValueChanged(object sender, EventArgs e)
         {
-           SetFrame();
+            SetFrame();
         }
 
         public void SetFrame()
@@ -62,8 +65,6 @@ namespace BasicGiffer
                     Application.DoEvents();
                     Thread.Sleep(0);
                 }
-
-
                 lblResult.Text = $"File was saved!";
             }
         }
@@ -103,34 +104,33 @@ namespace BasicGiffer
 
         private void BasicGiffer_DragEnter(object sender, DragEventArgs e)
         {
-            freshImages.Clear();
-
             validData = GetFilename(out filenames, e);
             if (validData)
             {
-                getImageThread = new Thread(new ThreadStart(LoadImages));
-                getImageThread.Start();
                 e.Effect = DragDropEffects.Copy;
-                lblResult.Text = filenames.Count().ToString() + " are loading ...";
+                lblResult.Text = filenames.Count().ToString() + " files to drop";
             }
             else
             {
-                lblResult.Text = "";
+                lblResult.Text = "Unsupported file detected";
                 e.Effect = DragDropEffects.None;
             }
-
         }
         private void BasicGiffer_DragDrop(object sender, DragEventArgs e)
         {
             if (validData)
             {
+                DisposeImages();
+                lblResult.Text = filenames.Count().ToString() + " frames are loading ...";
+                getImageThread = new Thread(new ThreadStart(LoadImages));
+                getImageThread.Start();
+
                 while (getImageThread.IsAlive)
                 {
                     Application.DoEvents();
                     Thread.Sleep(0);
                 }
 
-                images = freshImages;
                 tbFrames.Value = 1;
                 tbFrames.Maximum = images.Count();
                 UpdateInfo();
@@ -141,18 +141,33 @@ namespace BasicGiffer
                 btnStop.Enabled = true;
                 tbFrames.Enabled = true;
             }
-
         }
 
         protected void LoadImages()
         {
             foreach (var name in filenames)
-                freshImages.Add(new Bitmap(name));      
+            {
+                Image img;
+                // release file lock
+                using (var bmpTemp = new Bitmap(name))
+                {
+                    img = new Bitmap(bmpTemp);
+                    images.Add(img);
+                }
+            }
+        }
+
+        protected void DisposeImages()
+        {
+            foreach (var img in images)
+            {
+                img.Dispose();
+            }
+            images.Clear();
         }
 
         protected void SaveGif()
         {
-            lblResult.Text = $"Writing file 0%";
             var imageArray = images.ToArray();
             double time = 1000 / (double)nudFPS.Value;
             double percentMultiplier = 100 / images.Count;
@@ -164,7 +179,8 @@ namespace BasicGiffer
                     for (int i = 0; i < imageArray.Length; i++)
                     {
                         var image = new Bitmap((imageArray[i] as Bitmap));
-                    
+                      
+
                         encoder.AddFrame(image, 0, 0, TimeSpan.FromMilliseconds(time));
                         lblResult.Text = $"Writing file {i * percentMultiplier}%";
                     }
@@ -180,10 +196,11 @@ namespace BasicGiffer
 
 
 
+
         public void UpdateInfo()
         {
             lblResult.Text = $"of {tbFrames.Maximum} frames = {tbFrames.Maximum / nudFPS.Value:F} sec";
-            tAnimation.Interval = (int) Math.Round(1000/nudFPS.Value, MidpointRounding.AwayFromZero);
+            tAnimation.Interval = (int)Math.Round(1000 / nudFPS.Value, MidpointRounding.AwayFromZero);
         }
 
         private void nudFPS_ValueChanged(object sender, EventArgs e)
@@ -266,11 +283,11 @@ namespace BasicGiffer
                 info += $"Images loaded: {tbFrames.Maximum} frames\n" +
                     $"First frame size: {images[0].Size.Width}x{images[0].Size.Height}px.\n\n";
             else
-                info += $"Image info will be availabe after you load frames.\n\n";
+                info += $"Image info will be availabe after you load frames.\n\n\n";
 
             info += $"{Application.ProductName} version: {Application.ProductVersion}\n" +
                     $"License: Freeware\n" +
-                    $"Contact: www.ankere.co\n" +
+                    $"Web: www.ankere.co\n" +
                     $"©2021 Anton Kerezov, All Rights Reserved.";
 
             InfoForm frm = new InfoForm();
@@ -318,10 +335,12 @@ namespace BasicGiffer
             switch (keys)
             {
                 case Keys.Space:
-                    if (tAnimation.Enabled)
-                        Stop();
-                    else Play();
-
+                    if (images.Count > 0)
+                    {
+                        if (tAnimation.Enabled)
+                            Stop();
+                        else Play();
+                    }
                     return true; // signal that we've processed this key
 
                 case Keys.Control | Keys.S:
@@ -331,6 +350,27 @@ namespace BasicGiffer
 
             // run base implementation
             return base.ProcessCmdKey(ref message, keys);
+        }
+
+        private void nudFPS_KeyUp(object sender, KeyEventArgs e)
+        {
+            //nudFPS.Value = nudFPS.Value;
+
+            //if (nudFPS.Value >= 1000)
+            //{
+            //    nudFPS.Value = 1000;
+            //}
+            //else if ( nudFPS.Value <1)
+            //{
+            //    nudFPS.Value = 1;
+            //}
+        }
+
+        private void Gifit_FormClosing(object sender, FormClosingEventArgs e)
+        {
+
+            //Gifit.Properties.Settings.Default["SomeProperty"] = "Some Value";
+            //  Properties.Settings.Default.Save(); // Saves settings in application configuration file
         }
     }
 }

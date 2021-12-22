@@ -1,5 +1,9 @@
-//    < Gifit - a animated gif creation tool >
-//    Copyright (C) 2021, Anton D. Kerezov, All rights reserved.
+/* Copyright (C) 2021, Anton D. Kerezov, All rights reserved.
+ * Unauthorized copying of this file, via any medium is strictly prohibited
+ * Proprietary and confidential
+ * Written by Anton Kerezov <ankere@gmail.com>, December 2021
+ */
+
 
 using System;
 using System.Collections.Generic;

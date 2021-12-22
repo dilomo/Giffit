@@ -10,18 +10,19 @@
     <Company>ANKERE</Company>
     <PackageIcon>MOOSESolver.ico</PackageIcon>
     <PackageIconUrl />
-    <Description>Animated gif maker for still images.</Description>
-    <PackageId>gifit</PackageId>
+    <Description>Animation maker for still images.</Description>
+    <PackageId>Giffit</PackageId>
     <PackageLicenseFile></PackageLicenseFile>
-    <Product>Gifit</Product>
+    <Product></Product>
     <StartupObject></StartupObject>
-    <ApplicationIcon>C:\Users\anchan\source\repos\dilomo\Moose\_miscArchive\Icons\MOOSESolver.ico</ApplicationIcon>
+    <ApplicationIcon>Resources\giffericon1_bXS_icon.ico</ApplicationIcon>
     <SignAssembly>false</SignAssembly>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <AssemblyName>Giffit</AssemblyName>
-    <RootNamespace>Gifit</RootNamespace>
+    <RootNamespace>Giffit</RootNamespace>
     <AssemblyVersion>0.1.1.0</AssemblyVersion>
     <FileVersion>0.1.1.0</FileVersion>
+    <Win32Resource />
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|AnyCPU'">
@@ -38,11 +39,16 @@
       <AutoGen>True</AutoGen>
       <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
+    <Compile Update="Properties\Settings.Designer.cs">
+      <DesignTimeSharedInput>True</DesignTimeSharedInput>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>Settings.settings</DependentUpon>
+    </Compile>
   </ItemGroup>
 
   <ItemGroup>
     <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
+      <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
@@ -51,6 +57,13 @@
     <None Include="..\..\dilomo\Moose\_miscArchive\Icons\MOOSESolver.ico">
       <Pack>True</Pack>
       <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Update="Properties\Settings.settings">
+      <Generator>PublicSettingsSingleFileGenerator</Generator>
+      <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
   </ItemGroup>
 

@@ -1,0 +1,13 @@
+Giffit changes:
+
+v0.1.1 
+Fix: spacebar for play/pause shortcut to be app specific
+Fix: release file lock so loaded images can be deleted while used in app
+Fix: memory leak with double loading data on drag move
+Mod: Remove context menus for placyback control
+Add: Ctrl+S hotkey for saving 
+Add: double click animation area for import
+Add: new info dialog with support links
+
+v0.1 
+Inital release
