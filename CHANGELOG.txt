@@ -1,5 +1,15 @@
 Giffit changes:
 
+v0.2 
+Add: Recent locations 
+Add: Loopback function
+Add: Context menu on the main image area
+Add: Appending images to already loaded frames
+Add: Skip not supported files on load
+Add: Save Repeat and FPS settings
+Add: Image size and quality settings that are persistent
+Mod: Remove Loop button and use the setting in Repeats to loop the animation
+
 v0.1.1 
 Fix: spacebar for play/pause shortcut to be app specific
 Fix: release file lock so loaded images can be deleted while used in app
