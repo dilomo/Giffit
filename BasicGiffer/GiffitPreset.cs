@@ -35,6 +35,7 @@ namespace Giffit
         "Native (8bpp) (No preview) "
         };
 
+        public int DefaultStyle { get => StyleNames.Count - 1; }
         public int StyleIndex
         {
             get { return _sindex; }

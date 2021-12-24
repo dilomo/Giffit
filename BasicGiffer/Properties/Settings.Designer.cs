@@ -88,12 +88,12 @@ namespace Giffit.Properties {
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
         [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool Preview {
+        public bool KeepStyle {
             get {
-                return ((bool)(this["Preview"]));
+                return ((bool)(this["KeepStyle"]));
             }
             set {
-                this["Preview"] = value;
+                this["KeepStyle"] = value;
             }
         }
     }

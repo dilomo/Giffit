@@ -33,6 +33,7 @@ namespace BasicGiffer
             = new System.Collections.Specialized.StringCollection();
         bool loopback = false;
         bool preview = true;
+        bool preserveStyle = false;
         bool zoom = true;
         int repeats = 1; 
         protected bool validData;
@@ -131,6 +132,8 @@ namespace BasicGiffer
                 Thread.Sleep(0);
             }
 
+            PreviewEffects(true);
+
             tbFrames.Value = 1;
             tbFrames.Maximum = images.Count();
             UpdateInfo();
@@ -165,6 +168,22 @@ namespace BasicGiffer
             UpdateTitleBar("");
 
         }
+        private void OpenWithDialog()
+        {
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                filenames = ofd.FileNames;
+                OpenFiles();
+            }
+        }
+        private void AddWithDialog()
+        {
+            if (ofd.ShowDialog() == DialogResult.OK)
+            {
+                filenames = ofd.FileNames;
+                AddFiles();
+            }
+        }
         private void AddRecent(string[] filenames)
         {
             clearrecentToolStripMenuItem.Enabled = true;
@@ -189,10 +208,7 @@ namespace BasicGiffer
                     // store preview image
                     img = new Bitmap(bmpTemp);
                     img.Tag = i;
-                    if (preview)
-                        images.Add(ApplyEffects(img, settings));
-                    else
-                        images.Add(img);
+                    images.Add(img);
                 }
                 i++;
             }
@@ -245,12 +261,10 @@ namespace BasicGiffer
             if (preset.Scaling < 1)
                 image = (Bitmap)ScaleImage(image, (int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling));
 
-            Bitmap quantizedBitmap;
-            if (preset.StyleIndex < Giffit.GiffitPreset.StyleNames.Count - 1)
-                quantizedBitmap = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer, preset.ditherer);
-            else quantizedBitmap = (Bitmap) image;
-
-            return quantizedBitmap;
+            if (preset.StyleIndex != preset.DefaultStyle)
+                image = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer, preset.ditherer);
+ 
+            return image;
         }
         public void PreviewEffects(bool active)
         {
@@ -273,31 +287,41 @@ namespace BasicGiffer
 
             if (active)
             {
-                lblResult.Text = "Applying image settings ...";
-                Application.DoEvents();
-
-                var imagesNew = new ConcurrentBag<Image>();
-                Parallel.ForEach(originalImages, frame =>
+                foreach (var item in originalImages)
                 {
-                    CloneAdd(imagesNew, frame, settings);
-                });
-                images = imagesNew.OrderBy(bm => (int) bm.Tag).ToList();
+                    CloneAdd(images, item, settings);
+                }
+                //int infoLoop = 0; 
+                //var imagesNew = new ConcurrentBag<Image>();
+                //Parallel.ForEach(originalImages, frame =>
+                //{
+                //    if (infoLoop % 2 == 0)
+                //        UpdateInfo("Applying image settings 　・");
+                //    else
+                //        UpdateInfo("Applying image settings ・　");
 
-                //foreach (var frame in originalImages)
-                //    images.Add(ApplyEffects(new Bitmap(frame), settings));
-
-                lblResult.Text = images[5].Tag.ToString();
+                //    CloneAdd(imagesNew, frame, settings, loadStyle);
+                //    infoLoop++;
+                //});
+                //images = imagesNew.OrderBy(bm => (int) bm.Tag).ToList();
 
                 if (loopback)
                 {
-                    var imagesNewLB = new ConcurrentBag<Image>();
-                    Parallel.ForEach(originalImagesLoopBack, frame =>
-                    {
-                        CloneAdd(imagesNew, frame, settings);
-                    });
-                    imagesLoopBack = imagesNewLB.OrderBy(bm => (int) bm.Tag).ToList();
-                    //foreach (var frame in originalImagesLoopBack)
-                    //    imagesLoopBack.Add(ApplyEffects(new Bitmap(frame), settings));
+                    foreach (var frame in originalImagesLoopBack)
+                        CloneAdd(imagesLoopBack, frame, settings) ;
+
+                    //var imagesNewLB = new ConcurrentBag<Image>();
+                    //Parallel.ForEach(originalImagesLoopBack, frame =>
+                    //{
+                    //    if (infoLoop % 2 == 0)
+                    //        UpdateInfo("Applying image settings 　・");
+                    //    else
+                    //        UpdateInfo("Applying image settings ・　");
+
+                    //    CloneAdd(imagesNew, frame, settings, loadStyle);
+                    //    infoLoop++;
+                    //});
+                    //imagesLoopBack = imagesNewLB.OrderBy(bm => (int) bm.Tag).ToList();
 
                     images.AddRange(imagesLoopBack);
                 }
@@ -327,7 +351,7 @@ namespace BasicGiffer
             mod.Tag = frame.Tag;
             list.Add(mod);
         }
-        private static void CloneAdd(List<Image> list, Image frame, Giffit.GiffitPreset style)
+        private static void CloneAdd(List<Image> list, Image frame, Giffit.GiffitPreset style, bool applyQuantizer = true)
         {
             Image mod = new Bitmap(frame);
             mod = ApplyEffects(mod, style);
@@ -340,7 +364,7 @@ namespace BasicGiffer
             mod.Tag = frame.Tag;
             list.Add(mod);
         }
-        private static void CloneAdd(ConcurrentBag<Image> list, Image frame, Giffit.GiffitPreset style)
+        private static void CloneAdd(ConcurrentBag<Image> list, Image frame, Giffit.GiffitPreset style, bool applyQuantizer = true)
         {
             Image mod = new Bitmap(frame);
             mod = ApplyEffects(mod, style);
@@ -374,6 +398,17 @@ namespace BasicGiffer
             else
                 this.Text = "Giffit " + text;
         }
+        public void UpdateInfo(string text)
+        {
+            if (this.InvokeRequired)
+            {
+                // Call this same method but append THREAD2 to the text
+                Action safeWrite = delegate { UpdateTitleBar(text); };
+                this.Invoke(safeWrite);
+            }
+            else
+                lblResult.Text = text;
+        }
         public void UpdateInfo()
         {
             lblResult.Text = $"of {tbFrames.Maximum} frames = {tbFrames.Maximum / nudFPS.Value:F} sec";
@@ -383,7 +418,7 @@ namespace BasicGiffer
         {
             if (loop)
             {
-                lblResult.Text = "Creating loopback ...";
+                UpdateInfo("Creating loopback ...");
                 Application.DoEvents();
                 imagesLoopBack = images.Select(i => (Image)new Bitmap(i)).ToList();
                 for (int i = 0; i < images.Count; i++)
@@ -397,7 +432,7 @@ namespace BasicGiffer
             }
             else
             {
-                lblResult.Text = "Removing loopback ...";
+                UpdateInfo ("Removing loopback ...");
                 Application.DoEvents();
                 foreach (var img in imagesLoopBack)
                     img.Dispose();
@@ -522,12 +557,11 @@ namespace BasicGiffer
         }
         private void pbImage_DoubleClick(object sender, EventArgs e)
         {
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                filenames = ofd.FileNames;
-                OpenFiles();
-            }
+            OpenWithDialog();
         }
+
+   
+
         protected override bool ProcessCmdKey(ref Message message, Keys keys)
         {
             switch (keys)
@@ -544,6 +578,12 @@ namespace BasicGiffer
                 case Keys.Control | Keys.S:
                     btnSave.PerformClick();
                     return true;
+                case Keys.Control | Keys.O:
+                    OpenWithDialog();
+                    return true;
+                case Keys.Control | Keys.I:
+                    AddWithDialog();
+                    return true;
             }
 
             // run base implementation
@@ -551,16 +591,18 @@ namespace BasicGiffer
         }
         private void nudFPS_KeyUp(object sender, KeyEventArgs e)
         {
-            //nudFPS.Value = nudFPS.Value;
+            nudFPS.Focus();
+        }
 
-            //if (nudFPS.Value >= 1000)
-            //{
-            //    nudFPS.Value = 1000;
-            //}
-            //else if ( nudFPS.Value <1)
-            //{
-            //    nudFPS.Value = 1;
-            //}
+        private void nudRepeat_KeyUp(object sender, KeyEventArgs e)
+        {
+            nudRepeat.Focus();
+        }
+
+        private void nudFPS_Leave(object sender, EventArgs e)
+       {
+
+
         }
         private void Gifit_Load(object sender, EventArgs e)
         {
@@ -568,13 +610,14 @@ namespace BasicGiffer
             nudFPS.Value = (int)Giffit.Properties.Settings.Default["FPS"];
             recentFolders = (System.Collections.Specialized.StringCollection)Giffit.Properties.Settings.Default["Recents"];
             settings.Scaling = (decimal)Giffit.Properties.Settings.Default["Scaling"];
-            //settings.StyleIndex = (int)Giffit.Properties.Settings.Default["StyleIndex"];
-            // preview = (bool)Giffit.Properties.Settings.Default["Preview"];
+            preserveStyle = (bool)Giffit.Properties.Settings.Default["KeepStyle"];
+            settings.StyleIndex = (int)Giffit.Properties.Settings.Default["StyleIndex"];
+
+            if (!preserveStyle)
+                settings.StyleIndex = settings.DefaultStyle;
 
             if (recentFolders.Count > 0)
                 clearrecentToolStripMenuItem.Enabled = true;
-
-            //btnPreview.BackColor = preview ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;
 
             lblResult.Text = "";
         }
@@ -585,7 +628,7 @@ namespace BasicGiffer
             Giffit.Properties.Settings.Default["Recents"] = recentFolders;
             Giffit.Properties.Settings.Default["Scaling"] = settings.Scaling;
             Giffit.Properties.Settings.Default["StyleIndex"] = settings.StyleIndex;
-            Giffit.Properties.Settings.Default["Preview"] = preview;
+            Giffit.Properties.Settings.Default["KeepStyle"] = preserveStyle;
             Giffit.Properties.Settings.Default.Save(); // Saves settings in application configuration file
         }
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -612,10 +655,6 @@ namespace BasicGiffer
         {
             repeats = 1;
         }
-
-
-       
-
         private void btnSettings_Click(object sender, EventArgs e)
         {
             if (images.Count == 0)
@@ -626,21 +665,21 @@ namespace BasicGiffer
             sets.cbStyle.Items.AddRange(Giffit.GiffitPreset.StyleNames.ToArray());  
             sets.cbStyle.SelectedIndex = settings.StyleIndex;
             sets.tbSize.Value = (int) Math.Ceiling(settings.Scaling * 100);
+            sets.cbPersistent.Checked = preserveStyle;
             sets.h = images[0].Size.Height;
             sets.w = images[0].Size.Width;
 
             if (sets.ShowDialog() == DialogResult.OK)
             {
-                if (settings.StyleIndex != sets.cbStyle.SelectedIndex || settings.Scaling != (decimal)sets.tbSize.Value / 100)
+                if (settings.StyleIndex != sets.cbStyle.SelectedIndex || settings.Scaling != (decimal)sets.tbSize.Value / 100 || sets.cbPersistent.Checked != preserveStyle)
                 {
                     settings.StyleIndex = sets.cbStyle.SelectedIndex;
                     settings.Scaling = (decimal)sets.tbSize.Value / 100;
-                    if (preview)
-                        PreviewEffects(true);
+                    preserveStyle = sets.cbPersistent.Checked;
+                    PreviewEffects(preview);
                 }
             }
         }
-
         private void btnPreview_Click(object sender, EventArgs e)
         {
             zoom = !zoom;
@@ -653,7 +692,6 @@ namespace BasicGiffer
             btnPreview.BackColor = !zoom ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;
             
         }
-
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
             if (ofd.ShowDialog() == DialogResult.OK)
@@ -662,15 +700,12 @@ namespace BasicGiffer
                 OpenFiles();
             }
         }
-
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                filenames = ofd.FileNames;
-                AddFiles();
-            }
+            AddWithDialog();
         }
+
+ 
 
         private void saveGIFToolStripMenuItem_Click(object sender, EventArgs e)
         {
@@ -716,5 +751,6 @@ namespace BasicGiffer
                 MessageBox.Show("No supported files were found in this recent directiry");
             }
         }
+
     }
 }

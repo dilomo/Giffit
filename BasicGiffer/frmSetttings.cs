@@ -29,7 +29,8 @@ namespace Giffit
         {
             tbSize.Value = 100;
             cbStyle.SelectedIndex = cbStyle.Items.Count -1;
-            
+            cbPersistent.Checked = false;
+
             var nw = w * tbSize.Value / 100;
             var nh = h * tbSize.Value / 100;
             lblsize.Text = $"{nw}x{nh}px ({tbSize.Value}%)";

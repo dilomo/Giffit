@@ -20,7 +20,7 @@
     <Setting Name="StyleIndex" Type="System.Int32" Scope="User">
       <Value Profile="(Default)">0</Value>
     </Setting>
-    <Setting Name="Preview" Type="System.Boolean" Scope="User">
+    <Setting Name="KeepStyle" Type="System.Boolean" Scope="User">
       <Value Profile="(Default)">False</Value>
     </Setting>
   </Settings>

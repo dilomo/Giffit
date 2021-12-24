@@ -38,6 +38,7 @@ namespace BasicGiffer
             this.saveGIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.recentfoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.cmsRecents = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearrecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSave = new System.Windows.Forms.Button();
@@ -60,7 +61,6 @@ namespace BasicGiffer
             this.tAnimation = new System.Windows.Forms.Timer(this.components);
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.ttip = new System.Windows.Forms.ToolTip(this.components);
-            this.cmsRecents = new System.Windows.Forms.ContextMenuStrip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.cmsActions.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -102,13 +102,13 @@ namespace BasicGiffer
             this.cmsActions.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsActions.ShowImageMargin = false;
             this.cmsActions.ShowItemToolTips = false;
-            this.cmsActions.Size = new System.Drawing.Size(216, 203);
+            this.cmsActions.Size = new System.Drawing.Size(199, 170);
             this.cmsActions.Opening += new System.ComponentModel.CancelEventHandler(this.cmsActions_Opening_1);
             // 
             // newToolStripMenuItem
             // 
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(215, 32);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
             this.newToolStripMenuItem.Text = "&New Animation ...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -116,7 +116,7 @@ namespace BasicGiffer
             // 
             this.addToolStripMenuItem.Enabled = false;
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(215, 32);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
             this.addToolStripMenuItem.Text = "&Add Images ...";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
             // 
@@ -124,27 +124,38 @@ namespace BasicGiffer
             // 
             this.saveGIFToolStripMenuItem.Enabled = false;
             this.saveGIFToolStripMenuItem.Name = "saveGIFToolStripMenuItem";
-            this.saveGIFToolStripMenuItem.Size = new System.Drawing.Size(215, 32);
+            this.saveGIFToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
             this.saveGIFToolStripMenuItem.Text = "&Save GIF ...";
             this.saveGIFToolStripMenuItem.Click += new System.EventHandler(this.saveGIFToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(212, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(195, 6);
             // 
             // recentfoldersToolStripMenuItem
             // 
             this.recentfoldersToolStripMenuItem.DropDown = this.cmsRecents;
             this.recentfoldersToolStripMenuItem.Enabled = false;
             this.recentfoldersToolStripMenuItem.Name = "recentfoldersToolStripMenuItem";
-            this.recentfoldersToolStripMenuItem.Size = new System.Drawing.Size(215, 32);
+            this.recentfoldersToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
             this.recentfoldersToolStripMenuItem.Text = "Recents";
+            // 
+            // cmsRecents
+            // 
+            this.cmsRecents.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.cmsRecents.ImeMode = System.Windows.Forms.ImeMode.Off;
+            this.cmsRecents.Name = "cmsRecents";
+            this.cmsRecents.OwnerItem = this.recentfoldersToolStripMenuItem;
+            this.cmsRecents.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.cmsRecents.ShowImageMargin = false;
+            this.cmsRecents.ShowItemToolTips = false;
+            this.cmsRecents.Size = new System.Drawing.Size(36, 4);
             // 
             // clearrecentToolStripMenuItem
             // 
             this.clearrecentToolStripMenuItem.Name = "clearrecentToolStripMenuItem";
-            this.clearrecentToolStripMenuItem.Size = new System.Drawing.Size(215, 32);
+            this.clearrecentToolStripMenuItem.Size = new System.Drawing.Size(198, 32);
             this.clearrecentToolStripMenuItem.Text = "Clear Recents";
             this.clearrecentToolStripMenuItem.Click += new System.EventHandler(this.clearrecentToolStripMenuItem_Click);
             // 
@@ -152,12 +163,11 @@ namespace BasicGiffer
             // 
             this.tableLayoutPanel2.ColumnCount = 6;
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 82F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 61F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 155F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel2.Controls.Add(this.btnSave, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.nudFPS, 3, 0);
@@ -192,7 +202,7 @@ namespace BasicGiffer
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(148, 19);
+            this.label1.Location = new System.Drawing.Point(177, 19);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(45, 25);
@@ -201,8 +211,8 @@ namespace BasicGiffer
             // 
             // nudFPS
             // 
-            this.nudFPS.Anchor = System.Windows.Forms.AnchorStyles.Left;
-            this.nudFPS.Location = new System.Drawing.Point(196, 16);
+            this.nudFPS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.nudFPS.Location = new System.Drawing.Point(225, 16);
             this.nudFPS.Maximum = new decimal(new int[] {
             500,
             0,
@@ -214,7 +224,7 @@ namespace BasicGiffer
             0,
             0});
             this.nudFPS.Name = "nudFPS";
-            this.nudFPS.Size = new System.Drawing.Size(58, 31);
+            this.nudFPS.Size = new System.Drawing.Size(84, 31);
             this.nudFPS.TabIndex = 1;
             this.ttip.SetToolTip(this.nudFPS, "Frames per second ");
             this.nudFPS.Value = new decimal(new int[] {
@@ -229,7 +239,7 @@ namespace BasicGiffer
             // 
             this.lblResult.Anchor = System.Windows.Forms.AnchorStyles.Left;
             this.lblResult.AutoSize = true;
-            this.lblResult.Location = new System.Drawing.Point(260, 19);
+            this.lblResult.Location = new System.Drawing.Point(315, 19);
             this.lblResult.Name = "lblResult";
             this.lblResult.Size = new System.Drawing.Size(0, 25);
             this.lblResult.TabIndex = 3;
@@ -247,7 +257,7 @@ namespace BasicGiffer
             // 
             // nudRepeat
             // 
-            this.nudRepeat.Anchor = System.Windows.Forms.AnchorStyles.Left;
+            this.nudRepeat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.nudRepeat.Location = new System.Drawing.Point(85, 16);
             this.nudRepeat.Maximum = new decimal(new int[] {
             50,
@@ -255,10 +265,11 @@ namespace BasicGiffer
             0,
             0});
             this.nudRepeat.Name = "nudRepeat";
-            this.nudRepeat.Size = new System.Drawing.Size(55, 31);
+            this.nudRepeat.Size = new System.Drawing.Size(84, 31);
             this.nudRepeat.TabIndex = 5;
             this.ttip.SetToolTip(this.nudRepeat, "How many times to play the animation. Zero is for endless loops.");
             this.nudRepeat.ValueChanged += new System.EventHandler(this.nudRepeat_ValueChanged);
+            this.nudRepeat.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nudRepeat_KeyUp);
             // 
             // btnSettings
             // 
@@ -450,17 +461,6 @@ namespace BasicGiffer
             // 
             this.ttip.AutomaticDelay = 900;
             this.ttip.BackColor = System.Drawing.SystemColors.HighlightText;
-            // 
-            // cmsRecents
-            // 
-            this.cmsRecents.ImageScalingSize = new System.Drawing.Size(24, 24);
-            this.cmsRecents.ImeMode = System.Windows.Forms.ImeMode.Off;
-            this.cmsRecents.Name = "cmsRecents";
-            this.cmsRecents.OwnerItem = this.recentfoldersToolStripMenuItem;
-            this.cmsRecents.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
-            this.cmsRecents.ShowImageMargin = false;
-            this.cmsRecents.ShowItemToolTips = false;
-            this.cmsRecents.Size = new System.Drawing.Size(216, 37);
             // 
             // Gifit
             // 
