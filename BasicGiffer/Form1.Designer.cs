@@ -420,7 +420,7 @@ namespace BasicGiffer
             this.btnPreview.Name = "btnPreview";
             this.btnPreview.Size = new System.Drawing.Size(39, 38);
             this.btnPreview.TabIndex = 7;
-            this.ttip.SetToolTip(this.btnPreview, "Preview image settings");
+            this.ttip.SetToolTip(this.btnPreview, "Zoom to 100%");
             this.btnPreview.UseVisualStyleBackColor = true;
             this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
             // 
@@ -467,6 +467,7 @@ namespace BasicGiffer
             this.AllowDrop = true;
             this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
+            this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
             this.ClientSize = new System.Drawing.Size(1162, 940);
             this.Controls.Add(this.tableLayoutPanel1);
@@ -479,6 +480,7 @@ namespace BasicGiffer
             this.Text = "Giffit";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.Gifit_FormClosing);
             this.Load += new System.EventHandler(this.Gifit_Load);
+            this.SizeChanged += new System.EventHandler(this.Gifit_SizeChanged);
             this.DragDrop += new System.Windows.Forms.DragEventHandler(this.BasicGiffer_DragDrop);
             this.DragEnter += new System.Windows.Forms.DragEventHandler(this.BasicGiffer_DragEnter);
             this.DragLeave += new System.EventHandler(this.Gifit_DragLeave);

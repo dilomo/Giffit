@@ -27,14 +27,15 @@ namespace BasicGiffer
     {
         List<Image> originalImages = new List<Image>();
         List<Image> originalImagesLoopBack = new List<Image>();
-        List<Image> images = new List<Image>();
-        List<Image> imagesLoopBack = new List<Image>();
+        List<Image> previewImages = new List<Image>();
+        List<Image> previewImagesLoopBack = new List<Image>();
         System.Collections.Specialized.StringCollection recentFolders 
             = new System.Collections.Specialized.StringCollection();
         bool loopback = false;
         bool preview = true;
         bool preserveStyle = false;
         bool zoom = true;
+        bool oneToOne = false;
         int repeats = 1; 
         protected bool validData;
         protected string[] filenames;
@@ -111,9 +112,9 @@ namespace BasicGiffer
         }
         public void SetFrame()
         {
-            if (images.Count > 0)
+            if (previewImages.Count > 0)
             {
-                pbImage.Image = images[tbFrames.Value - 1];
+                pbImage.Image = previewImages[tbFrames.Value - 1];
                 lblCurFrame.Text = tbFrames.Value.ToString();
             }
         }
@@ -135,9 +136,9 @@ namespace BasicGiffer
             PreviewEffects(true);
 
             tbFrames.Value = 1;
-            tbFrames.Maximum = images.Count();
+            tbFrames.Maximum = previewImages.Count();
             UpdateInfo();
-            pbImage.Image = images.First();
+            pbImage.Image = previewImages.First();
             pbImage.BackgroundImage = null;
             btnSave.Enabled = true;
             btnSettings.Enabled = true;
@@ -149,6 +150,7 @@ namespace BasicGiffer
             saveGIFToolStripMenuItem.Enabled = true;
             addToolStripMenuItem.Enabled = true;
             UpdateTitleBar("");
+            AdjustWindowToImage();
         }
         protected void AddFiles()
         { 
@@ -163,9 +165,10 @@ namespace BasicGiffer
                 Application.DoEvents();
                 Thread.Sleep(0);
             }
-            tbFrames.Maximum = images.Count();
+            tbFrames.Maximum = previewImages.Count();
             UpdateInfo();
             UpdateTitleBar("");
+            AdjustWindowToImage();
 
         }
         private void OpenWithDialog()
@@ -193,7 +196,7 @@ namespace BasicGiffer
         }
         protected void LoadImages()
         {
-            int i = images.Count;
+            int i = previewImages.Count;
             foreach (var name in filenames)
             {
                 Image img;
@@ -208,7 +211,7 @@ namespace BasicGiffer
                     // store preview image
                     img = new Bitmap(bmpTemp);
                     img.Tag = i;
-                    images.Add(img);
+                    previewImages.Add(img);
                 }
                 i++;
             }
@@ -216,16 +219,16 @@ namespace BasicGiffer
         }
         protected void DisposeImages()
         {
-            foreach (var img in images)
+            foreach (var img in previewImages)
             {
                 img.Dispose();
             }
-            images.Clear();
-            foreach (var img in imagesLoopBack)
+            previewImages.Clear();
+            foreach (var img in previewImagesLoopBack)
             {
                 img.Dispose();
             }
-            imagesLoopBack.Clear();
+            previewImagesLoopBack.Clear();
             foreach (var img in originalImages)
             {
                 img.Dispose();
@@ -234,9 +237,9 @@ namespace BasicGiffer
         }
         protected void SaveGif()
         {
-            var imageArray = images.ToArray();
+            var imageArray = previewImages.ToArray();
             double time = 1000 / (double)nudFPS.Value;
-            double percentMultiplier = 100 / images.Count;
+            double percentMultiplier = 100 / previewImages.Count;
 
             using (var stream = new MemoryStream())
             {
@@ -268,76 +271,59 @@ namespace BasicGiffer
         }
         public void PreviewEffects(bool active)
         {
+            UpdateInfo("Applying image settings ...");
+            Application.DoEvents();
+
             Stop();
             btnPlay.Enabled = false;
 
-            if (images.Count > 0)
+            if (previewImages.Count > 0)
             {
-                foreach (var img in images)
+                foreach (var img in previewImages)
                     img.Dispose();
-                images.Clear();
+                previewImages.Clear();
             }
-            if (imagesLoopBack.Count > 0)
+            if (previewImagesLoopBack.Count > 0)
             {
-                foreach (var img in imagesLoopBack)
+                foreach (var img in previewImagesLoopBack)
                     img.Dispose();
-                imagesLoopBack.Clear();
+                previewImagesLoopBack.Clear();
             }
 
 
             if (active)
             {
-                foreach (var item in originalImages)
+                var imagesNew = new ConcurrentBag<Image>();
+                Parallel.ForEach(originalImages, frame =>
                 {
-                    CloneAdd(images, item, settings);
-                }
-                //int infoLoop = 0; 
-                //var imagesNew = new ConcurrentBag<Image>();
-                //Parallel.ForEach(originalImages, frame =>
-                //{
-                //    if (infoLoop % 2 == 0)
-                //        UpdateInfo("Applying image settings 　・");
-                //    else
-                //        UpdateInfo("Applying image settings ・　");
+                    CloneAdd(imagesNew, frame, settings);
 
-                //    CloneAdd(imagesNew, frame, settings, loadStyle);
-                //    infoLoop++;
-                //});
-                //images = imagesNew.OrderBy(bm => (int) bm.Tag).ToList();
+                });
+                previewImages = imagesNew.OrderBy(bm => (int)bm.Tag).ToList();
 
                 if (loopback)
                 {
-                    foreach (var frame in originalImagesLoopBack)
-                        CloneAdd(imagesLoopBack, frame, settings) ;
+                    var imagesNewLB = new ConcurrentBag<Image>();
+                    Parallel.ForEach(originalImagesLoopBack, frame =>
+                    {
+                        CloneAdd(imagesNewLB, frame, settings);
+                    });
+                    previewImagesLoopBack = imagesNewLB.OrderBy(bm => (int)bm.Tag).ToList();
 
-                    //var imagesNewLB = new ConcurrentBag<Image>();
-                    //Parallel.ForEach(originalImagesLoopBack, frame =>
-                    //{
-                    //    if (infoLoop % 2 == 0)
-                    //        UpdateInfo("Applying image settings 　・");
-                    //    else
-                    //        UpdateInfo("Applying image settings ・　");
-
-                    //    CloneAdd(imagesNew, frame, settings, loadStyle);
-                    //    infoLoop++;
-                    //});
-                    //imagesLoopBack = imagesNewLB.OrderBy(bm => (int) bm.Tag).ToList();
-
-                    images.AddRange(imagesLoopBack);
+                    previewImages.AddRange(previewImagesLoopBack);
                 }
             }
             else
             {
-
                 foreach (var frame in originalImages)
-                    CloneAdd(images, frame);
+                    CloneAdd(previewImages, frame);
                 
                 if (loopback)
                 {
                     foreach (var frame in originalImagesLoopBack)
-                        CloneAdd(imagesLoopBack, frame);
+                        CloneAdd(previewImagesLoopBack, frame);
 
-                    images.AddRange(imagesLoopBack);
+                    previewImages.AddRange(previewImagesLoopBack);
                 }
             }
 
@@ -403,7 +389,7 @@ namespace BasicGiffer
             if (this.InvokeRequired)
             {
                 // Call this same method but append THREAD2 to the text
-                Action safeWrite = delegate { UpdateTitleBar(text); };
+                Action safeWrite = delegate { UpdateInfo(text); };
                 this.Invoke(safeWrite);
             }
             else
@@ -420,38 +406,44 @@ namespace BasicGiffer
             {
                 UpdateInfo("Creating loopback ...");
                 Application.DoEvents();
-                imagesLoopBack = images.Select(i => (Image)new Bitmap(i)).ToList();
-                for (int i = 0; i < images.Count; i++)
-                     imagesLoopBack[i].Tag = images[i].Tag;
-                imagesLoopBack.Reverse();
+
+                // creat loopbacks for the two sets of data
+                previewImagesLoopBack = previewImages.Select(i => (Image)new Bitmap(i)).ToList();
+                previewImagesLoopBack.Reverse();
+                for (int i = 0; i < previewImages.Count; i++)
+                    previewImagesLoopBack[i].Tag = previewImages[i].Tag;
+             
+
+                // and now for the originasl
                 originalImagesLoopBack = originalImages.Select(i => (Image)new Bitmap(i)).ToList();
+                originalImagesLoopBack.Reverse();
                 for (int i = 0; i < originalImages.Count; i++)
                     originalImagesLoopBack[i].Tag = originalImages[i].Tag;
-                originalImagesLoopBack.Reverse();
-                images.AddRange(imagesLoopBack);
+                
+                previewImages.AddRange(previewImagesLoopBack);
             }
             else
             {
                 UpdateInfo ("Removing loopback ...");
                 Application.DoEvents();
-                foreach (var img in imagesLoopBack)
+                foreach (var img in previewImagesLoopBack)
                     img.Dispose();
-                imagesLoopBack.Clear();
+                previewImagesLoopBack.Clear();
                 foreach (var img in originalImagesLoopBack)
                     img.Dispose();
                 originalImagesLoopBack.Clear();
 
-                images.RemoveRange(images.Count / 2, images.Count / 2);
-                if (tbFrames.Value > images.Count)
-                     tbFrames.Value = images.Count;
+                previewImages.RemoveRange(previewImages.Count / 2, previewImages.Count / 2);
+                if (tbFrames.Value > previewImages.Count)
+                     tbFrames.Value = previewImages.Count;
             }          
-            tbFrames.Maximum = images.Count();
+            tbFrames.Maximum = previewImages.Count();
             btnLoop.BackColor = loopback ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;
             UpdateInfo();
         }
         public void Play()
         {
-            if (tbFrames.Value == images.Count)
+            if (tbFrames.Value == previewImages.Count)
                 tbFrames.Value = 1;
             tAnimation.Enabled = true;
             btnPlay.BackColor = System.Drawing.SystemColors.ControlDark;
@@ -464,6 +456,61 @@ namespace BasicGiffer
             btnStop.BackColor = System.Drawing.SystemColors.ControlDark;
         }
 
+        private void AdjustWindowToImage()
+        {
+            oneToOne = false;
+
+            var x = this.Width - pbImage.Width;
+            var y = this.Height - pbImage.Height;
+
+            var newW = pbImage.Image.Size.Width + x ;
+            var newH = pbImage.Image.Size.Height + y;
+
+            this.AutoSize = true;
+            if (newH <= this.MaximumSize.Height && newW <= this.MaximumSize.Width &&
+                newH >= this.MinimumSize.Height && newW >= this.MinimumSize.Width)
+            {
+                this.Size = new Size(newW, newH);
+                if (pbImage.SizeMode == PictureBoxSizeMode.Zoom)
+                {
+                    oneToOne = true;
+                    btnPreview.PerformClick();
+                }
+            }
+            else if (newH < this.MinimumSize.Height && newW < this.MinimumSize.Width)
+            {
+                var w = MinimumSize.Width - newW;
+                var h = MinimumSize.Height - newH;
+                var ratio = (double) Math.Min(w, h) / Math.Max(newW, newH);
+
+                this.Size = new Size((int) Math.Truncate(newW * ratio), (int)Math.Truncate(newH * ratio));
+                if (pbImage.SizeMode == PictureBoxSizeMode.CenterImage)
+                {
+                    btnPreview.PerformClick();
+                }
+            }
+            else
+            {
+
+                if (newW > newH) // horizontal
+                {
+                    var w = (double) newW / MaximumSize.Width;
+                    this.Size = new Size(MaximumSize.Width, (int)Math.Truncate((newH) / w));
+                }
+                else
+                {
+                    var w = (double) newH / MaximumSize.Height;
+                    this.Size = new Size((int)Math.Truncate((newW) / w), MaximumSize.Height );
+                }
+
+                if (pbImage.SizeMode == PictureBoxSizeMode.CenterImage)
+                {
+                    btnPreview.PerformClick();
+                }
+            }
+
+            this.AutoSize = false;
+        }
 
         private void tbFrames_ValueChanged(object sender, EventArgs e)
         {
@@ -503,6 +550,7 @@ namespace BasicGiffer
             if (validData)
             {
                 OpenFiles();
+                this.Activate();
             }
         }
         private void Gifit_DragLeave(object sender, EventArgs e)
@@ -515,7 +563,7 @@ namespace BasicGiffer
         }
         private void tAnimation_Tick(object sender, EventArgs e)
         {
-            if (tbFrames.Value == images.Count)
+            if (tbFrames.Value == previewImages.Count)
             {
                 if (nudRepeat.Value == 0)
                     tbFrames.Value = 1;
@@ -567,7 +615,7 @@ namespace BasicGiffer
             switch (keys)
             {
                 case Keys.Space:
-                    if (images.Count > 0)
+                    if (previewImages.Count > 0)
                     {
                         if (tAnimation.Enabled)
                             Stop();
@@ -634,9 +682,9 @@ namespace BasicGiffer
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
             var info = "";
-            if (images.Count > 0)
+            if (previewImages.Count > 0)
                 info += $"Images loaded: {tbFrames.Maximum} frames\n" +
-                    $"First frame size: {images[0].Size.Width}x{images[0].Size.Height}px.\n\n";
+                    $"First frame size: {previewImages[0].Size.Width}x{previewImages[0].Size.Height}px.\n\n";
             else
                 info += $"Image info will be availabe after you load frames.\n\n\n";
 
@@ -657,7 +705,7 @@ namespace BasicGiffer
         }
         private void btnSettings_Click(object sender, EventArgs e)
         {
-            if (images.Count == 0)
+            if (previewImages.Count == 0)
             { MessageBox.Show("No data loaded"); return; };
 
             Giffit.frmSettings sets = new Giffit.frmSettings();
@@ -666,8 +714,8 @@ namespace BasicGiffer
             sets.cbStyle.SelectedIndex = settings.StyleIndex;
             sets.tbSize.Value = (int) Math.Ceiling(settings.Scaling * 100);
             sets.cbPersistent.Checked = preserveStyle;
-            sets.h = images[0].Size.Height;
-            sets.w = images[0].Size.Width;
+            sets.h = previewImages[0].Size.Height;
+            sets.w = previewImages[0].Size.Width;
 
             if (sets.ShowDialog() == DialogResult.OK)
             {
@@ -752,5 +800,13 @@ namespace BasicGiffer
             }
         }
 
+        private void Gifit_SizeChanged(object sender, EventArgs e)
+        {
+            if (oneToOne)
+            {
+                oneToOne = false;
+                btnPreview.PerformClick();
+            }
+        }
     }
 }

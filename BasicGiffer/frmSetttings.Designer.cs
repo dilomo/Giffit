@@ -35,8 +35,8 @@ namespace Giffit
             this.lblsize = new System.Windows.Forms.Label();
             this.tbSize = new System.Windows.Forms.TrackBar();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
-            this.cbStyle = new System.Windows.Forms.ComboBox();
             this.cbPersistent = new System.Windows.Forms.CheckBox();
+            this.cbStyle = new System.Windows.Forms.ComboBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbSize)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -114,6 +114,16 @@ namespace Giffit
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Style";
             // 
+            // cbPersistent
+            // 
+            this.cbPersistent.AutoSize = true;
+            this.cbPersistent.Location = new System.Drawing.Point(11, 80);
+            this.cbPersistent.Name = "cbPersistent";
+            this.cbPersistent.Size = new System.Drawing.Size(199, 29);
+            this.cbPersistent.TabIndex = 1;
+            this.cbPersistent.Text = "Keep style on reload";
+            this.cbPersistent.UseVisualStyleBackColor = true;
+            // 
             // cbStyle
             // 
             this.cbStyle.DisplayMember = "1";
@@ -127,16 +137,6 @@ namespace Giffit
             this.cbStyle.Size = new System.Drawing.Size(275, 33);
             this.cbStyle.TabIndex = 0;
             this.cbStyle.ValueMember = "0";
-            // 
-            // cbPersistent
-            // 
-            this.cbPersistent.AutoSize = true;
-            this.cbPersistent.Location = new System.Drawing.Point(11, 80);
-            this.cbPersistent.Name = "cbPersistent";
-            this.cbPersistent.Size = new System.Drawing.Size(158, 29);
-            this.cbPersistent.TabIndex = 1;
-            this.cbPersistent.Text = "Keep on reload";
-            this.cbPersistent.UseVisualStyleBackColor = true;
             // 
             // frmSettings
             // 
