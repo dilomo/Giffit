@@ -38,10 +38,10 @@ namespace BasicGiffer
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(589, 440);
-            this.btnClose.Margin = new System.Windows.Forms.Padding(5);
+            this.btnClose.Location = new System.Drawing.Point(450, 359);
+            this.btnClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(185, 61);
+            this.btnClose.Size = new System.Drawing.Size(141, 48);
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "&Close";
             this.btnClose.UseVisualStyleBackColor = true;
@@ -54,10 +54,10 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblInfo.BackColor = System.Drawing.SystemColors.Window;
             this.lblInfo.Location = new System.Drawing.Point(0, 0);
-            this.lblInfo.Margin = new System.Windows.Forms.Padding(46, 49, 46, 49);
+            this.lblInfo.Margin = new System.Windows.Forms.Padding(35, 38, 35, 38);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Padding = new System.Windows.Forms.Padding(46, 49, 46, 49);
-            this.lblInfo.Size = new System.Drawing.Size(793, 413);
+            this.lblInfo.Padding = new System.Windows.Forms.Padding(35, 38, 35, 38);
+            this.lblInfo.Size = new System.Drawing.Size(606, 338);
             this.lblInfo.TabIndex = 2;
             this.lblInfo.Text = "label1   dsd ";
             // 
@@ -67,11 +67,11 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkSupport.AutoSize = true;
             this.linkSupport.BackColor = System.Drawing.SystemColors.Control;
-            this.linkSupport.Location = new System.Drawing.Point(0, 448);
-            this.linkSupport.Margin = new System.Windows.Forms.Padding(5, 0, 5, 0);
+            this.linkSupport.Location = new System.Drawing.Point(0, 366);
+            this.linkSupport.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
             this.linkSupport.Name = "linkSupport";
-            this.linkSupport.Padding = new System.Windows.Forms.Padding(46, 0, 0, 0);
-            this.linkSupport.Size = new System.Drawing.Size(451, 41);
+            this.linkSupport.Padding = new System.Windows.Forms.Padding(35, 0, 0, 0);
+            this.linkSupport.Size = new System.Drawing.Size(361, 32);
             this.linkSupport.TabIndex = 3;
             this.linkSupport.TabStop = true;
             this.linkSupport.Text = "Support and feature requests";
@@ -79,14 +79,14 @@ namespace BasicGiffer
             // 
             // InfoForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(17F, 41F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(793, 523);
+            this.ClientSize = new System.Drawing.Size(606, 424);
             this.Controls.Add(this.linkSupport);
             this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.btnClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(5);
+            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "InfoForm";

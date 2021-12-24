@@ -1,14 +1,20 @@
 Giffit changes:
 
-v0.2 
+v0.2
+Add: Automatic shape and scaling adjustment based on image size 
+Add: Zoom to 100% button 
+Add: Gif styles and size changes (processed for multicore systems)
 Add: Recent locations 
 Add: Loopback function
 Add: Context menu on the main image area
 Add: Appending images to already loaded frames
 Add: Skip not supported files on load
-Add: Save Repeat and FPS settings
+Add: Save Repeat and FPS, image settings
 Add: Image size and quality settings that are persistent
 Mod: Remove Loop button and use the setting in Repeats to loop the animation
+Fix: Repeat and FPS now update on type
+
+
 
 v0.1.1 
 Fix: spacebar for play/pause shortcut to be app specific

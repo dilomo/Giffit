@@ -147,6 +147,7 @@ namespace BasicGiffer
             btnStop.Enabled = true;
             tbFrames.Enabled = true;
             btnPreview.Enabled = true;
+            copyStripMenuItem.Enabled = true;
             saveGIFToolStripMenuItem.Enabled = true;
             addToolStripMenuItem.Enabled = true;
             UpdateTitleBar("");
@@ -166,10 +167,9 @@ namespace BasicGiffer
                 Thread.Sleep(0);
             }
             tbFrames.Maximum = previewImages.Count();
+            PreviewEffects(true);
             UpdateInfo();
             UpdateTitleBar("");
-            AdjustWindowToImage();
-
         }
         private void OpenWithDialog()
         {
@@ -624,7 +624,10 @@ namespace BasicGiffer
                     return true; // signal that we've processed this key
 
                 case Keys.Control | Keys.S:
-                    btnSave.PerformClick();
+                    if (previewImages.Count > 0)
+                    {
+                        btnSave.PerformClick();
+                    }
                     return true;
                 case Keys.Control | Keys.O:
                     OpenWithDialog();
@@ -632,11 +635,17 @@ namespace BasicGiffer
                 case Keys.Control | Keys.I:
                     AddWithDialog();
                     return true;
+                case Keys.Control | Keys.C:
+                    if (previewImages.Count > 0)
+                        Clipboard.SetDataObject(pbImage.Image);
+                    return true;
             }
 
             // run base implementation
             return base.ProcessCmdKey(ref message, keys);
         }
+
+
         private void nudFPS_KeyUp(object sender, KeyEventArgs e)
         {
             nudFPS.Focus();
@@ -683,14 +692,14 @@ namespace BasicGiffer
         {
             var info = "";
             if (previewImages.Count > 0)
-                info += $"Images loaded: {tbFrames.Maximum} frames\n" +
-                    $"First frame size: {previewImages[0].Size.Width}x{previewImages[0].Size.Height}px.\n\n";
+                info += $"1 of {tbFrames.Maximum} frames is {previewImages[0].Size.Width}x{previewImages[0].Size.Height}px\n" +
+                    $"Encoding: {previewImages[0].PixelFormat.ToString()}\n\n";
             else
                 info += $"Image info will be availabe after you load frames.\n\n\n";
 
             info += $"{Application.ProductName} version: {Application.ProductVersion}\n" +
-                $"KGySoft version: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.Drawing.Imaging.AnimatedGifConfiguration)).GetName().Version.ToString()}\n" +
-                    $"Giffit License: Freeware\n" +   
+                $"KGySoft module: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.Drawing.Imaging.AnimatedGifConfiguration)).GetName().Version.ToString()}\n\n" +
+                    $"License: Freeware\n" +   
                     $"©2021 Anton Kerezov, All Rights Reserved.";
 
             InfoForm frm = new InfoForm();
@@ -807,6 +816,11 @@ namespace BasicGiffer
                 oneToOne = false;
                 btnPreview.PerformClick();
             }
+        }
+
+        private void copyStripMenuItem_Click(object sender, EventArgs e)
+        {
+            Clipboard.SetDataObject(pbImage.Image);
         }
     }
 }
