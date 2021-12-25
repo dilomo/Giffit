@@ -235,7 +235,7 @@ namespace BasicGiffer
             }
             originalImages.Clear();
         }
-        protected void SaveGif()
+        protected void SaveGifAnimation()
         {
             var imageArray = previewImages.ToArray();
             double time = 1000 / (double)nudFPS.Value;
@@ -259,6 +259,23 @@ namespace BasicGiffer
                 }
             }
         }
+        protected void SaveGifFrame()
+        {
+            using (var stream = new MemoryStream())
+            {
+                using (var encoder = new BumpKit.GifEncoder(stream, null, null, (int)-1))
+                {
+                    var image = new Bitmap((pbImage.Image as Bitmap));
+                    encoder.AddFrame(image, 0, 0, TimeSpan.FromMilliseconds(0));
+
+                    stream.Position = 0;
+                    using (var fileStream = new FileStream(saveGIF.FileName, FileMode.Create, FileAccess.Write, FileShare.None, 81920, false))
+                    {
+                        stream.WriteTo(fileStream);
+                    }
+                }
+            }
+        }
         public static Image ApplyEffects(Image image, Giffit.GiffitPreset preset)
         {
             if (preset.Scaling < 1)
@@ -271,12 +288,28 @@ namespace BasicGiffer
         }
         public void PreviewEffects(bool active)
         {
-            UpdateInfo("Applying image settings ...");
+            btnSettings.Image = Giffit.Properties.Resources.spinner_20;
             Application.DoEvents();
-
             Stop();
             btnPlay.Enabled = false;
 
+            var previewThread = new Thread(() => GeneratePreview(active));
+            previewThread.Start();
+            while (previewThread.IsAlive)
+            {
+                Application.DoEvents();
+                Thread.Sleep(0);
+            }
+
+
+            btnPlay.Enabled = true;
+            btnSettings.Image = Giffit.Properties.Resources.Settings;
+            UpdateInfo();
+            SetFrame();
+        }
+
+        private void GeneratePreview(bool active)
+        {
             if (previewImages.Count > 0)
             {
                 foreach (var img in previewImages)
@@ -317,7 +350,7 @@ namespace BasicGiffer
             {
                 foreach (var frame in originalImages)
                     CloneAdd(previewImages, frame);
-                
+
                 if (loopback)
                 {
                     foreach (var frame in originalImagesLoopBack)
@@ -326,11 +359,8 @@ namespace BasicGiffer
                     previewImages.AddRange(previewImagesLoopBack);
                 }
             }
-
-            btnPlay.Enabled = true;
-            UpdateInfo();
-            SetFrame();
         }
+
         private static void CloneAdd(List<Image> list, Image frame)
         {
             var mod = new Bitmap(frame);
@@ -357,10 +387,10 @@ namespace BasicGiffer
             mod.Tag = frame.Tag;
             list.Add(mod);
         }
-        public static Image ScaleImage(Image image, int maxWidth, int maxHeight)
+        public static Image ScaleImage(Image image, int Width, int Height)
         {
-            var ratioX = (double)maxWidth / image.Width;
-            var ratioY = (double)maxHeight / image.Height;
+            var ratioX = (double)Width / image.Width;
+            var ratioY = (double)Height / image.Height;
             var ratio = Math.Min(ratioX, ratioY);
 
             var newWidth = (int)(image.Width * ratio);
@@ -455,54 +485,77 @@ namespace BasicGiffer
             btnPlay.BackColor = System.Drawing.SystemColors.Control;
             btnStop.BackColor = System.Drawing.SystemColors.ControlDark;
         }
-
         private void AdjustWindowToImage()
         {
             oneToOne = false;
 
-            var x = this.Width - pbImage.Width;
-            var y = this.Height - pbImage.Height;
+            // contol size to add later
+            var width = this.Width - pbImage.Width;
+            var height = this.Height - pbImage.Height;
+            var maxW = this.MaximumSize.Width - width;
+            var maxH = this.MaximumSize.Height - height;
 
-            var newW = pbImage.Image.Size.Width + x ;
-            var newH = pbImage.Image.Size.Height + y;
+
+            // new total size we aim for
+            var W = pbImage.Image.Size.Width;
+            var H = pbImage.Image.Size.Height;
 
             this.AutoSize = true;
-            if (newH <= this.MaximumSize.Height && newW <= this.MaximumSize.Width &&
-                newH >= this.MinimumSize.Height && newW >= this.MinimumSize.Width)
+            if ((H <= maxH && W <= maxW))
             {
-                this.Size = new Size(newW, newH);
+                this.Size = new Size(W+width, H+height);
                 if (pbImage.SizeMode == PictureBoxSizeMode.Zoom)
                 {
                     oneToOne = true;
                     btnPreview.PerformClick();
                 }
             }
-            else if (newH < this.MinimumSize.Height && newW < this.MinimumSize.Width)
+            else if (this.MinimumSize.Height - height > H && this.MinimumSize.Width - width > W)
             {
-                var w = MinimumSize.Width - newW;
-                var h = MinimumSize.Height - newH;
-                var ratio = (double) Math.Min(w, h) / Math.Max(newW, newH);
+                var w = MinimumSize.Width - W;
+                var h = MinimumSize.Height - H;
+                var ratio = (double)Math.Min(w, h) / Math.Max(W, H);
 
-                this.Size = new Size((int) Math.Truncate(newW * ratio), (int)Math.Truncate(newH * ratio));
+                this.Size = new Size((int)Math.Truncate(W * ratio), (int)Math.Truncate(H * ratio));
+
                 if (pbImage.SizeMode == PictureBoxSizeMode.CenterImage)
                 {
                     btnPreview.PerformClick();
                 }
             }
-            else
+            else if (H >maxH && W <= maxW)
             {
-
-                if (newW > newH) // horizontal
+                var ratio = (double)W / H;
+                this.Size = new Size((int)Math.Truncate((MaximumSize.Height - height) * ratio) + width, MaximumSize.Height);
+                if (pbImage.SizeMode == PictureBoxSizeMode.CenterImage)
                 {
-                    var w = (double) newW / MaximumSize.Width;
-                    this.Size = new Size(MaximumSize.Width, (int)Math.Truncate((newH) / w));
+                    btnPreview.PerformClick();
+                }
+            }
+            else if (H <= maxH && W > maxW)
+            {
+                var ratio = (double)H / W;
+                this.Size = new Size(MaximumSize.Width, (int)Math.Truncate((MaximumSize.Width - width) * ratio) + height);
+                if (pbImage.SizeMode == PictureBoxSizeMode.CenterImage)
+                {
+                    btnPreview.PerformClick();
+                }
+            }
+            else if (H > maxH && W > maxW)
+            {
+                // horizontal
+                if (W > H)
+                {
+                    var ratio = (double)W / H;
+                    this.Size = new Size((int)Math.Truncate((MaximumSize.Height - height) * ratio) + width, MaximumSize.Height);
+                    //var ratio = (double)H / W;
+                    //this.Size = new Size(MaximumSize.Width, (int)Math.Truncate((MaximumSize.Width - width) * ratio) + height);
                 }
                 else
                 {
-                    var w = (double) newH / MaximumSize.Height;
-                    this.Size = new Size((int)Math.Truncate((newW) / w), MaximumSize.Height );
+                    var ratio = (double)W / H;
+                    this.Size = new Size((int)Math.Truncate((MaximumSize.Height - height) * ratio) + width, MaximumSize.Height);   
                 }
-
                 if (pbImage.SizeMode == PictureBoxSizeMode.CenterImage)
                 {
                     btnPreview.PerformClick();
@@ -521,12 +574,19 @@ namespace BasicGiffer
             if (saveGIF.ShowDialog() == DialogResult.OK)
             {
                 UpdateTitleBar($" - Writing file ...");
-                Thread saveGifThread = new Thread(new ThreadStart(SaveGif));
-                saveGifThread.Start();
-                while (saveGifThread.IsAlive)
+                if (saveGIF.FilterIndex == 1)
                 {
-                    Application.DoEvents();
-                    Thread.Sleep(0);
+                    Thread saveGifThread = new Thread(new ThreadStart(SaveGifAnimation));
+                    saveGifThread.Start();
+                    while (saveGifThread.IsAlive)
+                    {
+                        Application.DoEvents();
+                        Thread.Sleep(0);
+                    }
+                }
+                else
+                {
+                    SaveGifFrame();
                 }
                 UpdateTitleBar($" - Saved to {Path.GetFileName(saveGIF.FileName)}");
             }
@@ -608,7 +668,6 @@ namespace BasicGiffer
             OpenWithDialog();
         }
 
-   
 
         protected override bool ProcessCmdKey(ref Message message, Keys keys)
         {
@@ -650,12 +709,10 @@ namespace BasicGiffer
         {
             nudFPS.Focus();
         }
-
         private void nudRepeat_KeyUp(object sender, KeyEventArgs e)
         {
             nudRepeat.Focus();
         }
-
         private void nudFPS_Leave(object sender, EventArgs e)
        {
 
@@ -695,15 +752,16 @@ namespace BasicGiffer
                 info += $"1 of {tbFrames.Maximum} frames is {previewImages[0].Size.Width}x{previewImages[0].Size.Height}px\n" +
                     $"Encoding: {previewImages[0].PixelFormat.ToString()}\n\n";
             else
-                info += $"Image info will be availabe after you load frames.\n\n\n";
+                info += $"Image info will be availabe after you load frames.\n\n";
 
-            info += $"{Application.ProductName} version: {Application.ProductVersion}\n" +
+                info += $"{Application.ProductName} version: {Application.ProductVersion}\n" +
                 $"KGySoft module: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.Drawing.Imaging.AnimatedGifConfiguration)).GetName().Version.ToString()}\n\n" +
-                    $"License: Freeware\n" +   
-                    $"©2021 Anton Kerezov, All Rights Reserved.";
+                $"License: Freeware";
+
+            // $"©2021 Anton Kerezov, All Rights Reserved.";
 
             InfoForm frm = new InfoForm();
-            frm.urlAdress = "https://www.ankere.co/news/gifit-the-animated-gif-tool-for-architects/";
+            frm.urlAdress = "https://www.ankere.co/news/giffit-the-animated-gif-tool-for-architects/";
             frm.lblInfo.Text = info;
             frm.ShowDialog();
 
@@ -715,7 +773,7 @@ namespace BasicGiffer
         private void btnSettings_Click(object sender, EventArgs e)
         {
             if (previewImages.Count == 0)
-            { MessageBox.Show("No data loaded"); return; };
+            { MessageBox.Show("Processing images, please wait ..."); return; };
 
             Giffit.frmSettings sets = new Giffit.frmSettings();
 
@@ -761,20 +819,15 @@ namespace BasicGiffer
         {
             AddWithDialog();
         }
-
- 
-
         private void saveGIFToolStripMenuItem_Click(object sender, EventArgs e)
         {
             btnSave.PerformClick();
         }
-
         private void clearrecentToolStripMenuItem_Click(object sender, EventArgs e)
         {
             recentfoldersToolStripMenuItem.Enabled = false;
             recentFolders.Clear();
         }
-
         private void cmsActions_Opening_1(object sender, CancelEventArgs e)
         {
             cmsRecents.Items.Clear();
@@ -808,7 +861,6 @@ namespace BasicGiffer
                 MessageBox.Show("No supported files were found in this recent directiry");
             }
         }
-
         private void Gifit_SizeChanged(object sender, EventArgs e)
         {
             if (oneToOne)
@@ -817,10 +869,22 @@ namespace BasicGiffer
                 btnPreview.PerformClick();
             }
         }
-
         private void copyStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(pbImage.Image);
+        }
+
+        bool tok = false;
+        private void tStatus_Tick(object sender, EventArgs e)
+        {
+            tok = !tok;
+
+            if (tok)
+              UpdateInfo("Applying image settings 　・");
+            else
+              UpdateInfo("Applying image settings ・　");
+
+            Application.DoEvents();
         }
     }
 }

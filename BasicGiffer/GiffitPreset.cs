@@ -24,7 +24,10 @@ namespace Giffit
         "Medium Dot (1bpp)",
         "Small Dot (1bpp)",
         "Vintage (1bpp)",
-        "Film Grain 800 (4bpp)",
+        "Etchy (4bpp)",
+        "Midnight Blues (4bpp)",
+        "Mono Rough (4bpp)",
+        "Grayscale (8bpp)",
         "Film Grain 200 (8bpp)",
         "Expired Film (8bpp)",
         "Full Index (8bpp)",
@@ -46,7 +49,7 @@ namespace Giffit
                 switch (value)
                 {
                     case 0: // graphix
-                        quantizer = PredefinedColorsQuantizer.BlackAndWhite();     
+                        quantizer = PredefinedColorsQuantizer.BlackAndWhite();
                         pixFormat = PixelFormat.Format1bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise;
                         break;
@@ -75,45 +78,65 @@ namespace Giffit
                         pixFormat = PixelFormat.Format1bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise.ConfigureStrength(.66f);
                         break;
-                    case 6: // film
+                    case 6: // etchy
                         quantizer = PredefinedColorsQuantizer.BlackAndWhite();
                         pixFormat = PixelFormat.Format4bppIndexed;
                         ditherer = ErrorDiffusionDitherer.StevensonArce;
                         break;
-                    case 7: // film 200
+                    case 7: // blues
+                        Palette blues = new Palette(new Color32[] {
+                        new Color32(System.Drawing.Color.AliceBlue),
+                        new Color32(System.Drawing.Color.SteelBlue),
+                        new Color32(System.Drawing.Color.LightGoldenrodYellow),
+                        new Color32(System.Drawing.Color.White),
+                        new Color32(System.Drawing.Color.Black)});
+                        quantizer = PredefinedColorsQuantizer.FromCustomPalette(blues);
+                        pixFormat = PixelFormat.Format4bppIndexed;
+                        ditherer = ErrorDiffusionDitherer.Burkes;
+                        break;
+                    case 8: // mono
+                        quantizer = PredefinedColorsQuantizer.Grayscale16();
+                        pixFormat = PixelFormat.Format4bppIndexed;
+                        ditherer = ErrorDiffusionDitherer.FloydSteinberg;
+                        break;
+                    case 9: // Gray
+                        quantizer = PredefinedColorsQuantizer.Grayscale();
+                        pixFormat = PixelFormat.Format8bppIndexed;
+                        break;
+                    case 10: // film 200
                         quantizer = PredefinedColorsQuantizer.Grayscale();
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = new RandomNoiseDitherer(0.25f);
                         break;
-                    case 8: // expired
+                    case 11: // expired
                         quantizer = OptimizedPaletteQuantizer.Octree(36);
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise;
                         break;
-                    case 9: // index
+                    case 12: // index
                         quantizer = OptimizedPaletteQuantizer.Octree();
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise;
                         break;
-                    case 10: // 565 
+                    case 13: // 565 
                         quantizer = PredefinedColorsQuantizer.Rgb565();
                         pixFormat = PixelFormat.Format16bppRgb565;
                         ditherer = ErrorDiffusionDitherer.FloydSteinberg;
                         break;
-                    case 11: // transparante
+                    case 14: // transparante
                         quantizer = PredefinedColorsQuantizer.Argb1555();
                         pixFormat = PixelFormat.Format16bppArgb1555;
                         ditherer = ErrorDiffusionDitherer.FloydSteinberg;
                         break;
-                    case 12: // 888
+                    case 15: // 888
                         quantizer = PredefinedColorsQuantizer.Rgb888();
                         pixFormat = PixelFormat.Format24bppRgb;
                         break;
-                    case 13: // ultra
+                    case 16: // ultra
                         quantizer = PredefinedColorsQuantizer.Argb8888();
                         pixFormat = PixelFormat.Format32bppPArgb;
                         break;
-                    case 14: // system
+                    case 17: // system
                         break;
                     default:
                         quantizer = PredefinedColorsQuantizer.Rgb565();

@@ -32,16 +32,16 @@ namespace BasicGiffer
             this.btnClose = new System.Windows.Forms.Button();
             this.lblInfo = new System.Windows.Forms.Label();
             this.linkSupport = new System.Windows.Forms.LinkLabel();
+            this.label1 = new System.Windows.Forms.Label();
             this.SuspendLayout();
             // 
             // btnClose
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(450, 359);
-            this.btnClose.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
+            this.btnClose.Location = new System.Drawing.Point(385, 313);
             this.btnClose.Name = "btnClose";
-            this.btnClose.Size = new System.Drawing.Size(141, 48);
+            this.btnClose.Size = new System.Drawing.Size(119, 38);
             this.btnClose.TabIndex = 1;
             this.btnClose.Text = "&Close";
             this.btnClose.UseVisualStyleBackColor = true;
@@ -54,12 +54,12 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblInfo.BackColor = System.Drawing.SystemColors.Window;
             this.lblInfo.Location = new System.Drawing.Point(0, 0);
-            this.lblInfo.Margin = new System.Windows.Forms.Padding(35, 38, 35, 38);
+            this.lblInfo.Margin = new System.Windows.Forms.Padding(30);
             this.lblInfo.Name = "lblInfo";
-            this.lblInfo.Padding = new System.Windows.Forms.Padding(35, 38, 35, 38);
-            this.lblInfo.Size = new System.Drawing.Size(606, 338);
+            this.lblInfo.Padding = new System.Windows.Forms.Padding(30);
+            this.lblInfo.Size = new System.Drawing.Size(517, 246);
             this.lblInfo.TabIndex = 2;
-            this.lblInfo.Text = "label1   dsd ";
+            this.lblInfo.Text = "label1   ";
             // 
             // linkSupport
             // 
@@ -67,26 +67,39 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkSupport.AutoSize = true;
             this.linkSupport.BackColor = System.Drawing.SystemColors.Control;
-            this.linkSupport.Location = new System.Drawing.Point(0, 366);
-            this.linkSupport.Margin = new System.Windows.Forms.Padding(4, 0, 4, 0);
+            this.linkSupport.Location = new System.Drawing.Point(0, 319);
             this.linkSupport.Name = "linkSupport";
-            this.linkSupport.Padding = new System.Windows.Forms.Padding(35, 0, 0, 0);
-            this.linkSupport.Size = new System.Drawing.Size(361, 32);
+            this.linkSupport.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.linkSupport.Size = new System.Drawing.Size(287, 25);
             this.linkSupport.TabIndex = 3;
             this.linkSupport.TabStop = true;
             this.linkSupport.Text = "Support and feature requests";
             this.linkSupport.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkSupport_LinkClicked);
             // 
+            // label1
+            // 
+            this.label1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
+            | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.label1.BackColor = System.Drawing.SystemColors.Window;
+            this.label1.Location = new System.Drawing.Point(0, 241);
+            this.label1.Margin = new System.Windows.Forms.Padding(30, 15, 30, 15);
+            this.label1.Name = "label1";
+            this.label1.Padding = new System.Windows.Forms.Padding(30, 15, 30, 15);
+            this.label1.Size = new System.Drawing.Size(517, 57);
+            this.label1.TabIndex = 2;
+            this.label1.Text = "©2021 Anton Kerezov, All Rights Reserved.";
+            // 
             // InfoForm
             // 
-            this.AutoScaleDimensions = new System.Drawing.SizeF(13F, 32F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(606, 424);
+            this.ClientSize = new System.Drawing.Size(517, 364);
             this.Controls.Add(this.linkSupport);
+            this.Controls.Add(this.label1);
             this.Controls.Add(this.lblInfo);
             this.Controls.Add(this.btnClose);
             this.FormBorderStyle = System.Windows.Forms.FormBorderStyle.FixedDialog;
-            this.Margin = new System.Windows.Forms.Padding(4, 4, 4, 4);
             this.MaximizeBox = false;
             this.MinimizeBox = false;
             this.Name = "InfoForm";
@@ -102,5 +115,6 @@ namespace BasicGiffer
         private System.Windows.Forms.Button btnClose;
         private System.Windows.Forms.LinkLabel linkSupport;
         public System.Windows.Forms.Label lblInfo;
+        public System.Windows.Forms.Label label1;
     }
 }
