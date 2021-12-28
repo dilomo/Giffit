@@ -8,6 +8,8 @@ using System.Drawing.Drawing2D;
 using System.IO;
 using System.Linq;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 
 namespace BumpKit
 {
@@ -78,8 +80,6 @@ namespace BumpKit
         {
             using (var gifStream = new MemoryStream())
             {
-                EncoderParameters ec = new EncoderParameters();
-                
                 img.Save(gifStream, ImageFormat.Gif);
                 if (_isFirstImage) // Steal the global color table info
                 {
@@ -398,6 +398,45 @@ namespace BumpKit
             }
             if (dispose) image.Dispose();
             return newImage;
+        }
+
+        /// <summary>Creates a 24 bit-per-pixel copy of the source image.</summary>
+        public static Image CopyImage(this Image image) => CopyImage(image, PixelFormat.Format24bppRgb);
+
+        /// <summary>Creates a copy of the source image with the specified pixel format.</summary><remarks>
+        /// This can also be achieved with the <see cref="Bitmap.Clone(int, int, PixelFormat)"/>
+        /// overload, but I have had issues with that method.</remarks>
+        public static Image CopyImage(this Image image, PixelFormat format)
+        {
+            if (image == null)
+                throw new ArgumentNullException("image");
+
+            // Don't try to draw a new Bitmap with an indexed pixel format.
+            if (format == PixelFormat.Format1bppIndexed || format == PixelFormat.Format4bppIndexed || format == PixelFormat.Format8bppIndexed || format == PixelFormat.Indexed)
+                return (image as Bitmap).Clone(new Rectangle(0, 0, image.Width, image.Height), format);
+
+            Image result = null;
+            try
+            {
+                result = new Bitmap(image.Width, image.Height, format);
+
+                using (Graphics graphics = Graphics.FromImage(result))
+                {
+                    graphics.InterpolationMode = InterpolationMode.HighQualityBicubic;
+                    graphics.SmoothingMode = SmoothingMode.AntiAlias;
+                    graphics.CompositingQuality = CompositingQuality.HighQuality;
+
+                    graphics.DrawImage(image, 0, 0, result.Width, result.Height);
+                }
+            }
+            catch
+            {
+                if (result != null)
+                    result.Dispose();
+
+                throw;
+            }
+            return result;
         }
     }
 

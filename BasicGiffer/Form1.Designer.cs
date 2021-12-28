@@ -75,14 +75,14 @@ namespace BasicGiffer
             // pbImage
             // 
             this.pbImage.BackColor = System.Drawing.SystemColors.Window;
-            this.pbImage.BackgroundImage = global::Giffit.Properties.Resources.dropImage;
+            this.pbImage.BackgroundImage = global::Giffit.Properties.Resources.drop;
             this.pbImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbImage.ContextMenuStrip = this.cmsActions;
             this.pbImage.Dock = System.Windows.Forms.DockStyle.Fill;
             this.pbImage.Location = new System.Drawing.Point(3, 4);
             this.pbImage.Name = "pbImage";
-            this.pbImage.Size = new System.Drawing.Size(1273, 768);
+            this.pbImage.Size = new System.Drawing.Size(1052, 701);
             this.pbImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbImage.TabIndex = 4;
             this.pbImage.TabStop = false;
@@ -104,51 +104,61 @@ namespace BasicGiffer
             this.cmsActions.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsActions.ShowImageMargin = false;
             this.cmsActions.ShowItemToolTips = false;
-            this.cmsActions.Size = new System.Drawing.Size(207, 202);
+            this.cmsActions.Size = new System.Drawing.Size(276, 202);
             this.cmsActions.Opening += new System.ComponentModel.CancelEventHandler(this.cmsActions_Opening_1);
             // 
             // newToolStripMenuItem
             // 
+            this.newToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(206, 32);
+            this.newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+O";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
             this.newToolStripMenuItem.Text = "&New Animation ...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // addToolStripMenuItem
             // 
             this.addToolStripMenuItem.Enabled = false;
+            this.addToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(206, 32);
+            this.addToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+I";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
             this.addToolStripMenuItem.Text = "&Add Images ...";
+            this.addToolStripMenuItem.ToolTipText = "Ctrl+I";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
             // 
             // saveGIFToolStripMenuItem
             // 
             this.saveGIFToolStripMenuItem.Enabled = false;
+            this.saveGIFToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.saveGIFToolStripMenuItem.Name = "saveGIFToolStripMenuItem";
-            this.saveGIFToolStripMenuItem.Size = new System.Drawing.Size(206, 32);
-            this.saveGIFToolStripMenuItem.Text = "&Save GIF ...";
+            this.saveGIFToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
+            this.saveGIFToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
+            this.saveGIFToolStripMenuItem.Text = "&Export ...";
             this.saveGIFToolStripMenuItem.Click += new System.EventHandler(this.saveGIFToolStripMenuItem_Click);
             // 
             // copyStripMenuItem
             // 
             this.copyStripMenuItem.Enabled = false;
+            this.copyStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.copyStripMenuItem.Name = "copyStripMenuItem";
-            this.copyStripMenuItem.Size = new System.Drawing.Size(206, 32);
+            this.copyStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
+            this.copyStripMenuItem.Size = new System.Drawing.Size(275, 32);
             this.copyStripMenuItem.Text = "&Copy Frame";
+            this.copyStripMenuItem.ToolTipText = "Ctrl+C";
             this.copyStripMenuItem.Click += new System.EventHandler(this.copyStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(203, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(272, 6);
             // 
             // recentfoldersToolStripMenuItem
             // 
             this.recentfoldersToolStripMenuItem.DropDown = this.cmsRecents;
             this.recentfoldersToolStripMenuItem.Enabled = false;
             this.recentfoldersToolStripMenuItem.Name = "recentfoldersToolStripMenuItem";
-            this.recentfoldersToolStripMenuItem.Size = new System.Drawing.Size(206, 32);
+            this.recentfoldersToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
             this.recentfoldersToolStripMenuItem.Text = "Recents";
             // 
             // cmsRecents
@@ -165,7 +175,7 @@ namespace BasicGiffer
             // clearrecentToolStripMenuItem
             // 
             this.clearrecentToolStripMenuItem.Name = "clearrecentToolStripMenuItem";
-            this.clearrecentToolStripMenuItem.Size = new System.Drawing.Size(206, 32);
+            this.clearrecentToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
             this.clearrecentToolStripMenuItem.Text = "Clear Recents";
             this.clearrecentToolStripMenuItem.Click += new System.EventHandler(this.clearrecentToolStripMenuItem_Click);
             // 
@@ -185,11 +195,11 @@ namespace BasicGiffer
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.nudRepeat, 1, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 873);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 806);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1273, 64);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(1052, 64);
             this.tableLayoutPanel2.TabIndex = 2;
             // 
             // btnSave
@@ -199,12 +209,13 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.BackColor = System.Drawing.SystemColors.Control;
             this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(1105, 12);
+            this.btnSave.Location = new System.Drawing.Point(884, 12);
             this.btnSave.Margin = new System.Windows.Forms.Padding(3, 12, 12, 12);
             this.btnSave.Name = "btnSave";
             this.btnSave.Size = new System.Drawing.Size(156, 40);
             this.btnSave.TabIndex = 0;
-            this.btnSave.Text = "&Save";
+            this.btnSave.Text = "&Export";
+            this.ttip.SetToolTip(this.btnSave, "Save to file (Ctrl+S)");
             this.btnSave.UseVisualStyleBackColor = false;
             this.btnSave.Click += new System.EventHandler(this.btnSave_Click);
             // 
@@ -250,7 +261,7 @@ namespace BasicGiffer
             this.lblResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblResult.Location = new System.Drawing.Point(347, 9);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(752, 45);
+            this.lblResult.Size = new System.Drawing.Size(531, 45);
             this.lblResult.TabIndex = 3;
             this.lblResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -288,11 +299,11 @@ namespace BasicGiffer
             this.btnSettings.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSettings.Image = global::Giffit.Properties.Resources.Settings;
-            this.btnSettings.Location = new System.Drawing.Point(708, 3);
+            this.btnSettings.Location = new System.Drawing.Point(597, 3);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(43, 38);
             this.btnSettings.TabIndex = 6;
-            this.ttip.SetToolTip(this.btnSettings, "Image settings");
+            this.ttip.SetToolTip(this.btnSettings, "Image settings (S)");
             this.btnSettings.UseVisualStyleBackColor = true;
             this.btnSettings.Click += new System.EventHandler(this.btnSettings_Click);
             // 
@@ -314,7 +325,7 @@ namespace BasicGiffer
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1279, 940);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(1058, 873);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel3
@@ -328,7 +339,7 @@ namespace BasicGiffer
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 130F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131F));
             this.tableLayoutPanel3.Controls.Add(this.btnPlay, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnStop, 3, 0);
             this.tableLayoutPanel3.Controls.Add(this.lblCurFrame, 0, 0);
@@ -337,11 +348,11 @@ namespace BasicGiffer
             this.tableLayoutPanel3.Controls.Add(this.btnSettings, 6, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnPreview, 5, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 823);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 756);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(1273, 44);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(1052, 44);
             this.tableLayoutPanel3.TabIndex = 5;
             // 
             // btnPlay
@@ -352,10 +363,11 @@ namespace BasicGiffer
             this.btnPlay.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPlay.Image = global::Giffit.Properties.Resources.play;
-            this.btnPlay.Location = new System.Drawing.Point(512, 3);
+            this.btnPlay.Location = new System.Drawing.Point(401, 3);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(43, 38);
             this.btnPlay.TabIndex = 0;
+            this.ttip.SetToolTip(this.btnPlay, "Play (Space)");
             this.btnPlay.UseVisualStyleBackColor = false;
             this.btnPlay.Click += new System.EventHandler(this.btnPlay_Click);
             // 
@@ -367,10 +379,11 @@ namespace BasicGiffer
             this.btnStop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStop.Image = global::Giffit.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(561, 3);
+            this.btnStop.Location = new System.Drawing.Point(450, 3);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(43, 38);
             this.btnStop.TabIndex = 1;
+            this.ttip.SetToolTip(this.btnStop, "Stop (Space)");
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
             // 
@@ -394,9 +407,10 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel1.AutoSize = true;
-            this.linkLabel1.Location = new System.Drawing.Point(1146, 0);
+            this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.linkLabel1.Location = new System.Drawing.Point(924, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(124, 44);
+            this.linkLabel1.Size = new System.Drawing.Size(125, 44);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "info";
@@ -411,11 +425,11 @@ namespace BasicGiffer
             this.btnLoop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnLoop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLoop.Image = global::Giffit.Properties.Resources.loopbv;
-            this.btnLoop.Location = new System.Drawing.Point(610, 3);
+            this.btnLoop.Location = new System.Drawing.Point(499, 3);
             this.btnLoop.Name = "btnLoop";
             this.btnLoop.Size = new System.Drawing.Size(43, 38);
             this.btnLoop.TabIndex = 2;
-            this.ttip.SetToolTip(this.btnLoop, "Loopback");
+            this.ttip.SetToolTip(this.btnLoop, "Loopback the frames");
             this.btnLoop.UseVisualStyleBackColor = false;
             this.btnLoop.Click += new System.EventHandler(this.btnLoop_Click);
             // 
@@ -426,11 +440,11 @@ namespace BasicGiffer
             this.btnPreview.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnPreview.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPreview.Image = global::Giffit.Properties.Resources.preview;
-            this.btnPreview.Location = new System.Drawing.Point(659, 3);
+            this.btnPreview.Location = new System.Drawing.Point(548, 3);
             this.btnPreview.Name = "btnPreview";
             this.btnPreview.Size = new System.Drawing.Size(43, 38);
             this.btnPreview.TabIndex = 7;
-            this.ttip.SetToolTip(this.btnPreview, "Zoom to 100%");
+            this.ttip.SetToolTip(this.btnPreview, "Zoom to 100% (Z)");
             this.btnPreview.UseVisualStyleBackColor = true;
             this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
             // 
@@ -438,11 +452,11 @@ namespace BasicGiffer
             // 
             this.tbFrames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbFrames.Enabled = false;
-            this.tbFrames.Location = new System.Drawing.Point(3, 778);
+            this.tbFrames.Location = new System.Drawing.Point(3, 711);
             this.tbFrames.Maximum = 1;
             this.tbFrames.Minimum = 1;
             this.tbFrames.Name = "tbFrames";
-            this.tbFrames.Size = new System.Drawing.Size(1273, 39);
+            this.tbFrames.Size = new System.Drawing.Size(1052, 39);
             this.tbFrames.TabIndex = 3;
             this.tbFrames.Value = 1;
             this.tbFrames.ValueChanged += new System.EventHandler(this.tbFrames_ValueChanged);
@@ -451,7 +465,8 @@ namespace BasicGiffer
             // 
             this.saveGIF.DefaultExt = "gif";
             this.saveGIF.FileName = "animation";
-            this.saveGIF.Filter = "GIF Animation |*.gif|GIF Frame as still image|*.gif";
+            this.saveGIF.Filter = "GIF Animation |*.gif|Current frame as GIF|*.gif|Current frame as JPG|*.jpg|Curren" +
+    "t frame as PNG|*.png|Current frame as TIFF|*.tiff";
             this.saveGIF.RestoreDirectory = true;
             this.saveGIF.SupportMultiDottedExtensions = true;
             this.saveGIF.Title = "Export GIF";
@@ -462,7 +477,8 @@ namespace BasicGiffer
             // 
             // ofd
             // 
-            this.ofd.Filter = " JPG |*.jpg| PNG |*.png| BMP |*.bmp";
+            this.ofd.Filter = " GIF |*.gif| JPG |*.jpg| PNG |*.png| BMP |*.bmp| TIFF |*.tiff";
+            this.ofd.FilterIndex = 2;
             this.ofd.Multiselect = true;
             this.ofd.RestoreDirectory = true;
             this.ofd.Title = "Import Images";
@@ -479,11 +495,11 @@ namespace BasicGiffer
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1279, 940);
+            this.ClientSize = new System.Drawing.Size(1058, 873);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(2140, 1296);
+            this.MaximumSize = new System.Drawing.Size(2340, 1400);
             this.MinimumSize = new System.Drawing.Size(646, 547);
             this.Name = "Gifit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;

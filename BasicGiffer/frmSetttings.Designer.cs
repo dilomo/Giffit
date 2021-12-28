@@ -46,9 +46,9 @@ namespace Giffit
             // 
             this.btnStore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStore.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnStore.Location = new System.Drawing.Point(133, 248);
+            this.btnStore.Location = new System.Drawing.Point(146, 263);
             this.btnStore.Name = "btnStore";
-            this.btnStore.Size = new System.Drawing.Size(176, 36);
+            this.btnStore.Size = new System.Drawing.Size(194, 36);
             this.btnStore.TabIndex = 0;
             this.btnStore.Text = "&Apply";
             this.btnStore.UseVisualStyleBackColor = true;
@@ -57,9 +57,9 @@ namespace Giffit
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnReset.Location = new System.Drawing.Point(12, 248);
+            this.btnReset.Location = new System.Drawing.Point(13, 263);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(86, 36);
+            this.btnReset.Size = new System.Drawing.Size(95, 36);
             this.btnReset.TabIndex = 1;
             this.btnReset.Text = "&Reset";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -71,9 +71,9 @@ namespace Giffit
             this.groupBox1.Controls.Add(this.lblsize);
             this.groupBox1.Controls.Add(this.tbSize);
             this.groupBox1.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox1.Location = new System.Drawing.Point(12, 4);
+            this.groupBox1.Location = new System.Drawing.Point(12, 12);
             this.groupBox1.Name = "groupBox1";
-            this.groupBox1.Size = new System.Drawing.Size(297, 109);
+            this.groupBox1.Size = new System.Drawing.Size(327, 109);
             this.groupBox1.TabIndex = 6;
             this.groupBox1.TabStop = false;
             this.groupBox1.Text = "Size";
@@ -83,7 +83,7 @@ namespace Giffit
             this.lblsize.Dock = System.Windows.Forms.DockStyle.Bottom;
             this.lblsize.Location = new System.Drawing.Point(3, 76);
             this.lblsize.Name = "lblsize";
-            this.lblsize.Size = new System.Drawing.Size(291, 30);
+            this.lblsize.Size = new System.Drawing.Size(321, 30);
             this.lblsize.TabIndex = 5;
             this.lblsize.Text = "2000x1600 px (100%)";
             this.lblsize.TextAlign = System.Drawing.ContentAlignment.MiddleCenter;
@@ -91,11 +91,11 @@ namespace Giffit
             // tbSize
             // 
             this.tbSize.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tbSize.Location = new System.Drawing.Point(3, 27);
+            this.tbSize.Location = new System.Drawing.Point(3, 29);
             this.tbSize.Maximum = 100;
             this.tbSize.Minimum = 1;
             this.tbSize.Name = "tbSize";
-            this.tbSize.Size = new System.Drawing.Size(291, 69);
+            this.tbSize.Size = new System.Drawing.Size(321, 72);
             this.tbSize.TabIndex = 6;
             this.tbSize.TickFrequency = 5;
             this.tbSize.Value = 50;
@@ -104,12 +104,11 @@ namespace Giffit
             // groupBox2
             // 
             this.groupBox2.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.groupBox2.Controls.Add(this.cbPersistent);
             this.groupBox2.Controls.Add(this.cbStyle);
             this.groupBox2.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.groupBox2.Location = new System.Drawing.Point(12, 108);
+            this.groupBox2.Location = new System.Drawing.Point(9, 121);
             this.groupBox2.Name = "groupBox2";
-            this.groupBox2.Size = new System.Drawing.Size(297, 118);
+            this.groupBox2.Size = new System.Drawing.Size(327, 82);
             this.groupBox2.TabIndex = 6;
             this.groupBox2.TabStop = false;
             this.groupBox2.Text = "Style";
@@ -117,11 +116,11 @@ namespace Giffit
             // cbPersistent
             // 
             this.cbPersistent.AutoSize = true;
-            this.cbPersistent.Location = new System.Drawing.Point(11, 80);
+            this.cbPersistent.Location = new System.Drawing.Point(21, 209);
             this.cbPersistent.Name = "cbPersistent";
-            this.cbPersistent.Size = new System.Drawing.Size(199, 29);
+            this.cbPersistent.Size = new System.Drawing.Size(236, 29);
             this.cbPersistent.TabIndex = 1;
-            this.cbPersistent.Text = "Keep style on reload";
+            this.cbPersistent.Text = "Keep settings on restart";
             this.cbPersistent.UseVisualStyleBackColor = true;
             // 
             // cbStyle
@@ -130,20 +129,21 @@ namespace Giffit
             this.cbStyle.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
             this.cbStyle.FlatStyle = System.Windows.Forms.FlatStyle.System;
             this.cbStyle.FormattingEnabled = true;
-            this.cbStyle.Location = new System.Drawing.Point(11, 36);
-            this.cbStyle.Margin = new System.Windows.Forms.Padding(8, 3, 8, 3);
+            this.cbStyle.Location = new System.Drawing.Point(12, 36);
+            this.cbStyle.Margin = new System.Windows.Forms.Padding(9, 3, 9, 3);
             this.cbStyle.MaxDropDownItems = 15;
             this.cbStyle.Name = "cbStyle";
-            this.cbStyle.Size = new System.Drawing.Size(275, 33);
+            this.cbStyle.Size = new System.Drawing.Size(302, 33);
             this.cbStyle.TabIndex = 0;
             this.cbStyle.ValueMember = "0";
             // 
             // frmSettings
             // 
             this.AcceptButton = this.btnStore;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(321, 294);
+            this.ClientSize = new System.Drawing.Size(353, 309);
+            this.Controls.Add(this.cbPersistent);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
             this.Controls.Add(this.btnReset);
@@ -157,8 +157,8 @@ namespace Giffit
             this.groupBox1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbSize)).EndInit();
             this.groupBox2.ResumeLayout(false);
-            this.groupBox2.PerformLayout();
             this.ResumeLayout(false);
+            this.PerformLayout();
 
         }
 

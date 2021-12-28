@@ -33,6 +33,7 @@ namespace BasicGiffer
             = new System.Collections.Specialized.StringCollection();
         bool loopback = false;
         bool preview = true;
+        bool processing = false;
         bool preserveStyle = false;
         bool zoom = true;
         bool oneToOne = false;
@@ -47,14 +48,15 @@ namespace BasicGiffer
             InitializeComponent();
         }
 
-       
+      
         private bool GetFilename(out string[] filenames, DragEventArgs e)
         {
             bool ret = true;
             List<string> names = new List<string>();
             if ((e.AllowedEffect & DragDropEffects.Copy) == DragDropEffects.Copy)
             {
-                Array data = ((IDataObject)e.Data).GetData("FileDrop") as Array;
+                string[] data = ((IDataObject)e.Data).GetData("FileDrop") as string[];
+
                 if (data != null)
                 {
                     for (int i = 0; i < data.Length; i++)
@@ -63,7 +65,7 @@ namespace BasicGiffer
                         {
                             var filename = ((string[])data)[i];
                             string ext = Path.GetExtension(filename).ToLower();
-                            if ((ext != ".jpg") && (ext != ".png") && (ext != ".bmp"))
+                            if ((ext != ".gif") && (ext != ".jpg") && (ext != ".png") && (ext != ".bmp") && (ext != ".tiff"))
                             {
                                 //ret = false;
                             }
@@ -88,15 +90,16 @@ namespace BasicGiffer
 
             string[] data = Directory.GetFiles(folder);
 
+
             if (data != null)
             {
                 for (int i = 0; i < data.Length; i++)
                 {
                     var filename = data[i];
                     string ext = Path.GetExtension(filename).ToLower();
-                    if ((ext != ".jpg") && (ext != ".png") && (ext != ".bmp"))
+                    if ((ext != ".gif") && (ext != ".jpg") && (ext != ".png") && (ext != ".bmp") && (ext != ".tiff"))
                     {
-                        //ret = false;
+                        // skip file //ret = false;
                     }
                     else
                         names.Add(filename);
@@ -117,13 +120,17 @@ namespace BasicGiffer
                 pbImage.Image = previewImages[tbFrames.Value - 1];
                 lblCurFrame.Text = tbFrames.Value.ToString();
             }
+            else pbImage.Image = null;
         }
         protected void OpenFiles()
         {
+          
             DisposeImages();
-            UpdateTitleBar($"- {filenames.Count().ToString()} files are loading ... ");
+            DisableActions();
+            UpdateInfo($"{filenames.Count().ToString()} files are loading ... ");
             AddRecent(filenames);
 
+            
             getImageThread = new Thread(new ThreadStart(LoadImages));
             getImageThread.Start();
 
@@ -132,30 +139,32 @@ namespace BasicGiffer
                 Application.DoEvents();
                 Thread.Sleep(0);
             }
-
-            PreviewEffects(true);
-
+      
             tbFrames.Value = 1;
             tbFrames.Maximum = previewImages.Count();
-            UpdateInfo();
+            pbImage.Image = null;
+            PreviewEffects(preview);
+            pbImage.SizeMode = PictureBoxSizeMode.Zoom;
             pbImage.Image = previewImages.First();
+            AdjustWindowToImage();
             pbImage.BackgroundImage = null;
-            btnSave.Enabled = true;
+            //btnSave.Enabled = true;
             btnSettings.Enabled = true;
-            btnLoop.Enabled = true;
-            btnPlay.Enabled = true;
-            btnStop.Enabled = true;
+            //btnLoop.Enabled = true;
+            //btnPlay.Enabled = true;
+            //btnStop.Enabled = true;
             tbFrames.Enabled = true;
-            btnPreview.Enabled = true;
+            //btnPreview.Enabled = true;
             copyStripMenuItem.Enabled = true;
             saveGIFToolStripMenuItem.Enabled = true;
             addToolStripMenuItem.Enabled = true;
-            UpdateTitleBar("");
-            AdjustWindowToImage();
+            UpdateInfo();
+            EnableActions();
         }
         protected void AddFiles()
-        { 
-            UpdateTitleBar($"- {filenames.Count().ToString()} files are loading ... ");
+        {
+            DisableActions();
+            UpdateInfo($"{filenames.Count().ToString()} files are loading ... ");
             AddRecent(filenames);
 
             getImageThread = new Thread(new ThreadStart(LoadImages));
@@ -169,7 +178,7 @@ namespace BasicGiffer
             tbFrames.Maximum = previewImages.Count();
             PreviewEffects(true);
             UpdateInfo();
-            UpdateTitleBar("");
+            EnableActions();
         }
         private void OpenWithDialog()
         {
@@ -199,21 +208,29 @@ namespace BasicGiffer
             int i = previewImages.Count;
             foreach (var name in filenames)
             {
-                Image img;
-                Image imgOriginal;
+                Image previewImg;
+                Image originalImg;
                 // release file lock
-                using (var bmpTemp = new Bitmap(name))
+                using (var temp = (Bitmap)Image.FromFile(name, true))
                 {
-                    // store original files for non destructive editing
-                    imgOriginal = new Bitmap(bmpTemp);
-                    imgOriginal.Tag = i;
-                    originalImages.Add(imgOriginal);
-                    // store preview image
-                    img = new Bitmap(bmpTemp);
-                    img.Tag = i;
-                    previewImages.Add(img);
+                    var possibleFrames = BitmapExtensions.ExtractBitmaps(temp);
+
+                    foreach (var tempFrame in possibleFrames)
+                    {
+                        // store original files for non destructive editing
+                        originalImg = tempFrame.CloneCurrentFrame();
+                        originalImg.Tag = i;
+                        originalImages.Add(originalImg);
+
+                        // store preview image
+                        previewImg = tempFrame.CloneCurrentFrame();
+                        previewImg.Tag = i;
+                        previewImages.Add(previewImg);
+                        i++;
+                        UpdateInfo($"Adding frame {i}");
+                    }
                 }
-                i++;
+                
             }
 
         }
@@ -234,25 +251,109 @@ namespace BasicGiffer
                 img.Dispose();
             }
             originalImages.Clear();
+            foreach (var img in originalImagesLoopBack)
+            {
+                img.Dispose();
+            }
+            originalImagesLoopBack.Clear();
+            // get pointer to delete later
+            this.Invoke(new MethodInvoker(delegate ()
+            {
+                if (pbImage.Image != null)
+                {
+                    pbImage.Image.Dispose();
+                    pbImage.Image = null;
+                }
+            }));
         }
         protected void SaveGifAnimation()
+        {
+            double time = 1000 / (double)nudFPS.Value;
+            double percentMultiplier = 100 / previewImages.Count;
+            IEnumerable<IReadableBitmapData> imageArray;
+
+            if (settings.HighQuality)
+            {
+                List<Image> allframes = new List<Image>();
+                allframes.AddRange(originalImages);
+                allframes.AddRange(originalImagesLoopBack);
+                allframes = allframes.Select(i => ApplyEffects(i, settings)).ToList();
+                imageArray = allframes.Select(i => BitmapExtensions.GetReadableBitmapData((Bitmap)i.Clone()));
+            }
+            else
+                imageArray = previewImages.Select(i => BitmapExtensions.GetReadableBitmapData((Bitmap)i.Clone()));
+
+            var agf = new AnimatedGifConfiguration(imageArray, TimeSpan.FromMilliseconds(time));
+            agf.AnimationMode = (AnimationMode) nudRepeat.Value;
+            agf.SizeHandling = AnimationFramesSizeHandling.Center;
+            agf.ReportOverallProgress = true;
+
+            if (settings.OptimisedQuantizer)
+                agf.AllowDeltaFrames = false;
+
+            // bugfix for now
+            if (settings.StyleIndex == 9) agf.Ditherer = settings.ditherer;
+
+            if (settings.HighQuality)
+            {
+                // must be agf.AllowDeltaFrames = true;
+                agf.Quantizer = settings.quantizer;
+                agf.Ditherer = settings.ditherer;
+            }
+
+            using (var stream = new MemoryStream())
+            {
+                var progresseReporter = new TaskConfig();
+                progresseReporter.Progress = new SaveProgress(saveGIF.FileName, UpdateInfo);
+                
+                GifEncoder.EncodeAnimationAsync(agf, stream, progresseReporter).Wait();
+
+                stream.Position = 0;
+                using (var fileStream = new FileStream(saveGIF.FileName, FileMode.Create, FileAccess.Write, FileShare.None, 131072, false))
+                {
+                    stream.WriteTo(fileStream);
+                }
+            }
+        }
+        private class SaveProgress : IDrawingProgress
+        {
+            string name;
+            Action<string> show; 
+            #region Methods
+            public SaveProgress(string file, Action<string> displayFunc )
+            {
+                name = file;
+                show = displayFunc;
+            }
+            
+            void IDrawingProgress.Report(DrawingProgress progress) => show($"Saving {Convert.ToInt32((double)progress.CurrentValue/progress.MaximumValue*100)}% ...");
+            void IDrawingProgress.New(DrawingOperation operationType, int maximumValue, int currentValue) => show($"Saving file ...");
+            void IDrawingProgress.Increment() { }
+            void IDrawingProgress.SetProgressValue(int value) => show($"({value})");
+            void IDrawingProgress.Complete() => show($"File saved to {name}");
+#if !(NET35 || NET40)
+            void IProgress<DrawingProgress>.Report(DrawingProgress value) => ((IDrawingProgress)this).Report(value);
+#endif
+
+            #endregion
+        }
+        protected void SaveGifAnimation_BumpKit()
         {
             var imageArray = previewImages.ToArray();
             double time = 1000 / (double)nudFPS.Value;
             double percentMultiplier = 100 / previewImages.Count;
-
             using (var stream = new MemoryStream())
             {
-                using (var encoder = new BumpKit.GifEncoder(stream, null, null, (int)-1))
+                using (var encoder = new BumpKit.GifEncoder(stream, null, null, (int)nudRepeat.Value))
                 {
                     for (int i = 0; i < imageArray.Length; i++)
                     {
-                        var image = new Bitmap((imageArray[i] as Bitmap));
-                        encoder.AddFrame(image, 0, 0, TimeSpan.FromMilliseconds(time));      
-                        UpdateTitleBar($" - Writing file { i * percentMultiplier}%");
+                        var image = new Bitmap(imageArray[i]);
+                        encoder.AddFrame(image, 0, 0, TimeSpan.FromMilliseconds(time));
+                        UpdateInfo($"Writing file { i * percentMultiplier}%");
                     }
                     stream.Position = 0;
-                    using (var fileStream = new FileStream(saveGIF.FileName, FileMode.Create, FileAccess.Write, FileShare.None, 81920, false))
+                    using (var fileStream = new FileStream(saveGIF.FileName, FileMode.Create, FileAccess.Write, FileShare.None, 131072, false))
                     {
                         stream.WriteTo(fileStream);
                     }
@@ -261,20 +362,21 @@ namespace BasicGiffer
         }
         protected void SaveGifFrame()
         {
-            using (var stream = new MemoryStream())
-            {
-                using (var encoder = new BumpKit.GifEncoder(stream, null, null, (int)-1))
-                {
-                    var image = new Bitmap((pbImage.Image as Bitmap));
-                    encoder.AddFrame(image, 0, 0, TimeSpan.FromMilliseconds(0));
-
-                    stream.Position = 0;
-                    using (var fileStream = new FileStream(saveGIF.FileName, FileMode.Create, FileAccess.Write, FileShare.None, 81920, false))
-                    {
-                        stream.WriteTo(fileStream);
-                    }
-                }
-            }
+            pbImage.Image.Save(saveGIF.FileName, ImageFormat.Gif);
+        }
+        protected void SavePNGFrame()
+        {
+            pbImage.Image.Save(saveGIF.FileName, ImageFormat.Png); 
+        }
+        protected void SaveJpgFrame()
+        {
+          //  var enc = new EncoderParameters();
+          //  enc.Param = new EncoderParameter[1] { new EncoderParameter(System.Drawing.Imaging.Encoder.Quality, 80) };
+            pbImage.Image.Save(saveGIF.FileName, ImageFormat.Jpeg);
+        }
+        protected void SaveTIFfFrame()
+        {
+            pbImage.Image.Save(saveGIF.FileName, ImageFormat.Tiff);
         }
         public static Image ApplyEffects(Image image, Giffit.GiffitPreset preset)
         {
@@ -282,16 +384,19 @@ namespace BasicGiffer
                 image = (Bitmap)ScaleImage(image, (int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling));
 
             if (preset.StyleIndex != preset.DefaultStyle)
-                image = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer, preset.ditherer);
- 
+                if (!preset.HighQuality)
+                    image = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer, preset.ditherer);
+
             return image;
         }
         public void PreviewEffects(bool active)
         {
+            UpdateTitleBar("");
             btnSettings.Image = Giffit.Properties.Resources.spinner_20;
-            Application.DoEvents();
             Stop();
-            btnPlay.Enabled = false;
+            DisableActions();
+            UpdateInfo("Generating preview ... ");
+           
 
             var previewThread = new Thread(() => GeneratePreview(active));
             previewThread.Start();
@@ -301,13 +406,34 @@ namespace BasicGiffer
                 Thread.Sleep(0);
             }
 
-
-            btnPlay.Enabled = true;
+            EnableActions();
             btnSettings.Image = Giffit.Properties.Resources.Settings;
             UpdateInfo();
             SetFrame();
         }
-
+        private void EnableActions()
+        {
+            btnSave.Enabled = true;
+            btnPlay.Enabled = true;
+            btnLoop.Enabled = true;
+            cmsActions.Enabled = true;
+            btnPreview.Enabled = true;
+            btnStop.Enabled = true;
+            btnSave.Enabled = true;
+            tbFrames.Enabled = true;
+            processing = false;
+        }
+        private void DisableActions()
+        {
+            btnPlay.Enabled = false;
+            btnLoop.Enabled = false;
+            btnPreview.Enabled = false;
+            btnStop.Enabled = false;
+            cmsActions.Enabled = false;
+            btnSave.Enabled = false;
+            tbFrames.Enabled = false;
+            processing = true;
+        }
         private void GeneratePreview(bool active)
         {
             if (previewImages.Count > 0)
@@ -360,7 +486,6 @@ namespace BasicGiffer
                 }
             }
         }
-
         private static void CloneAdd(List<Image> list, Image frame)
         {
             var mod = new Bitmap(frame);
@@ -413,6 +538,7 @@ namespace BasicGiffer
             }
             else
                 this.Text = "Giffit " + text;
+            
         }
         public void UpdateInfo(string text)
         {
@@ -487,6 +613,9 @@ namespace BasicGiffer
         }
         private void AdjustWindowToImage()
         {
+            if (pbImage.Image == null)
+                return;
+
             oneToOne = false;
 
             // contol size to add later
@@ -564,6 +693,70 @@ namespace BasicGiffer
 
             this.AutoSize = false;
         }
+        private void MoveRight()
+        {
+            if (previewImages.Count > 0)
+            {
+                if (tbFrames.Value + 1 <= tbFrames.Maximum)
+                    tbFrames.Value += 1;
+            }
+        }
+        private void MoveLeft()
+        {
+            if (previewImages.Count > 0)
+                if (tbFrames.Value - 1 >= tbFrames.Minimum)
+                    tbFrames.Value -= 1;
+        }
+
+
+        protected override bool ProcessCmdKey(ref Message message, Keys keys)
+        {
+            switch (keys)
+            {
+                case Keys.Space:
+                    if (previewImages.Count > 0)
+                    {
+                        if (tAnimation.Enabled)
+                            Stop();
+                        else Play();
+                    }
+                    return true; // signal that we've processed this key
+
+                case Keys.Control | Keys.S:
+                    if (previewImages.Count > 0)
+                    {
+                        btnSave.PerformClick();
+                    }
+                    return true;
+                case Keys.Control | Keys.O:
+                    OpenWithDialog();
+                    return true;
+                case Keys.Control | Keys.I:
+                    AddWithDialog();
+                    return true;
+                case Keys.Control | Keys.C:
+                    if (previewImages.Count > 0)
+                        Clipboard.SetDataObject(pbImage.Image);
+                    return true;
+                case Keys.Z:
+                    if (previewImages.Count > 0)
+                        btnPreview.PerformClick();
+                    return true;
+                case Keys.S:
+                    if (previewImages.Count > 0)
+                        btnSettings.PerformClick();
+                    return true;
+                case Keys.Left:
+                    MoveLeft();
+                    return true;
+                case Keys.Right:
+                    MoveRight();
+                    return true;
+            }
+
+            // run base implementation
+            return base.ProcessCmdKey(ref message, keys);
+        }
 
         private void tbFrames_ValueChanged(object sender, EventArgs e)
         {
@@ -571,12 +764,19 @@ namespace BasicGiffer
         }
         private void btnSave_Click(object sender, EventArgs e)
         {
+            Stop();
             if (saveGIF.ShowDialog() == DialogResult.OK)
             {
-                UpdateTitleBar($" - Writing file ...");
+                UpdateInfo($"Writing file ...");
+                DisableActions();
                 if (saveGIF.FilterIndex == 1)
                 {
-                    Thread saveGifThread = new Thread(new ThreadStart(SaveGifAnimation));
+                    Thread saveGifThread = null;
+                    if (settings.StyleIndex == settings.DefaultStyle)
+                        saveGifThread = new Thread(new ThreadStart(SaveGifAnimation_BumpKit));
+                    else
+                        saveGifThread = new Thread(new ThreadStart(SaveGifAnimation));
+                                     
                     saveGifThread.Start();
                     while (saveGifThread.IsAlive)
                     {
@@ -584,11 +784,19 @@ namespace BasicGiffer
                         Thread.Sleep(0);
                     }
                 }
-                else
-                {
+
+                else if (saveGIF.FilterIndex == 2)
                     SaveGifFrame();
-                }
-                UpdateTitleBar($" - Saved to {Path.GetFileName(saveGIF.FileName)}");
+                else if (saveGIF.FilterIndex == 3)
+                    SaveJpgFrame();
+                else if (saveGIF.FilterIndex == 4)
+                    SavePNGFrame();
+                else
+                    SaveTIFfFrame();
+
+                UpdateInfo();
+                UpdateTitleBar($"- Saved to {Path.GetFileName(saveGIF.FileName)}");
+                EnableActions();
             }
         }
         private void BasicGiffer_DragEnter(object sender, DragEventArgs e)
@@ -597,25 +805,27 @@ namespace BasicGiffer
             if (validData)
             {
                 e.Effect = DragDropEffects.Copy;
-                UpdateTitleBar($"- {filenames.Count().ToString()} files can be loaded");
+                UpdateInfo($"{filenames.Count().ToString()} files can be loaded");
             }
             else
             {
-                UpdateTitleBar($"- none of the files dragged is supported");
+                UpdateInfo($"none of the files dragged is supported");
                 e.Effect = DragDropEffects.None;
             }
         }
         private void BasicGiffer_DragDrop(object sender, DragEventArgs e)
         {
-            if (validData)
+            if (validData && !processing)
             {
                 OpenFiles();
                 this.Activate();
             }
+            else
+                MessageBox.Show("The files are not supported or there is currently processing action in background that cannot be interrupted.");
         }
         private void Gifit_DragLeave(object sender, EventArgs e)
         {
-            UpdateTitleBar("");
+            UpdateInfo();
         }
         private void nudFPS_ValueChanged(object sender, EventArgs e)
         {
@@ -667,44 +877,6 @@ namespace BasicGiffer
         {
             OpenWithDialog();
         }
-
-
-        protected override bool ProcessCmdKey(ref Message message, Keys keys)
-        {
-            switch (keys)
-            {
-                case Keys.Space:
-                    if (previewImages.Count > 0)
-                    {
-                        if (tAnimation.Enabled)
-                            Stop();
-                        else Play();
-                    }
-                    return true; // signal that we've processed this key
-
-                case Keys.Control | Keys.S:
-                    if (previewImages.Count > 0)
-                    {
-                        btnSave.PerformClick();
-                    }
-                    return true;
-                case Keys.Control | Keys.O:
-                    OpenWithDialog();
-                    return true;
-                case Keys.Control | Keys.I:
-                    AddWithDialog();
-                    return true;
-                case Keys.Control | Keys.C:
-                    if (previewImages.Count > 0)
-                        Clipboard.SetDataObject(pbImage.Image);
-                    return true;
-            }
-
-            // run base implementation
-            return base.ProcessCmdKey(ref message, keys);
-        }
-
-
         private void nudFPS_KeyUp(object sender, KeyEventArgs e)
         {
             nudFPS.Focus();
@@ -712,11 +884,6 @@ namespace BasicGiffer
         private void nudRepeat_KeyUp(object sender, KeyEventArgs e)
         {
             nudRepeat.Focus();
-        }
-        private void nudFPS_Leave(object sender, EventArgs e)
-       {
-
-
         }
         private void Gifit_Load(object sender, EventArgs e)
         {
@@ -728,7 +895,10 @@ namespace BasicGiffer
             settings.StyleIndex = (int)Giffit.Properties.Settings.Default["StyleIndex"];
 
             if (!preserveStyle)
+            {
                 settings.StyleIndex = settings.DefaultStyle;
+                settings.Scaling = 1.0m;
+            }
 
             if (recentFolders.Count > 0)
                 clearrecentToolStripMenuItem.Enabled = true;
@@ -749,13 +919,13 @@ namespace BasicGiffer
         {
             var info = "";
             if (previewImages.Count > 0)
-                info += $"1 of {tbFrames.Maximum} frames is {previewImages[0].Size.Width}x{previewImages[0].Size.Height}px\n" +
-                    $"Encoding: {previewImages[0].PixelFormat.ToString()}\n\n";
+                info += $"Frame {tbFrames.Value} of {tbFrames.Maximum} is sized {previewImages[0].Size.Width}x{previewImages[0].Size.Height}px\n" +
+                    $"Encoding: {pbImage.Image.GetBitsPerPixel()}bpp ({((Bitmap)pbImage.Image).GetColorCount()} colours)\n\n";
             else
                 info += $"Image info will be availabe after you load frames.\n\n";
 
                 info += $"{Application.ProductName} version: {Application.ProductVersion}\n" +
-                $"KGySoft module: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.Drawing.Imaging.AnimatedGifConfiguration)).GetName().Version.ToString()}\n\n" +
+                $"KGySoft module: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.Drawing.Imaging.AnimatedGifConfiguration)).GetName().Version.ToString()}\n" +
                 $"License: Freeware";
 
             // $"©2021 Anton Kerezov, All Rights Reserved.";
@@ -781,8 +951,8 @@ namespace BasicGiffer
             sets.cbStyle.SelectedIndex = settings.StyleIndex;
             sets.tbSize.Value = (int) Math.Ceiling(settings.Scaling * 100);
             sets.cbPersistent.Checked = preserveStyle;
-            sets.h = previewImages[0].Size.Height;
-            sets.w = previewImages[0].Size.Width;
+            sets.h = originalImages[0].Size.Height;
+            sets.w = originalImages[0].Size.Width;
 
             if (sets.ShowDialog() == DialogResult.OK)
             {
@@ -872,19 +1042,6 @@ namespace BasicGiffer
         private void copyStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(pbImage.Image);
-        }
-
-        bool tok = false;
-        private void tStatus_Tick(object sender, EventArgs e)
-        {
-            tok = !tok;
-
-            if (tok)
-              UpdateInfo("Applying image settings 　・");
-            else
-              UpdateInfo("Applying image settings ・　");
-
-            Application.DoEvents();
         }
     }
 }

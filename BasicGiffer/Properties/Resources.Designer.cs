@@ -63,9 +63,9 @@ namespace Giffit.Properties {
         /// <summary>
         ///   Looks up a localized resource of type System.Drawing.Bitmap.
         /// </summary>
-        public static System.Drawing.Bitmap dropImage {
+        public static System.Drawing.Bitmap drop {
             get {
-                object obj = ResourceManager.GetObject("dropImage", resourceCulture);
+                object obj = ResourceManager.GetObject("drop", resourceCulture);
                 return ((System.Drawing.Bitmap)(obj));
             }
         }

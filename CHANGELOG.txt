@@ -1,6 +1,8 @@
 Giffit changes:
 
 v0.2
+Add: Import Tiff files and gif animations as frames
+Add: Z for zoom, Ctrl+I for add files, Ctrl+O for new animation shortcuts 
 Add: Automatic shape and scaling adjustment based on image size 
 Add: Zoom to 100% button 
 Add: Gif styles and size changes (processed for multicore systems)
@@ -11,10 +13,14 @@ Add: Appending images to already loaded frames
 Add: Skip not supported files on load
 Add: Save Repeat and FPS, image settings
 Add: Image size and quality settings that are persistent
+Mod: Display image format, colour info for each frame.
 Mod: Remove Loop button and use the setting in Repeats to loop the animation
-Fix: Repeat and FPS now update on type
+Mod: Dual encoder system 
+Fix: Repeat and FPS now update while typing
+Fix: Do not allow drop when processing
 
-
+v0.1.2 
+Fix: Support link adress
 
 v0.1.1 
 Fix: spacebar for play/pause shortcut to be app specific

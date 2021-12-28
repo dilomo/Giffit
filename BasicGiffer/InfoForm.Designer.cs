@@ -39,7 +39,7 @@ namespace BasicGiffer
             // 
             this.btnClose.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnClose.DialogResult = System.Windows.Forms.DialogResult.Cancel;
-            this.btnClose.Location = new System.Drawing.Point(385, 313);
+            this.btnClose.Location = new System.Drawing.Point(327, 336);
             this.btnClose.Name = "btnClose";
             this.btnClose.Size = new System.Drawing.Size(119, 38);
             this.btnClose.TabIndex = 1;
@@ -57,7 +57,7 @@ namespace BasicGiffer
             this.lblInfo.Margin = new System.Windows.Forms.Padding(30);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Padding = new System.Windows.Forms.Padding(30);
-            this.lblInfo.Size = new System.Drawing.Size(517, 246);
+            this.lblInfo.Size = new System.Drawing.Size(459, 252);
             this.lblInfo.TabIndex = 2;
             this.lblInfo.Text = "label1   ";
             // 
@@ -66,8 +66,8 @@ namespace BasicGiffer
             this.linkSupport.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkSupport.AutoSize = true;
-            this.linkSupport.BackColor = System.Drawing.SystemColors.Control;
-            this.linkSupport.Location = new System.Drawing.Point(0, 319);
+            this.linkSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.linkSupport.Location = new System.Drawing.Point(0, 244);
             this.linkSupport.Name = "linkSupport";
             this.linkSupport.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
             this.linkSupport.Size = new System.Drawing.Size(287, 25);
@@ -82,19 +82,20 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.SystemColors.Window;
-            this.label1.Location = new System.Drawing.Point(0, 241);
+            this.label1.Location = new System.Drawing.Point(0, 244);
             this.label1.Margin = new System.Windows.Forms.Padding(30, 15, 30, 15);
             this.label1.Name = "label1";
             this.label1.Padding = new System.Windows.Forms.Padding(30, 15, 30, 15);
-            this.label1.Size = new System.Drawing.Size(517, 57);
+            this.label1.Size = new System.Drawing.Size(459, 77);
             this.label1.TabIndex = 2;
             this.label1.Text = "©2021 Anton Kerezov, All Rights Reserved.";
+            this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // InfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(517, 364);
+            this.ClientSize = new System.Drawing.Size(459, 387);
             this.Controls.Add(this.linkSupport);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblInfo);
