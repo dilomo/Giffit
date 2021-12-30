@@ -57,20 +57,39 @@ namespace BasicGiffer
             {
                 string[] data = ((IDataObject)e.Data).GetData("FileDrop") as string[];
 
+
                 if (data != null)
                 {
                     for (int i = 0; i < data.Length; i++)
                     {
+
+
+
                         if (data.GetValue(0) is String)
                         {
                             var filename = ((string[])data)[i];
-                            string ext = Path.GetExtension(filename).ToLower();
-                            if ((ext != ".gif") && (ext != ".jpg") && (ext != ".png") && (ext != ".bmp") && (ext != ".tiff"))
+
+                            string[] files;
+
+                            if (Directory.Exists(filename))
                             {
-                                //ret = false;
+                                files = Directory.GetFiles(filename);
                             }
                             else
-                                names.Add(filename);
+                                files = new string[] { filename };
+
+                            foreach (var file in files)
+                            {
+                                string ext = Path.GetExtension(file).ToLower();
+                                if ((ext != ".gif") && (ext != ".jpg") && (ext != ".png") && (ext != ".bmp") && (ext != ".tiff"))
+                                {
+                                    //ret = false;
+                                }
+                                else
+                                    names.Add(file);
+                            }
+                                
+                            
                         }
                     }
                 }
@@ -145,7 +164,8 @@ namespace BasicGiffer
             pbImage.Image = null;
             PreviewEffects(preview);
             pbImage.SizeMode = PictureBoxSizeMode.Zoom;
-            pbImage.Image = previewImages.First();
+            pbImage.BackColor = settings.Background;
+            pbImage.Image = previewImages.First();   
             AdjustWindowToImage();
             pbImage.BackgroundImage = null;
             //btnSave.Enabled = true;
@@ -230,9 +250,7 @@ namespace BasicGiffer
                         UpdateInfo($"Adding frame {i}");
                     }
                 }
-                
             }
-
         }
         protected void DisposeImages()
         {
@@ -266,9 +284,8 @@ namespace BasicGiffer
                 }
             }));
         }
-        protected void SaveGifAnimation()
+        protected void SaveGifAnimation(double time)
         {
-            double time = 1000 / (double)nudFPS.Value;
             double percentMultiplier = 100 / previewImages.Count;
             IEnumerable<IReadableBitmapData> imageArray;
 
@@ -287,12 +304,13 @@ namespace BasicGiffer
             agf.AnimationMode = (AnimationMode) nudRepeat.Value;
             agf.SizeHandling = AnimationFramesSizeHandling.Center;
             agf.ReportOverallProgress = true;
+            agf.ReplaceZeroDelays = false;
 
             if (settings.OptimisedQuantizer)
                 agf.AllowDeltaFrames = false;
 
             // bugfix for now
-            if (settings.StyleIndex == 9) agf.Ditherer = settings.ditherer;
+            if (settings.StyleIndex == 9) agf.Quantizer = settings.quantizer;
 
             if (settings.HighQuality)
             {
@@ -337,10 +355,9 @@ namespace BasicGiffer
 
             #endregion
         }
-        protected void SaveGifAnimation_BumpKit()
+        protected void SaveGifAnimation_BumpKit(double time)
         {
             var imageArray = previewImages.ToArray();
-            double time = 1000 / (double)nudFPS.Value;
             double percentMultiplier = 100 / previewImages.Count;
             using (var stream = new MemoryStream())
             {
@@ -392,7 +409,10 @@ namespace BasicGiffer
         public void PreviewEffects(bool active)
         {
             UpdateTitleBar("");
+            Image currenticon = btnSettings.Image;
+            Color border = btnSettings.FlatAppearance.BorderColor;
             btnSettings.Image = Giffit.Properties.Resources.spinner_20;
+            btnSettings.FlatAppearance.BorderColor = Color.OrangeRed;
             Stop();
             DisableActions();
             UpdateInfo("Generating preview ... ");
@@ -407,8 +427,8 @@ namespace BasicGiffer
             }
 
             EnableActions();
-            btnSettings.Image = Giffit.Properties.Resources.Settings;
-            UpdateInfo();
+            btnSettings.FlatAppearance.BorderColor = border;
+            btnSettings.Image = currenticon;
             SetFrame();
         }
         private void EnableActions()
@@ -549,12 +569,14 @@ namespace BasicGiffer
                 this.Invoke(safeWrite);
             }
             else
+            {
                 lblResult.Text = text;
+            }
         }
         public void UpdateInfo()
         {
-            lblResult.Text = $"of {tbFrames.Maximum} frames = {tbFrames.Maximum / nudFPS.Value:F} sec";
-            tAnimation.Interval = (int)Math.Round(1000 / nudFPS.Value, MidpointRounding.AwayFromZero);
+            lblResult.Text = $"from {tbFrames.Maximum} frames = {tbFrames.Maximum / GetFPS():F}s";
+            tAnimation.Interval = (int)Math.Round(1000 / GetFPS(), MidpointRounding.AwayFromZero);
         }
         public void Loop( bool loop)
         {
@@ -707,7 +729,10 @@ namespace BasicGiffer
                 if (tbFrames.Value - 1 >= tbFrames.Minimum)
                     tbFrames.Value -= 1;
         }
-
+        private double GetFPS()
+        {
+            return double.Parse(cbFPS.Text);
+        }
 
         protected override bool ProcessCmdKey(ref Message message, Keys keys)
         {
@@ -772,11 +797,12 @@ namespace BasicGiffer
                 if (saveGIF.FilterIndex == 1)
                 {
                     Thread saveGifThread = null;
+                    var fps = GetFPS();
                     if (settings.StyleIndex == settings.DefaultStyle)
-                        saveGifThread = new Thread(new ThreadStart(SaveGifAnimation_BumpKit));
+                        saveGifThread = new Thread(() => SaveGifAnimation_BumpKit(1000 /fps));
                     else
-                        saveGifThread = new Thread(new ThreadStart(SaveGifAnimation));
-                                     
+                        saveGifThread = new Thread(() => SaveGifAnimation(1000 / fps));
+
                     saveGifThread.Start();
                     while (saveGifThread.IsAlive)
                     {
@@ -827,10 +853,6 @@ namespace BasicGiffer
         {
             UpdateInfo();
         }
-        private void nudFPS_ValueChanged(object sender, EventArgs e)
-        {
-            UpdateInfo();
-        }
         private void tAnimation_Tick(object sender, EventArgs e)
         {
             if (tbFrames.Value == previewImages.Count)
@@ -851,15 +873,6 @@ namespace BasicGiffer
             else
                 tbFrames.Value++;
         }
-        private void playToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Play();
-
-        }
-        private void pauseToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            Stop();
-        }
         private void btnPlay_Click(object sender, EventArgs e)
         {
             Play();
@@ -877,10 +890,6 @@ namespace BasicGiffer
         {
             OpenWithDialog();
         }
-        private void nudFPS_KeyUp(object sender, KeyEventArgs e)
-        {
-            nudFPS.Focus();
-        }
         private void nudRepeat_KeyUp(object sender, KeyEventArgs e)
         {
             nudRepeat.Focus();
@@ -888,16 +897,18 @@ namespace BasicGiffer
         private void Gifit_Load(object sender, EventArgs e)
         {
             nudRepeat.Value = (int)Giffit.Properties.Settings.Default["Repeats"];
-            nudFPS.Value = (int)Giffit.Properties.Settings.Default["FPS"];
+            cbFPS.SelectedIndex = (int)Giffit.Properties.Settings.Default["FPS"];
             recentFolders = (System.Collections.Specialized.StringCollection)Giffit.Properties.Settings.Default["Recents"];
             settings.Scaling = (decimal)Giffit.Properties.Settings.Default["Scaling"];
             preserveStyle = (bool)Giffit.Properties.Settings.Default["KeepStyle"];
+            settings.Background = (Color)Giffit.Properties.Settings.Default["BackgroundC"];
             settings.StyleIndex = (int)Giffit.Properties.Settings.Default["StyleIndex"];
 
             if (!preserveStyle)
             {
                 settings.StyleIndex = settings.DefaultStyle;
                 settings.Scaling = 1.0m;
+                settings.Background = Color.White;
             }
 
             if (recentFolders.Count > 0)
@@ -908,10 +919,11 @@ namespace BasicGiffer
         private void Gifit_FormClosing(object sender, FormClosingEventArgs e)
         {
             Giffit.Properties.Settings.Default["Repeats"] = (int) nudRepeat.Value;
-            Giffit.Properties.Settings.Default["FPS"] = (int) nudFPS.Value;
+            Giffit.Properties.Settings.Default["FPS"] = (int) cbFPS.SelectedIndex;
             Giffit.Properties.Settings.Default["Recents"] = recentFolders;
             Giffit.Properties.Settings.Default["Scaling"] = settings.Scaling;
             Giffit.Properties.Settings.Default["StyleIndex"] = settings.StyleIndex;
+            Giffit.Properties.Settings.Default["BackgroundC"] = settings.Background;
             Giffit.Properties.Settings.Default["KeepStyle"] = preserveStyle;
             Giffit.Properties.Settings.Default.Save(); // Saves settings in application configuration file
         }
@@ -934,7 +946,6 @@ namespace BasicGiffer
             frm.urlAdress = "https://www.ankere.co/news/giffit-the-animated-gif-tool-for-architects/";
             frm.lblInfo.Text = info;
             frm.ShowDialog();
-
         }
         private void nudRepeat_ValueChanged(object sender, EventArgs e)
         {
@@ -950,19 +961,28 @@ namespace BasicGiffer
             sets.cbStyle.Items.AddRange(Giffit.GiffitPreset.StyleNames.ToArray());  
             sets.cbStyle.SelectedIndex = settings.StyleIndex;
             sets.tbSize.Value = (int) Math.Ceiling(settings.Scaling * 100);
+            sets.Background = settings.Background;
             sets.cbPersistent.Checked = preserveStyle;
             sets.h = originalImages[0].Size.Height;
             sets.w = originalImages[0].Size.Width;
 
             if (sets.ShowDialog() == DialogResult.OK)
             {
-                if (settings.StyleIndex != sets.cbStyle.SelectedIndex || settings.Scaling != (decimal)sets.tbSize.Value / 100 || sets.cbPersistent.Checked != preserveStyle)
+                if (settings.StyleIndex != sets.cbStyle.SelectedIndex || 
+                    settings.Scaling != (decimal)sets.tbSize.Value / 100 || 
+                    sets.cbPersistent.Checked != preserveStyle ||
+                    settings.Background != sets.Background)
                 {
-                    settings.StyleIndex = sets.cbStyle.SelectedIndex;
                     settings.Scaling = (decimal)sets.tbSize.Value / 100;
+                    settings.StyleIndex = sets.cbStyle.SelectedIndex;
+                    settings.Background = sets.Background;
+                    pbImage.BackColor = settings.Background;
                     preserveStyle = sets.cbPersistent.Checked;
+                    Application.DoEvents();
                     PreviewEffects(preview);
+                    UpdateInfo();
                 }
+
             }
         }
         private void btnPreview_Click(object sender, EventArgs e)
@@ -1042,6 +1062,39 @@ namespace BasicGiffer
         private void copyStripMenuItem_Click(object sender, EventArgs e)
         {
             Clipboard.SetDataObject(pbImage.Image);
+        }
+        private void cbFPS_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            UpdateInfo();
+        }
+
+        //static Color GetPixel(Point position)
+        //{
+        //    using (var bitmap = new Bitmap(1, 1))
+        //    {
+        //        using (var graphics = Graphics.FromImage(bitmap))
+        //        {
+        //            graphics.CopyFromScreen(position, new Point(0, 0), new Size(1, 1));
+        //        }
+        //        return bitmap.GetPixel(0, 0);
+        //    }
+        //}
+        private void pbImage_MouseLeave(object sender, EventArgs e)
+        {
+            //lblColourInfo.Text = "";
+        }
+        private void pbImage_MouseUp(object sender, MouseEventArgs e)
+        {
+            //if (!processing && pbImage.Image != null)
+            //{
+            //    //Color c = GetPixel(new Point( Location.X + e.Location.X, Location.Y + e.Location.Y));
+            //    ////if (c.A < 255)
+            //    ////    lblColourInfo.Text = "Transparent pixel";
+            //    ////else
+            //    /////  lblColourInfo.Text = $"({c.R},{c.G},{c.B})";
+            //    /////  
+            //    //lblColourInfo.BackColor = c;
+            //}
         }
     }
 }

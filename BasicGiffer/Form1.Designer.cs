@@ -44,15 +44,16 @@ namespace BasicGiffer
             this.tableLayoutPanel2 = new System.Windows.Forms.TableLayoutPanel();
             this.btnSave = new System.Windows.Forms.Button();
             this.label1 = new System.Windows.Forms.Label();
-            this.nudFPS = new System.Windows.Forms.NumericUpDown();
-            this.lblResult = new System.Windows.Forms.Label();
             this.label2 = new System.Windows.Forms.Label();
             this.nudRepeat = new System.Windows.Forms.NumericUpDown();
+            this.lblResult = new System.Windows.Forms.Label();
+            this.cbFPS = new System.Windows.Forms.ComboBox();
             this.btnSettings = new System.Windows.Forms.Button();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.tableLayoutPanel3 = new System.Windows.Forms.TableLayoutPanel();
             this.btnPlay = new System.Windows.Forms.Button();
             this.btnStop = new System.Windows.Forms.Button();
+            this.lblColourInfo = new System.Windows.Forms.Label();
             this.lblCurFrame = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.btnLoop = new System.Windows.Forms.Button();
@@ -65,7 +66,6 @@ namespace BasicGiffer
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.cmsActions.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFPS)).BeginInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRepeat)).BeginInit();
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
@@ -74,7 +74,7 @@ namespace BasicGiffer
             // 
             // pbImage
             // 
-            this.pbImage.BackColor = System.Drawing.SystemColors.Window;
+            this.pbImage.BackColor = System.Drawing.Color.White;
             this.pbImage.BackgroundImage = global::Giffit.Properties.Resources.drop;
             this.pbImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
@@ -88,6 +88,8 @@ namespace BasicGiffer
             this.pbImage.TabStop = false;
             this.pbImage.Tag = "dropper";
             this.pbImage.DoubleClick += new System.EventHandler(this.pbImage_DoubleClick);
+            this.pbImage.MouseLeave += new System.EventHandler(this.pbImage_MouseLeave);
+            this.pbImage.MouseUp += new System.Windows.Forms.MouseEventHandler(this.pbImage_MouseUp);
             // 
             // cmsActions
             // 
@@ -190,10 +192,10 @@ namespace BasicGiffer
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
             this.tableLayoutPanel2.Controls.Add(this.btnSave, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.label1, 2, 0);
-            this.tableLayoutPanel2.Controls.Add(this.nudFPS, 3, 0);
-            this.tableLayoutPanel2.Controls.Add(this.lblResult, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 0);
             this.tableLayoutPanel2.Controls.Add(this.nudRepeat, 1, 0);
+            this.tableLayoutPanel2.Controls.Add(this.lblResult, 4, 0);
+            this.tableLayoutPanel2.Controls.Add(this.cbFPS, 3, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 806);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
@@ -230,41 +232,6 @@ namespace BasicGiffer
             this.label1.TabIndex = 2;
             this.label1.Text = "FPS:";
             // 
-            // nudFPS
-            // 
-            this.nudFPS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.nudFPS.Location = new System.Drawing.Point(248, 15);
-            this.nudFPS.Maximum = new decimal(new int[] {
-            500,
-            0,
-            0,
-            0});
-            this.nudFPS.Minimum = new decimal(new int[] {
-            1,
-            0,
-            0,
-            0});
-            this.nudFPS.Name = "nudFPS";
-            this.nudFPS.Size = new System.Drawing.Size(93, 33);
-            this.nudFPS.TabIndex = 1;
-            this.ttip.SetToolTip(this.nudFPS, "Frames per second ");
-            this.nudFPS.Value = new decimal(new int[] {
-            15,
-            0,
-            0,
-            0});
-            this.nudFPS.ValueChanged += new System.EventHandler(this.nudFPS_ValueChanged);
-            this.nudFPS.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nudFPS_KeyUp);
-            // 
-            // lblResult
-            // 
-            this.lblResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblResult.Location = new System.Drawing.Point(347, 9);
-            this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(531, 45);
-            this.lblResult.TabIndex = 3;
-            this.lblResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
-            // 
             // label2
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
@@ -292,14 +259,51 @@ namespace BasicGiffer
             this.nudRepeat.ValueChanged += new System.EventHandler(this.nudRepeat_ValueChanged);
             this.nudRepeat.KeyUp += new System.Windows.Forms.KeyEventHandler(this.nudRepeat_KeyUp);
             // 
+            // lblResult
+            // 
+            this.lblResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblResult.Location = new System.Drawing.Point(347, 9);
+            this.lblResult.Name = "lblResult";
+            this.lblResult.Size = new System.Drawing.Size(531, 45);
+            this.lblResult.TabIndex = 3;
+            this.lblResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            // 
+            // cbFPS
+            // 
+            this.cbFPS.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.cbFPS.DropDownStyle = System.Windows.Forms.ComboBoxStyle.DropDownList;
+            this.cbFPS.FlatStyle = System.Windows.Forms.FlatStyle.System;
+            this.cbFPS.FormattingEnabled = true;
+            this.cbFPS.Items.AddRange(new object[] {
+            "100",
+            "50",
+            "33.33",
+            "25",
+            "20",
+            "16.67",
+            "14.29",
+            "12.5",
+            "10",
+            "5",
+            "2.5",
+            "1",
+            "0.5",
+            "0.2"});
+            this.cbFPS.Location = new System.Drawing.Point(248, 15);
+            this.cbFPS.Name = "cbFPS";
+            this.cbFPS.Size = new System.Drawing.Size(93, 33);
+            this.cbFPS.TabIndex = 6;
+            this.ttip.SetToolTip(this.cbFPS, "Frames per second to use based on 1/100 second");
+            this.cbFPS.SelectedIndexChanged += new System.EventHandler(this.cbFPS_SelectedIndexChanged);
+            // 
             // btnSettings
             // 
             this.btnSettings.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnSettings.Enabled = false;
             this.btnSettings.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnSettings.Image = global::Giffit.Properties.Resources.Settings;
-            this.btnSettings.Location = new System.Drawing.Point(597, 3);
+            this.btnSettings.Image = global::Giffit.Properties.Resources.magic_wand;
+            this.btnSettings.Location = new System.Drawing.Point(602, 3);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(43, 38);
             this.btnSettings.TabIndex = 6;
@@ -331,7 +335,7 @@ namespace BasicGiffer
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 9;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 120F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
@@ -339,9 +343,10 @@ namespace BasicGiffer
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 131F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
             this.tableLayoutPanel3.Controls.Add(this.btnPlay, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnStop, 3, 0);
+            this.tableLayoutPanel3.Controls.Add(this.lblColourInfo, 7, 0);
             this.tableLayoutPanel3.Controls.Add(this.lblCurFrame, 0, 0);
             this.tableLayoutPanel3.Controls.Add(this.linkLabel1, 8, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnLoop, 4, 0);
@@ -363,7 +368,7 @@ namespace BasicGiffer
             this.btnPlay.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPlay.Image = global::Giffit.Properties.Resources.play;
-            this.btnPlay.Location = new System.Drawing.Point(401, 3);
+            this.btnPlay.Location = new System.Drawing.Point(406, 3);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(43, 38);
             this.btnPlay.TabIndex = 0;
@@ -379,13 +384,25 @@ namespace BasicGiffer
             this.btnStop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStop.Image = global::Giffit.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(450, 3);
+            this.btnStop.Location = new System.Drawing.Point(455, 3);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(43, 38);
             this.btnStop.TabIndex = 1;
             this.ttip.SetToolTip(this.btnStop, "Stop (Space)");
             this.btnStop.UseVisualStyleBackColor = false;
             this.btnStop.Click += new System.EventHandler(this.btnStop_Click);
+            // 
+            // lblColourInfo
+            // 
+            this.lblColourInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblColourInfo.Font = new System.Drawing.Font("Segoe UI", 7.948052F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblColourInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblColourInfo.Location = new System.Drawing.Point(648, 5);
+            this.lblColourInfo.Margin = new System.Windows.Forms.Padding(0);
+            this.lblColourInfo.Name = "lblColourInfo";
+            this.lblColourInfo.Size = new System.Drawing.Size(333, 34);
+            this.lblColourInfo.TabIndex = 2;
+            this.lblColourInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblCurFrame
             // 
@@ -396,9 +413,9 @@ namespace BasicGiffer
             this.lblCurFrame.Font = new System.Drawing.Font("Segoe UI Semibold", 8.883117F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblCurFrame.Location = new System.Drawing.Point(3, 0);
             this.lblCurFrame.Name = "lblCurFrame";
-            this.lblCurFrame.Size = new System.Drawing.Size(114, 44);
+            this.lblCurFrame.Size = new System.Drawing.Size(64, 44);
             this.lblCurFrame.TabIndex = 3;
-            this.lblCurFrame.Text = "1";
+            this.lblCurFrame.Text = "1000";
             this.lblCurFrame.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // linkLabel1
@@ -408,9 +425,9 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.linkLabel1.Location = new System.Drawing.Point(924, 0);
+            this.linkLabel1.Location = new System.Drawing.Point(984, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(125, 44);
+            this.linkLabel1.Size = new System.Drawing.Size(65, 44);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "info";
@@ -425,7 +442,7 @@ namespace BasicGiffer
             this.btnLoop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnLoop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLoop.Image = global::Giffit.Properties.Resources.loopbv;
-            this.btnLoop.Location = new System.Drawing.Point(499, 3);
+            this.btnLoop.Location = new System.Drawing.Point(504, 3);
             this.btnLoop.Name = "btnLoop";
             this.btnLoop.Size = new System.Drawing.Size(43, 38);
             this.btnLoop.TabIndex = 2;
@@ -440,7 +457,7 @@ namespace BasicGiffer
             this.btnPreview.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnPreview.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPreview.Image = global::Giffit.Properties.Resources.preview;
-            this.btnPreview.Location = new System.Drawing.Point(548, 3);
+            this.btnPreview.Location = new System.Drawing.Point(553, 3);
             this.btnPreview.Name = "btnPreview";
             this.btnPreview.Size = new System.Drawing.Size(43, 38);
             this.btnPreview.TabIndex = 7;
@@ -498,8 +515,8 @@ namespace BasicGiffer
             this.ClientSize = new System.Drawing.Size(1058, 873);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
-            this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(2340, 1400);
+            this.MaximumSize = new System.Drawing.Size(2340, 1500);
+            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(646, 547);
             this.Name = "Gifit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
@@ -514,7 +531,6 @@ namespace BasicGiffer
             this.cmsActions.ResumeLayout(false);
             this.tableLayoutPanel2.ResumeLayout(false);
             this.tableLayoutPanel2.PerformLayout();
-            ((System.ComponentModel.ISupportInitialize)(this.nudFPS)).EndInit();
             ((System.ComponentModel.ISupportInitialize)(this.nudRepeat)).EndInit();
             this.tableLayoutPanel1.ResumeLayout(false);
             this.tableLayoutPanel1.PerformLayout();
@@ -529,7 +545,6 @@ namespace BasicGiffer
 
         private System.Windows.Forms.PictureBox pbImage;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel2;
-        private System.Windows.Forms.NumericUpDown nudFPS;
         private System.Windows.Forms.Button btnSave;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.TableLayoutPanel tableLayoutPanel1;
@@ -559,6 +574,8 @@ namespace BasicGiffer
         private System.Windows.Forms.ToolStripMenuItem clearrecentToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip cmsRecents;
         private System.Windows.Forms.ToolStripMenuItem copyStripMenuItem;
+        private System.Windows.Forms.ComboBox cbFPS;
+        private System.Windows.Forms.Label lblColourInfo;
     }
 }
 

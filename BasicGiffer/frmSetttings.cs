@@ -27,6 +27,8 @@ namespace Giffit
         }
         private void btnReset_Click(object sender, EventArgs e)
         {
+            cd.Color = Color.White;
+            label1.BackColor = Color.White;
             tbSize.Value = 100;
             cbStyle.SelectedIndex = cbStyle.Items.Count -1;
             cbPersistent.Checked = false;
@@ -48,6 +50,33 @@ namespace Giffit
             var nw = w * tbSize.Value / 100;
             var nh = h * tbSize.Value / 100;
             lblsize.Text = $"{nw}x{nh}px ({tbSize.Value}%)";
+        }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+            cd.ShowDialog();
+            label1.BackColor = cd.Color;
+        }
+
+        private void label1_MouseLeave(object sender, EventArgs e)
+        {
+            this.Cursor = System.Windows.Forms.Cursors.Default;
+        }
+
+        public Color Background
+        {
+            get {
+                return cd.Color;
+            }
+            set {
+                cd.Color = value;
+                label1.BackColor = value;
+            }
+        }
+
+        private void label1_MouseEnter(object sender, EventArgs e)
+        {
+            this.Cursor = System.Windows.Forms.Cursors.Cross;
         }
     }
 }

@@ -37,7 +37,7 @@ namespace Giffit.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("15")]
+        [global::System.Configuration.DefaultSettingValueAttribute("1")]
         public int FPS {
             get {
                 return ((int)(this["FPS"]));
@@ -94,6 +94,18 @@ namespace Giffit.Properties {
             }
             set {
                 this["KeepStyle"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("White")]
+        public global::System.Drawing.Color BackgroundC {
+            get {
+                return ((global::System.Drawing.Color)(this["BackgroundC"]));
+            }
+            set {
+                this["BackgroundC"] = value;
             }
         }
     }
