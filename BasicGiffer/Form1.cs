@@ -301,7 +301,7 @@ namespace BasicGiffer
                 imageArray = previewImages.Select(i => BitmapExtensions.GetReadableBitmapData((Bitmap)i.Clone()));
 
             var agf = new AnimatedGifConfiguration(imageArray, TimeSpan.FromMilliseconds(time));
-            agf.AnimationMode = (AnimationMode) nudRepeat.Value;
+            agf.AnimationMode = (AnimationMode)nudRepeat.Value;
             agf.SizeHandling = AnimationFramesSizeHandling.Center;
             agf.ReportOverallProgress = true;
             agf.ReplaceZeroDelays = false;
@@ -309,7 +309,7 @@ namespace BasicGiffer
             if (settings.OptimisedQuantizer)
                 agf.AllowDeltaFrames = false;
 
-            // bugfix for now
+            // grayscale bugfix for now
             if (settings.StyleIndex == 9) agf.Quantizer = settings.quantizer;
 
             if (settings.HighQuality)
@@ -321,9 +321,12 @@ namespace BasicGiffer
 
             using (var stream = new MemoryStream())
             {
+                //GifEncoder enc = new GifEncoder(stream, new Size(imageArray.First().Width, imageArray.First().Height));
+                //enc.RepeatCount = (int)nudRepeat.Value;
+
                 var progresseReporter = new TaskConfig();
                 progresseReporter.Progress = new SaveProgress(saveGIF.FileName, UpdateInfo);
-                
+
                 GifEncoder.EncodeAnimationAsync(agf, stream, progresseReporter).Wait();
 
                 stream.Position = 0;
@@ -753,7 +756,7 @@ namespace BasicGiffer
                         btnSave.PerformClick();
                     }
                     return true;
-                case Keys.Control | Keys.O:
+                case Keys.Control | Keys.N:
                     OpenWithDialog();
                     return true;
                 case Keys.Control | Keys.I:

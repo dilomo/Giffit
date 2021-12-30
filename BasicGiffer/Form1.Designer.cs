@@ -113,7 +113,7 @@ namespace BasicGiffer
             // 
             this.newToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+O";
+            this.newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
             this.newToolStripMenuItem.Text = "&New Animation ...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
@@ -184,10 +184,10 @@ namespace BasicGiffer
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 6;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 91F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 99F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
             this.tableLayoutPanel2.Controls.Add(this.btnSave, 5, 0);
@@ -225,7 +225,7 @@ namespace BasicGiffer
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(199, 19);
+            this.label1.Location = new System.Drawing.Point(179, 19);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(46, 25);
@@ -236,7 +236,7 @@ namespace BasicGiffer
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(10, 19);
+            this.label2.Location = new System.Drawing.Point(4, 19);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(81, 25);
@@ -246,14 +246,14 @@ namespace BasicGiffer
             // nudRepeat
             // 
             this.nudRepeat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.nudRepeat.Location = new System.Drawing.Point(94, 15);
+            this.nudRepeat.Location = new System.Drawing.Point(88, 15);
             this.nudRepeat.Maximum = new decimal(new int[] {
             50,
             0,
             0,
             0});
             this.nudRepeat.Name = "nudRepeat";
-            this.nudRepeat.Size = new System.Drawing.Size(93, 33);
+            this.nudRepeat.Size = new System.Drawing.Size(79, 33);
             this.nudRepeat.TabIndex = 5;
             this.ttip.SetToolTip(this.nudRepeat, "How many times to play the animation. Zero is for endless loops.");
             this.nudRepeat.ValueChanged += new System.EventHandler(this.nudRepeat_ValueChanged);
@@ -262,9 +262,9 @@ namespace BasicGiffer
             // lblResult
             // 
             this.lblResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblResult.Location = new System.Drawing.Point(347, 9);
+            this.lblResult.Location = new System.Drawing.Point(318, 9);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(531, 45);
+            this.lblResult.Size = new System.Drawing.Size(560, 45);
             this.lblResult.TabIndex = 3;
             this.lblResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -289,9 +289,9 @@ namespace BasicGiffer
             "1",
             "0.5",
             "0.2"});
-            this.cbFPS.Location = new System.Drawing.Point(248, 15);
+            this.cbFPS.Location = new System.Drawing.Point(228, 15);
             this.cbFPS.Name = "cbFPS";
-            this.cbFPS.Size = new System.Drawing.Size(93, 33);
+            this.cbFPS.Size = new System.Drawing.Size(84, 33);
             this.cbFPS.TabIndex = 6;
             this.ttip.SetToolTip(this.cbFPS, "Frames per second to use based on 1/100 second");
             this.cbFPS.SelectedIndexChanged += new System.EventHandler(this.cbFPS_SelectedIndexChanged);
@@ -415,7 +415,7 @@ namespace BasicGiffer
             this.lblCurFrame.Name = "lblCurFrame";
             this.lblCurFrame.Size = new System.Drawing.Size(64, 44);
             this.lblCurFrame.TabIndex = 3;
-            this.lblCurFrame.Text = "1000";
+            this.lblCurFrame.Text = "1";
             this.lblCurFrame.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // linkLabel1
