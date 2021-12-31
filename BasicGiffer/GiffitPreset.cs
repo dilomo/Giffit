@@ -13,6 +13,7 @@ namespace Giffit
     public class GiffitPreset
     {
         public decimal Scaling = 1.0m;
+        public decimal Brightness = 1.0m;
         private int _sindex = 0;
         public IQuantizer quantizer = null;
         public IDitherer ditherer = null;
@@ -20,7 +21,7 @@ namespace Giffit
         public bool OptimisedQuantizer = false;
         public bool HighQuality = false;
         public System.Drawing.Color Background = System.Drawing.Color.White;
-        private byte whiteThold = 128;
+        public byte AlphaThold = 128;
 
         public static List<string> StyleNames = new List<string>{
         "Graphix (1bpp)",
@@ -28,21 +29,22 @@ namespace Giffit
         "Polka Dot (1bpp)",
         "Medium Dot (1bpp)",
         "Small Dot (1bpp)",
-        "Vintage (1bpp)",
+        "Vintage (4bpp)",
         "Mono Pop (4bpp)",
         "Midnight Blues (4bpp)",
         "Half Grey (4bpp)",
         "Grayscale (8bpp)",
         "B&W Film (8bpp)",
+        "Rough Colour (4bpp)",
         "Filmic (8bpp)",
         "Octree #256 (8bpp)",
         "Colour #332 (8bpp)",
-        "High colour (additive 8bpp)",
-        "System (no preview)(8bpp)"
+        "Windows '98 (8bpp)",
+        "High fidelity (additive 8bpp)"
         };
 
 
-        public int DefaultStyle { get => StyleNames.Count - 1; }
+        public int DefaultStyle { get => 14; }
         public int StyleIndex
         {
             get { return _sindex; }
@@ -54,7 +56,7 @@ namespace Giffit
                 switch (value)
                 {
                     case 0: // graphix
-                        quantizer = PredefinedColorsQuantizer.BlackAndWhite(Background, whiteThold);
+                        quantizer = PredefinedColorsQuantizer.BlackAndWhite(Background, AlphaThold);
                         pixFormat = PixelFormat.Format1bppIndexed;
                         ditherer =  OrderedDitherer.BlueNoise.ConfigureStrength(0.9f);
                         break;
@@ -69,7 +71,7 @@ namespace Giffit
                         ditherer = OrderedDitherer.DottedHalftone.ConfigureStrength(.9f);
                         break;
                     case 3: // medium dot
-                        quantizer = PredefinedColorsQuantizer.BlackAndWhite();
+                        quantizer = PredefinedColorsQuantizer.BlackAndWhite(Background, AlphaThold);
                         pixFormat = PixelFormat.Format1bppIndexed;
                         ditherer = ErrorDiffusionDitherer.StevensonArce;
                         break;
@@ -79,8 +81,8 @@ namespace Giffit
                         ditherer = ErrorDiffusionDitherer.Burkes;
                         break;
                     case 5: // vintage
-                        quantizer = OptimizedPaletteQuantizer.Octree(2, Background, whiteThold);
-                        pixFormat = PixelFormat.Format1bppIndexed;
+                        quantizer = OptimizedPaletteQuantizer.Octree(4, Background, AlphaThold);
+                        pixFormat = PixelFormat.Format4bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise.ConfigureStrength(.66f);
                         OptimisedQuantizer = true;
                         break;
@@ -90,14 +92,14 @@ namespace Giffit
                         ditherer = OrderedDitherer.Bayer8x8.ConfigureStrength(.7f);
                         break;
                     case 7: // blues
-                        Color[] colours = new Color[] {
+                        Color[] colour5 = new Color[] {
+                            System.Drawing.Color.Black,
+                            System.Drawing.Color.White,
                             System.Drawing.Color.AliceBlue,
                             System.Drawing.Color.SteelBlue,
-                            System.Drawing.Color.LightGoldenrodYellow,
-                            System.Drawing.Color.White,
-                            System.Drawing.Color.Black 
+                            System.Drawing.Color.LightGoldenrodYellow           
                         };
-                        quantizer = PredefinedColorsQuantizer.FromCustomPalette(colours, Background, whiteThold);
+                        quantizer = PredefinedColorsQuantizer.FromCustomPalette(colour5, Background, AlphaThold);
                         pixFormat = PixelFormat.Format4bppIndexed;
                         ditherer = ErrorDiffusionDitherer.Burkes;
                         break;
@@ -116,35 +118,54 @@ namespace Giffit
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = new RandomNoiseDitherer(0.25f);
                         break;
-                    case 11: // filmic
-                        quantizer = OptimizedPaletteQuantizer.Octree(32, Background, whiteThold);
+                    case 11: // rought c
+                        Color[] colour9 = new Color[] {
+                            System.Drawing.Color.Black,
+                            System.Drawing.Color.White,
+                            System.Drawing.Color.Transparent,
+                            System.Drawing.Color.Red,
+                            System.Drawing.Color.Lime,
+                            System.Drawing.Color.Blue,
+                            System.Drawing.Color.Cyan,
+                            System.Drawing.Color.Yellow,
+                            System.Drawing.Color.Magenta
+                        };
+                        quantizer = PredefinedColorsQuantizer.FromCustomPalette(colour9, Background, AlphaThold);
+                        pixFormat = PixelFormat.Format4bppIndexed;
+                        ditherer = new InterleavedGradientNoiseDitherer();
+                        break;
+                    case 12: // filmic
+                        quantizer = OptimizedPaletteQuantizer.Octree(32, Background, AlphaThold);
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise.ConfigureStrength(.88f);
                         OptimisedQuantizer = true;
                         break;
-                    case 12: // index
-                        quantizer = OptimizedPaletteQuantizer.Octree(256, Background, whiteThold);
+                    case 13: // index
+                        quantizer = OptimizedPaletteQuantizer.Octree(256, Background, AlphaThold);
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise;
                         OptimisedQuantizer = true;
                         break;
-                    case 13: // 332
-                        quantizer = PredefinedColorsQuantizer.Rgb332(System.Drawing.Color.Black, true);
+                    case 14: // 332
+                        quantizer = PredefinedColorsQuantizer.Rgb332(Background, true);
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = ErrorDiffusionDitherer.FloydSteinberg;
                         break;
-                    case 14: // High fidelity
+                     case 15: // system default
+                        quantizer = PredefinedColorsQuantizer.SystemDefault8BppPalette(Background, AlphaThold);
+                        pixFormat = PixelFormat.Format8bppIndexed;
+                        ditherer = OrderedDitherer.BlueNoise;
+                        break;
+                    case 16: // High fidelity
                         HighQuality = true;
-                        quantizer = OptimizedPaletteQuantizer.Wu(256, Background, whiteThold);
+                        quantizer = OptimizedPaletteQuantizer.Wu(256, Background, AlphaThold);
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = ErrorDiffusionDitherer.FloydSteinberg;
-                        break;
-                    case 15: // system default
                         break;
                     default: 
                         quantizer = PredefinedColorsQuantizer.Rgb332(Background, false);
                         pixFormat = PixelFormat.Format8bppIndexed;
-                        ditherer = ErrorDiffusionDitherer.FloydSteinberg;
+                        ditherer = OrderedDitherer.BlueNoise;
                         break;
                 }
             }

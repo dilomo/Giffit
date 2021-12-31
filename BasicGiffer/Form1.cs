@@ -164,7 +164,8 @@ namespace BasicGiffer
             pbImage.Image = null;
             PreviewEffects(preview);
             pbImage.SizeMode = PictureBoxSizeMode.Zoom;
-            pbImage.BackColor = settings.Background;
+            if (settings.StyleIndex == 14)
+                   pbImage.BackColor = settings.Background;
             pbImage.Image = previewImages.First();   
             AdjustWindowToImage();
             pbImage.BackgroundImage = null;
@@ -305,6 +306,7 @@ namespace BasicGiffer
             agf.SizeHandling = AnimationFramesSizeHandling.Center;
             agf.ReportOverallProgress = true;
             agf.ReplaceZeroDelays = false;
+            
 
             if (settings.OptimisedQuantizer)
                 agf.AllowDeltaFrames = false;
@@ -400,14 +402,24 @@ namespace BasicGiffer
         }
         public static Image ApplyEffects(Image image, Giffit.GiffitPreset preset)
         {
+            //if (preset.Scaling < 1)
+            //    image =   //(Bitmap)ScaleImage(image, (int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling));
+            // if (preset.StyleIndex != preset.DefaultStyle)
+            //  image = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer, preset.ditherer);
+
+            Bitmap mod = new Bitmap((int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling));
+            if (!preset.HighQuality)
+            {
+                image.DrawInto(mod, new Rectangle(0, 0, (int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling)), preset.quantizer, preset.ditherer, ScalingMode.Auto);
+                return mod;
+            }
+
             if (preset.Scaling < 1)
-                image = (Bitmap)ScaleImage(image, (int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling));
+                mod = (Bitmap)ScaleImage(image, (int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling));
+            else
+                mod = (Bitmap)image;
 
-            if (preset.StyleIndex != preset.DefaultStyle)
-                if (!preset.HighQuality)
-                    image = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer, preset.ditherer);
-
-            return image;
+            return mod;
         }
         public void PreviewEffects(bool active)
         {
@@ -965,9 +977,10 @@ namespace BasicGiffer
             sets.cbStyle.SelectedIndex = settings.StyleIndex;
             sets.tbSize.Value = (int) Math.Ceiling(settings.Scaling * 100);
             sets.Background = settings.Background;
-            sets.cbPersistent.Checked = preserveStyle;
+            sets.cbPersistent.Checked = !preserveStyle;
             sets.h = originalImages[0].Size.Height;
             sets.w = originalImages[0].Size.Width;
+            sets.defI = settings.DefaultStyle;
 
             if (sets.ShowDialog() == DialogResult.OK)
             {
@@ -979,13 +992,16 @@ namespace BasicGiffer
                     settings.Scaling = (decimal)sets.tbSize.Value / 100;
                     settings.StyleIndex = sets.cbStyle.SelectedIndex;
                     settings.Background = sets.Background;
-                    pbImage.BackColor = settings.Background;
-                    preserveStyle = sets.cbPersistent.Checked;
-                    Application.DoEvents();
+                    if (settings.StyleIndex == 14)
+                    {
+                        pbImage.BackColor = settings.Background;
+                        Application.DoEvents();
+                    }
+                    preserveStyle = !sets.cbPersistent.Checked;
+                    
                     PreviewEffects(preview);
                     UpdateInfo();
                 }
-
             }
         }
         private void btnPreview_Click(object sender, EventArgs e)

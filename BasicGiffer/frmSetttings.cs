@@ -14,7 +14,7 @@ namespace Giffit
     {
         public int w = 640;
         public int h = 480;
- 
+        public int defI = 0;
 
         public frmSettings()
         {
@@ -30,8 +30,8 @@ namespace Giffit
             cd.Color = Color.White;
             label1.BackColor = Color.White;
             tbSize.Value = 100;
-            cbStyle.SelectedIndex = cbStyle.Items.Count -1;
-            cbPersistent.Checked = false;
+            cbStyle.SelectedIndex = defI;
+            cbPersistent.Checked = true;
 
             var nw = w * tbSize.Value / 100;
             var nh = h * tbSize.Value / 100;
