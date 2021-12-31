@@ -49,9 +49,9 @@ namespace Giffit
             // 
             this.btnStore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStore.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnStore.Location = new System.Drawing.Point(114, 328);
+            this.btnStore.Location = new System.Drawing.Point(119, 320);
             this.btnStore.Name = "btnStore";
-            this.btnStore.Size = new System.Drawing.Size(226, 36);
+            this.btnStore.Size = new System.Drawing.Size(217, 42);
             this.btnStore.TabIndex = 0;
             this.btnStore.Text = "&Apply";
             this.btnStore.UseVisualStyleBackColor = true;
@@ -60,9 +60,9 @@ namespace Giffit
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnReset.Location = new System.Drawing.Point(13, 328);
+            this.btnReset.Location = new System.Drawing.Point(9, 320);
             this.btnReset.Name = "btnReset";
-            this.btnReset.Size = new System.Drawing.Size(95, 36);
+            this.btnReset.Size = new System.Drawing.Size(95, 42);
             this.btnReset.TabIndex = 1;
             this.btnReset.Text = "&Defaults";
             this.btnReset.UseVisualStyleBackColor = true;
@@ -122,19 +122,19 @@ namespace Giffit
             // 
             // label2
             // 
-            this.label2.Location = new System.Drawing.Point(69, 84);
+            this.label2.Location = new System.Drawing.Point(18, 85);
             this.label2.Name = "label2";
             this.label2.Size = new System.Drawing.Size(245, 33);
             this.label2.TabIndex = 2;
-            this.label2.Text = "Trancparency matte colour";
-            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+            this.label2.Text = "Matte:";
+            this.label2.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // label1
             // 
             this.label1.BackColor = System.Drawing.Color.White;
             this.label1.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.label1.FlatStyle = System.Windows.Forms.FlatStyle.Popup;
-            this.label1.Location = new System.Drawing.Point(12, 84);
+            this.label1.Location = new System.Drawing.Point(263, 85);
             this.label1.Name = "label1";
             this.label1.Size = new System.Drawing.Size(51, 33);
             this.label1.TabIndex = 1;
@@ -161,9 +161,9 @@ namespace Giffit
             this.cbPersistent.AutoSize = true;
             this.cbPersistent.Location = new System.Drawing.Point(21, 266);
             this.cbPersistent.Name = "cbPersistent";
-            this.cbPersistent.Size = new System.Drawing.Size(262, 29);
+            this.cbPersistent.Size = new System.Drawing.Size(244, 29);
             this.cbPersistent.TabIndex = 1;
-            this.cbPersistent.Text = "Reset to defaults on restart";
+            this.cbPersistent.Text = "Use defaults after restart";
             this.cbPersistent.UseVisualStyleBackColor = true;
             // 
             // cd

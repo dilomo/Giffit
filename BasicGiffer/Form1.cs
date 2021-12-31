@@ -164,8 +164,6 @@ namespace BasicGiffer
             pbImage.Image = null;
             PreviewEffects(preview);
             pbImage.SizeMode = PictureBoxSizeMode.Zoom;
-            if (settings.StyleIndex == 14)
-                   pbImage.BackColor = settings.Background;
             pbImage.Image = previewImages.First();   
             AdjustWindowToImage();
             pbImage.BackgroundImage = null;
@@ -402,11 +400,17 @@ namespace BasicGiffer
         }
         public static Image ApplyEffects(Image image, Giffit.GiffitPreset preset)
         {
-            //if (preset.Scaling < 1)
-            //    image =   //(Bitmap)ScaleImage(image, (int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling));
-            // if (preset.StyleIndex != preset.DefaultStyle)
-            //  image = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer, preset.ditherer);
+            if (preset.Scaling < 1)
+                image = ((Bitmap)image).Resize(new Size((int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling)), ScalingMode.Lanczos2, true);
 
+            if (!preset.HighQuality)
+            {
+                image = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer,preset.ditherer);
+            }  
+            return image;
+        }
+        public static Image ApplyEffects32bpp(Image image, Giffit.GiffitPreset preset)
+        {
             Bitmap mod = new Bitmap((int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling));
             if (!preset.HighQuality)
             {
@@ -421,6 +425,7 @@ namespace BasicGiffer
 
             return mod;
         }
+
         public void PreviewEffects(bool active)
         {
             UpdateTitleBar("");
@@ -992,11 +997,6 @@ namespace BasicGiffer
                     settings.Scaling = (decimal)sets.tbSize.Value / 100;
                     settings.StyleIndex = sets.cbStyle.SelectedIndex;
                     settings.Background = sets.Background;
-                    if (settings.StyleIndex == 14)
-                    {
-                        pbImage.BackColor = settings.Background;
-                        Application.DoEvents();
-                    }
                     preserveStyle = !sets.cbPersistent.Checked;
                     
                     PreviewEffects(preview);
