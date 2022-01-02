@@ -446,7 +446,7 @@ namespace BasicGiffer
             this.btnLoop.Name = "btnLoop";
             this.btnLoop.Size = new System.Drawing.Size(43, 38);
             this.btnLoop.TabIndex = 2;
-            this.ttip.SetToolTip(this.btnLoop, "Loopback the frames");
+            this.ttip.SetToolTip(this.btnLoop, "Loopback: add duplicate all frames in reverse order");
             this.btnLoop.UseVisualStyleBackColor = false;
             this.btnLoop.Click += new System.EventHandler(this.btnLoop_Click);
             // 
@@ -484,7 +484,6 @@ namespace BasicGiffer
             this.saveGIF.FileName = "animation";
             this.saveGIF.Filter = "GIF Animation |*.gif|Current frame as GIF|*.gif|Current frame as JPG|*.jpg|Curren" +
     "t frame as PNG|*.png|Current frame as TIFF|*.tiff";
-            this.saveGIF.RestoreDirectory = true;
             this.saveGIF.SupportMultiDottedExtensions = true;
             this.saveGIF.Title = "Export GIF";
             // 

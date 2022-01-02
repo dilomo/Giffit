@@ -42,6 +42,7 @@ namespace BasicGiffer
         protected string[] filenames;
         protected Thread getImageThread;
         protected Giffit.GiffitPreset settings = new Giffit.GiffitPreset();
+        string animationName = "animation";
 
         public Gifit()
         {
@@ -51,86 +52,84 @@ namespace BasicGiffer
       
         private bool GetFilename(out string[] filenames, DragEventArgs e)
         {
-            bool ret = true;
-            List<string> names = new List<string>();
+            bool result = true;
+            List<string> names = null;
             if ((e.AllowedEffect & DragDropEffects.Copy) == DragDropEffects.Copy)
             {
                 string[] data = ((IDataObject)e.Data).GetData("FileDrop") as string[];
+                names = AllowedFiles(data, out animationName);
+            }
 
+            if (names == null)
+                result = false;
 
-                if (data != null)
+            names.Sort();
+            filenames = names.ToArray();
+            return result;
+        }
+        private bool GetFilename(out string[] filenames, string folder)
+        {
+            bool result = true;
+            List<string> names = null;
+
+            string[] data = Directory.GetFiles(folder);
+            names = AllowedFiles(data, out animationName);
+
+            if (names == null)
+                result = false;
+
+            names.Sort();
+            filenames = names.ToArray();
+            return result;
+        }
+        /// <summary>
+        /// Get file names that can be loaded
+        /// </summary>
+        /// <param name="data"></param>
+        /// <param name="suggestedFilename">A name suggestion based on context</param>
+        /// <returns></returns>
+        private static List<string> AllowedFiles(string[] data, out string suggestedFilename)
+        {
+            suggestedFilename = "animation";
+            bool isFolder = false;
+            List<string> names = new List<string>();
+            if (data != null)
+            {
+                for (int i = 0; i < data.Length; i++)
                 {
-                    for (int i = 0; i < data.Length; i++)
+                    if (data.GetValue(0) is String)
                     {
+                        var filename = ((string[])data)[i];
+                        string[] files;
 
-
-
-                        if (data.GetValue(0) is String)
+                        if (Directory.Exists(filename))
                         {
-                            var filename = ((string[])data)[i];
+                            files = Directory.GetFiles(filename);
+                            isFolder = true;
+                        }
+                        else
+                            files = new string[] { filename };
 
-                            string[] files;
-
-                            if (Directory.Exists(filename))
+                        foreach (var file in files)
+                        {
+                            string ext = Path.GetExtension(file).ToLower();
+                            if ((ext != ".gif") && (ext != ".jpg") && (ext != ".png") && (ext != ".bmp") && (ext != ".tiff"))
                             {
-                                files = Directory.GetFiles(filename);
+                                //ret = false;
                             }
                             else
-                                files = new string[] { filename };
-
-                            foreach (var file in files)
-                            {
-                                string ext = Path.GetExtension(file).ToLower();
-                                if ((ext != ".gif") && (ext != ".jpg") && (ext != ".png") && (ext != ".bmp") && (ext != ".tiff"))
-                                {
-                                    //ret = false;
-                                }
-                                else
-                                    names.Add(file);
-                            }
-                                
-                            
+                                names.Add(file);
                         }
                     }
                 }
             }
 
             if (names.Count == 0)
-                ret = false;
+                return null;
+            else
+                suggestedFilename = isFolder ? Path.GetFileName(data[0]) : Path.GetDirectoryName(data[0]);
 
-            names.Sort();
-            filenames = names.ToArray();
-            return ret;
-        }
-        private bool GetFilename(out string[] filenames, string folder)
-        {
-            bool ret = true;
-            List<string> names = new List<string>();
-
-            string[] data = Directory.GetFiles(folder);
-
-
-            if (data != null)
-            {
-                for (int i = 0; i < data.Length; i++)
-                {
-                    var filename = data[i];
-                    string ext = Path.GetExtension(filename).ToLower();
-                    if ((ext != ".gif") && (ext != ".jpg") && (ext != ".png") && (ext != ".bmp") && (ext != ".tiff"))
-                    {
-                        // skip file //ret = false;
-                    }
-                    else
-                        names.Add(filename);
-                }
-            }
-
-            if (names.Count == 0)
-                ret = false;
-
-            names.Sort();
-            filenames = names.ToArray();
-            return ret;
+            return names;
         }
         public void SetFrame()
         {
@@ -162,18 +161,13 @@ namespace BasicGiffer
             tbFrames.Value = 1;
             tbFrames.Maximum = previewImages.Count();
             pbImage.Image = null;
+            btnSettings.Enabled = true;
             PreviewEffects(preview);
             pbImage.SizeMode = PictureBoxSizeMode.Zoom;
             pbImage.Image = previewImages.First();   
             AdjustWindowToImage();
             pbImage.BackgroundImage = null;
-            //btnSave.Enabled = true;
-            btnSettings.Enabled = true;
-            //btnLoop.Enabled = true;
-            //btnPlay.Enabled = true;
-            //btnStop.Enabled = true;
             tbFrames.Enabled = true;
-            //btnPreview.Enabled = true;
             copyStripMenuItem.Enabled = true;
             saveGIFToolStripMenuItem.Enabled = true;
             addToolStripMenuItem.Enabled = true;
@@ -304,17 +298,17 @@ namespace BasicGiffer
             agf.SizeHandling = AnimationFramesSizeHandling.Center;
             agf.ReportOverallProgress = true;
             agf.ReplaceZeroDelays = false;
-            
+            agf.AllowDeltaFrames = false;
 
             if (settings.OptimisedQuantizer)
-                agf.AllowDeltaFrames = false;
+                agf.AllowDeltaFrames = true;
 
             // grayscale bugfix for now
             if (settings.StyleIndex == 9) agf.Quantizer = settings.quantizer;
 
             if (settings.HighQuality)
             {
-                // must be agf.AllowDeltaFrames = true;
+                agf.AllowDeltaFrames = true;
                 agf.Quantizer = settings.quantizer;
                 agf.Ditherer = settings.ditherer;
             }
@@ -810,6 +804,9 @@ namespace BasicGiffer
         private void btnSave_Click(object sender, EventArgs e)
         {
             Stop();
+            saveGIF.FileName = Path.GetFileName(animationName);
+            saveGIF.InitialDirectory = Path.GetDirectoryName(animationName);
+
             if (saveGIF.ShowDialog() == DialogResult.OK)
             {
                 UpdateInfo($"Writing file ...");
@@ -818,10 +815,7 @@ namespace BasicGiffer
                 {
                     Thread saveGifThread = null;
                     var fps = GetFPS();
-                    if (settings.StyleIndex == settings.DefaultStyle)
-                        saveGifThread = new Thread(() => SaveGifAnimation_BumpKit(1000 /fps));
-                    else
-                        saveGifThread = new Thread(() => SaveGifAnimation(1000 / fps));
+                    saveGifThread = new Thread(() => SaveGifAnimation(1000 / fps));
 
                     saveGifThread.Start();
                     while (saveGifThread.IsAlive)
@@ -840,6 +834,7 @@ namespace BasicGiffer
                 else
                     SaveTIFfFrame();
 
+                animationName = saveGIF.FileName;
                 UpdateInfo();
                 UpdateTitleBar($"- Saved to {Path.GetFileName(saveGIF.FileName)}");
                 EnableActions();
@@ -982,7 +977,7 @@ namespace BasicGiffer
             sets.cbStyle.SelectedIndex = settings.StyleIndex;
             sets.tbSize.Value = (int) Math.Ceiling(settings.Scaling * 100);
             sets.Background = settings.Background;
-            sets.cbPersistent.Checked = !preserveStyle;
+            sets.cbUseDefault.Checked = !preserveStyle;
             sets.h = originalImages[0].Size.Height;
             sets.w = originalImages[0].Size.Width;
             sets.defI = settings.DefaultStyle;
@@ -991,13 +986,13 @@ namespace BasicGiffer
             {
                 if (settings.StyleIndex != sets.cbStyle.SelectedIndex || 
                     settings.Scaling != (decimal)sets.tbSize.Value / 100 || 
-                    sets.cbPersistent.Checked != preserveStyle ||
+                    sets.cbUseDefault.Checked == preserveStyle ||
                     settings.Background != sets.Background)
                 {
                     settings.Scaling = (decimal)sets.tbSize.Value / 100;
                     settings.StyleIndex = sets.cbStyle.SelectedIndex;
                     settings.Background = sets.Background;
-                    preserveStyle = !sets.cbPersistent.Checked;
+                    preserveStyle = !sets.cbUseDefault.Checked;
                     
                     PreviewEffects(preview);
                     UpdateInfo();

@@ -40,7 +40,7 @@ namespace Giffit
         "Octree #256 (8bpp)",
         "Colour #332 (8bpp)",
         "Windows '98 (8bpp)",
-        "High fidelity (additive 8bpp)"
+        "High Fidelity (additive 8bpp)"
         };
 
 
