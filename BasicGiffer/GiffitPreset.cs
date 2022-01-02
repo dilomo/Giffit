@@ -38,7 +38,7 @@ namespace Giffit
         "Rough Colour (4bpp)",
         "Filmic (8bpp)",
         "Octree #256 (8bpp)",
-        "Colour #332 (8bpp)",
+        "Colour #332 (opaque 8bpp)",
         "Windows '98 (8bpp)",
         "High Fidelity (additive 8bpp)"
         };

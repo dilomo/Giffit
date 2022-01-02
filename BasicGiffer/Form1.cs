@@ -42,7 +42,8 @@ namespace BasicGiffer
         protected string[] filenames;
         protected Thread getImageThread;
         protected Giffit.GiffitPreset settings = new Giffit.GiffitPreset();
-        string animationName = "animation";
+        string animationFolder = "animation";
+        bool folderDrop = false;
 
         public Gifit()
         {
@@ -57,7 +58,7 @@ namespace BasicGiffer
             if ((e.AllowedEffect & DragDropEffects.Copy) == DragDropEffects.Copy)
             {
                 string[] data = ((IDataObject)e.Data).GetData("FileDrop") as string[];
-                names = AllowedFiles(data, out animationName);
+                names = AllowedFiles(data, out folderDrop);
             }
 
             if (names == null)
@@ -73,10 +74,12 @@ namespace BasicGiffer
             List<string> names = null;
 
             string[] data = Directory.GetFiles(folder);
-            names = AllowedFiles(data, out animationName);
+            names = AllowedFiles(data, out folderDrop);
 
             if (names == null)
                 result = false;
+
+
 
             names.Sort();
             filenames = names.ToArray();
@@ -88,10 +91,9 @@ namespace BasicGiffer
         /// <param name="data"></param>
         /// <param name="suggestedFilename">A name suggestion based on context</param>
         /// <returns></returns>
-        private static List<string> AllowedFiles(string[] data, out string suggestedFilename)
+        private static List<string> AllowedFiles(string[] data, out bool isFolder)
         {
-            suggestedFilename = "animation";
-            bool isFolder = false;
+            isFolder = false;
             List<string> names = new List<string>();
             if (data != null)
             {
@@ -126,9 +128,7 @@ namespace BasicGiffer
 
             if (names.Count == 0)
                 return null;
-            else
-                suggestedFilename = isFolder ? Path.GetFileName(data[0]) : Path.GetDirectoryName(data[0]);
-
+           
             return names;
         }
         public void SetFrame()
@@ -148,7 +148,8 @@ namespace BasicGiffer
             UpdateInfo($"{filenames.Count().ToString()} files are loading ... ");
             AddRecent(filenames);
 
-            
+            animationFolder = Path.GetDirectoryName(filenames[0]);
+
             getImageThread = new Thread(new ThreadStart(LoadImages));
             getImageThread.Start();
 
@@ -429,7 +430,7 @@ namespace BasicGiffer
             btnSettings.FlatAppearance.BorderColor = Color.OrangeRed;
             Stop();
             DisableActions();
-            UpdateInfo("Generating preview ... ");
+            UpdateInfo($"Applying '{Giffit.GiffitPreset.StyleNames[settings.StyleIndex]}' ... ");
            
 
             var previewThread = new Thread(() => GeneratePreview(active));
@@ -804,8 +805,8 @@ namespace BasicGiffer
         private void btnSave_Click(object sender, EventArgs e)
         {
             Stop();
-            saveGIF.FileName = Path.GetFileName(animationName);
-            saveGIF.InitialDirectory = Path.GetDirectoryName(animationName);
+            saveGIF.FileName = Path.GetFileName(animationFolder);
+            saveGIF.InitialDirectory = Directory.GetParent(animationFolder).FullName;
 
             if (saveGIF.ShowDialog() == DialogResult.OK)
             {
@@ -834,7 +835,7 @@ namespace BasicGiffer
                 else
                     SaveTIFfFrame();
 
-                animationName = saveGIF.FileName;
+                animationFolder = saveGIF.FileName;
                 UpdateInfo();
                 UpdateTitleBar($"- Saved to {Path.GetFileName(saveGIF.FileName)}");
                 EnableActions();
@@ -990,8 +991,8 @@ namespace BasicGiffer
                     settings.Background != sets.Background)
                 {
                     settings.Scaling = (decimal)sets.tbSize.Value / 100;
+                    settings.Background = sets.Background; // set background before index otherwise we cannot use it in this run
                     settings.StyleIndex = sets.cbStyle.SelectedIndex;
-                    settings.Background = sets.Background;
                     preserveStyle = !sets.cbUseDefault.Checked;
                     
                     PreviewEffects(preview);
@@ -1062,7 +1063,7 @@ namespace BasicGiffer
             }
             else
             {
-                MessageBox.Show("No supported files were found in this recent directiry");
+                MessageBox.Show("No supported files were found in this recent directory");
             }
         }
         private void Gifit_SizeChanged(object sender, EventArgs e)
