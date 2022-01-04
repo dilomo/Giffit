@@ -924,6 +924,42 @@ namespace BasicGiffer
             if (recentFolders.Count > 0)
                 clearrecentToolStripMenuItem.Enabled = true;
 
+
+            // adjust button size for better fit
+            if (this.DeviceDpi <= 100)
+            {
+                tableLayoutPanel1.RowStyles[2].Height = 44;
+                tableLayoutPanel1.RowStyles[3].Height = 37;
+                tableLayoutPanel3.ColumnStyles[2].Width = 37;
+                tableLayoutPanel3.ColumnStyles[3].Width = 37;
+                tableLayoutPanel3.ColumnStyles[4].Width = 37;
+                tableLayoutPanel3.ColumnStyles[5].Width = 37;
+                tableLayoutPanel3.ColumnStyles[6].Width = 37;
+
+
+            }
+            else if (this.DeviceDpi > 100 && this.DeviceDpi < 190)
+            {
+                tableLayoutPanel1.RowStyles[2].Height = 55;
+                tableLayoutPanel1.RowStyles[3].Height = 48;
+                tableLayoutPanel3.ColumnStyles[2].Width = 42;
+                tableLayoutPanel3.ColumnStyles[3].Width = 42;
+                tableLayoutPanel3.ColumnStyles[4].Width = 42;
+                tableLayoutPanel3.ColumnStyles[5].Width = 42;
+                tableLayoutPanel3.ColumnStyles[6].Width = 42;
+            }
+            else
+            {
+                tableLayoutPanel1.RowStyles[2].Height = 70;
+                tableLayoutPanel1.RowStyles[3].Height = 62;
+                tableLayoutPanel3.ColumnStyles[2].Width = 60;
+                tableLayoutPanel3.ColumnStyles[3].Width = 60;
+                tableLayoutPanel3.ColumnStyles[4].Width = 60;
+                tableLayoutPanel3.ColumnStyles[5].Width = 60;
+                tableLayoutPanel3.ColumnStyles[6].Width = 60;
+            }
+
+
             lblResult.Text = "";
         }
         private void Gifit_FormClosing(object sender, FormClosingEventArgs e)

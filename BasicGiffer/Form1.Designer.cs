@@ -80,9 +80,9 @@ namespace BasicGiffer
             this.pbImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbImage.ContextMenuStrip = this.cmsActions;
             this.pbImage.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.pbImage.Location = new System.Drawing.Point(3, 4);
+            this.pbImage.Location = new System.Drawing.Point(3, 3);
             this.pbImage.Name = "pbImage";
-            this.pbImage.Size = new System.Drawing.Size(1052, 701);
+            this.pbImage.Size = new System.Drawing.Size(965, 661);
             this.pbImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
             this.pbImage.TabIndex = 4;
             this.pbImage.TabStop = false;
@@ -106,7 +106,7 @@ namespace BasicGiffer
             this.cmsActions.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsActions.ShowImageMargin = false;
             this.cmsActions.ShowItemToolTips = false;
-            this.cmsActions.Size = new System.Drawing.Size(276, 202);
+            this.cmsActions.Size = new System.Drawing.Size(263, 202);
             this.cmsActions.Opening += new System.ComponentModel.CancelEventHandler(this.cmsActions_Opening_1);
             // 
             // newToolStripMenuItem
@@ -114,7 +114,7 @@ namespace BasicGiffer
             this.newToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.newToolStripMenuItem.Name = "newToolStripMenuItem";
             this.newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
             this.newToolStripMenuItem.Text = "&New Animation ...";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
@@ -124,7 +124,7 @@ namespace BasicGiffer
             this.addToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.addToolStripMenuItem.Name = "addToolStripMenuItem";
             this.addToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+I";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
             this.addToolStripMenuItem.Text = "&Add Images ...";
             this.addToolStripMenuItem.ToolTipText = "Ctrl+I";
             this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
@@ -135,7 +135,7 @@ namespace BasicGiffer
             this.saveGIFToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.saveGIFToolStripMenuItem.Name = "saveGIFToolStripMenuItem";
             this.saveGIFToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
-            this.saveGIFToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
+            this.saveGIFToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
             this.saveGIFToolStripMenuItem.Text = "&Export ...";
             this.saveGIFToolStripMenuItem.Click += new System.EventHandler(this.saveGIFToolStripMenuItem_Click);
             // 
@@ -145,7 +145,7 @@ namespace BasicGiffer
             this.copyStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.copyStripMenuItem.Name = "copyStripMenuItem";
             this.copyStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
-            this.copyStripMenuItem.Size = new System.Drawing.Size(275, 32);
+            this.copyStripMenuItem.Size = new System.Drawing.Size(262, 32);
             this.copyStripMenuItem.Text = "&Copy Frame";
             this.copyStripMenuItem.ToolTipText = "Ctrl+C";
             this.copyStripMenuItem.Click += new System.EventHandler(this.copyStripMenuItem_Click);
@@ -153,14 +153,14 @@ namespace BasicGiffer
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(272, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(259, 6);
             // 
             // recentfoldersToolStripMenuItem
             // 
             this.recentfoldersToolStripMenuItem.DropDown = this.cmsRecents;
             this.recentfoldersToolStripMenuItem.Enabled = false;
             this.recentfoldersToolStripMenuItem.Name = "recentfoldersToolStripMenuItem";
-            this.recentfoldersToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
+            this.recentfoldersToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
             this.recentfoldersToolStripMenuItem.Text = "Recents";
             // 
             // cmsRecents
@@ -168,6 +168,7 @@ namespace BasicGiffer
             this.cmsRecents.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsRecents.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.cmsRecents.Name = "cmsRecents";
+            this.cmsRecents.OwnerItem = this.recentfoldersToolStripMenuItem;
             this.cmsRecents.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsRecents.ShowImageMargin = false;
             this.cmsRecents.Size = new System.Drawing.Size(36, 4);
@@ -175,19 +176,19 @@ namespace BasicGiffer
             // clearrecentToolStripMenuItem
             // 
             this.clearrecentToolStripMenuItem.Name = "clearrecentToolStripMenuItem";
-            this.clearrecentToolStripMenuItem.Size = new System.Drawing.Size(275, 32);
+            this.clearrecentToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
             this.clearrecentToolStripMenuItem.Text = "Clear Recents";
             this.clearrecentToolStripMenuItem.Click += new System.EventHandler(this.clearrecentToolStripMenuItem_Click);
             // 
             // tableLayoutPanel2
             // 
             this.tableLayoutPanel2.ColumnCount = 6;
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 85F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 55F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 90F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 86F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 77F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 81F));
             this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 171F));
+            this.tableLayoutPanel2.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 156F));
             this.tableLayoutPanel2.Controls.Add(this.btnSave, 5, 0);
             this.tableLayoutPanel2.Controls.Add(this.label1, 2, 0);
             this.tableLayoutPanel2.Controls.Add(this.label2, 0, 0);
@@ -195,11 +196,11 @@ namespace BasicGiffer
             this.tableLayoutPanel2.Controls.Add(this.lblResult, 4, 0);
             this.tableLayoutPanel2.Controls.Add(this.cbFPS, 3, 0);
             this.tableLayoutPanel2.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 806);
+            this.tableLayoutPanel2.Location = new System.Drawing.Point(3, 785);
             this.tableLayoutPanel2.Name = "tableLayoutPanel2";
             this.tableLayoutPanel2.RowCount = 1;
             this.tableLayoutPanel2.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel2.Size = new System.Drawing.Size(1052, 64);
+            this.tableLayoutPanel2.Size = new System.Drawing.Size(965, 64);
             this.tableLayoutPanel2.TabIndex = 2;
             // 
             // btnSave
@@ -209,10 +210,10 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.btnSave.BackColor = System.Drawing.SystemColors.Control;
             this.btnSave.Enabled = false;
-            this.btnSave.Location = new System.Drawing.Point(884, 12);
-            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 12, 12, 12);
+            this.btnSave.Location = new System.Drawing.Point(812, 12);
+            this.btnSave.Margin = new System.Windows.Forms.Padding(3, 12, 11, 12);
             this.btnSave.Name = "btnSave";
-            this.btnSave.Size = new System.Drawing.Size(156, 40);
+            this.btnSave.Size = new System.Drawing.Size(142, 40);
             this.btnSave.TabIndex = 0;
             this.btnSave.Text = "&Export";
             this.ttip.SetToolTip(this.btnSave, "Save to file (Ctrl+S)");
@@ -223,10 +224,10 @@ namespace BasicGiffer
             // 
             this.label1.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label1.AutoSize = true;
-            this.label1.Location = new System.Drawing.Point(179, 19);
+            this.label1.Location = new System.Drawing.Point(168, 19);
             this.label1.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label1.Name = "label1";
-            this.label1.Size = new System.Drawing.Size(46, 25);
+            this.label1.Size = new System.Drawing.Size(45, 25);
             this.label1.TabIndex = 2;
             this.label1.Text = "FPS:";
             // 
@@ -234,24 +235,24 @@ namespace BasicGiffer
             // 
             this.label2.Anchor = System.Windows.Forms.AnchorStyles.Right;
             this.label2.AutoSize = true;
-            this.label2.Location = new System.Drawing.Point(4, 19);
+            this.label2.Location = new System.Drawing.Point(8, 19);
             this.label2.Margin = new System.Windows.Forms.Padding(3, 0, 0, 0);
             this.label2.Name = "label2";
-            this.label2.Size = new System.Drawing.Size(81, 25);
+            this.label2.Size = new System.Drawing.Size(78, 25);
             this.label2.TabIndex = 4;
             this.label2.Text = "Repeats:";
             // 
             // nudRepeat
             // 
             this.nudRepeat.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.nudRepeat.Location = new System.Drawing.Point(88, 15);
+            this.nudRepeat.Location = new System.Drawing.Point(89, 16);
             this.nudRepeat.Maximum = new decimal(new int[] {
             50,
             0,
             0,
             0});
             this.nudRepeat.Name = "nudRepeat";
-            this.nudRepeat.Size = new System.Drawing.Size(79, 33);
+            this.nudRepeat.Size = new System.Drawing.Size(71, 31);
             this.nudRepeat.TabIndex = 5;
             this.ttip.SetToolTip(this.nudRepeat, "How many times to play the animation. Zero is for endless loops.");
             this.nudRepeat.ValueChanged += new System.EventHandler(this.nudRepeat_ValueChanged);
@@ -260,9 +261,9 @@ namespace BasicGiffer
             // lblResult
             // 
             this.lblResult.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblResult.Location = new System.Drawing.Point(318, 9);
+            this.lblResult.Location = new System.Drawing.Point(297, 9);
             this.lblResult.Name = "lblResult";
-            this.lblResult.Size = new System.Drawing.Size(560, 45);
+            this.lblResult.Size = new System.Drawing.Size(509, 45);
             this.lblResult.TabIndex = 3;
             this.lblResult.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
@@ -287,9 +288,9 @@ namespace BasicGiffer
             "1",
             "0.5",
             "0.2"});
-            this.cbFPS.Location = new System.Drawing.Point(228, 15);
+            this.cbFPS.Location = new System.Drawing.Point(216, 15);
             this.cbFPS.Name = "cbFPS";
-            this.cbFPS.Size = new System.Drawing.Size(84, 33);
+            this.cbFPS.Size = new System.Drawing.Size(75, 33);
             this.cbFPS.TabIndex = 6;
             this.ttip.SetToolTip(this.cbFPS, "Frames per second to use based on 1/100 second");
             this.cbFPS.SelectedIndexChanged += new System.EventHandler(this.cbFPS_SelectedIndexChanged);
@@ -301,9 +302,10 @@ namespace BasicGiffer
             this.btnSettings.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSettings.Image = global::Giffit.Properties.Resources.magic_wand;
-            this.btnSettings.Location = new System.Drawing.Point(602, 3);
+            this.btnSettings.Location = new System.Drawing.Point(560, 2);
+            this.btnSettings.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnSettings.Name = "btnSettings";
-            this.btnSettings.Size = new System.Drawing.Size(43, 38);
+            this.btnSettings.Size = new System.Drawing.Size(50, 45);
             this.btnSettings.TabIndex = 6;
             this.ttip.SetToolTip(this.btnSettings, "Image settings (S)");
             this.btnSettings.UseVisualStyleBackColor = true;
@@ -322,26 +324,26 @@ namespace BasicGiffer
             this.tableLayoutPanel1.Location = new System.Drawing.Point(0, 0);
             this.tableLayoutPanel1.Name = "tableLayoutPanel1";
             this.tableLayoutPanel1.RowCount = 5;
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 1F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 0F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 45F));
-            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 50F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 60F));
+            this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 55F));
             this.tableLayoutPanel1.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Absolute, 70F));
-            this.tableLayoutPanel1.Size = new System.Drawing.Size(1058, 873);
+            this.tableLayoutPanel1.Size = new System.Drawing.Size(971, 852);
             this.tableLayoutPanel1.TabIndex = 0;
             // 
             // tableLayoutPanel3
             // 
             this.tableLayoutPanel3.ColumnCount = 9;
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 70F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 49F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 67F));
             this.tableLayoutPanel3.Controls.Add(this.btnPlay, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnStop, 3, 0);
             this.tableLayoutPanel3.Controls.Add(this.lblColourInfo, 7, 0);
@@ -351,11 +353,11 @@ namespace BasicGiffer
             this.tableLayoutPanel3.Controls.Add(this.btnSettings, 6, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnPreview, 5, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 756);
+            this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 730);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
             this.tableLayoutPanel3.RowCount = 1;
             this.tableLayoutPanel3.RowStyles.Add(new System.Windows.Forms.RowStyle(System.Windows.Forms.SizeType.Percent, 100F));
-            this.tableLayoutPanel3.Size = new System.Drawing.Size(1052, 44);
+            this.tableLayoutPanel3.Size = new System.Drawing.Size(965, 49);
             this.tableLayoutPanel3.TabIndex = 5;
             // 
             // btnPlay
@@ -366,9 +368,10 @@ namespace BasicGiffer
             this.btnPlay.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPlay.Image = global::Giffit.Properties.Resources.play;
-            this.btnPlay.Location = new System.Drawing.Point(406, 3);
+            this.btnPlay.Location = new System.Drawing.Point(352, 2);
+            this.btnPlay.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnPlay.Name = "btnPlay";
-            this.btnPlay.Size = new System.Drawing.Size(43, 38);
+            this.btnPlay.Size = new System.Drawing.Size(50, 45);
             this.btnPlay.TabIndex = 0;
             this.ttip.SetToolTip(this.btnPlay, "Play (Space)");
             this.btnPlay.UseVisualStyleBackColor = false;
@@ -376,15 +379,17 @@ namespace BasicGiffer
             // 
             // btnStop
             // 
+            this.btnStop.AutoSize = true;
             this.btnStop.BackColor = System.Drawing.SystemColors.ControlDark;
             this.btnStop.Dock = System.Windows.Forms.DockStyle.Fill;
             this.btnStop.Enabled = false;
             this.btnStop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStop.Image = global::Giffit.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(455, 3);
+            this.btnStop.Location = new System.Drawing.Point(404, 2);
+            this.btnStop.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnStop.Name = "btnStop";
-            this.btnStop.Size = new System.Drawing.Size(43, 38);
+            this.btnStop.Size = new System.Drawing.Size(50, 45);
             this.btnStop.TabIndex = 1;
             this.ttip.SetToolTip(this.btnStop, "Stop (Space)");
             this.btnStop.UseVisualStyleBackColor = false;
@@ -395,10 +400,10 @@ namespace BasicGiffer
             this.lblColourInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
             this.lblColourInfo.Font = new System.Drawing.Font("Segoe UI", 7.948052F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblColourInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblColourInfo.Location = new System.Drawing.Point(648, 5);
+            this.lblColourInfo.Location = new System.Drawing.Point(611, 8);
             this.lblColourInfo.Margin = new System.Windows.Forms.Padding(0);
             this.lblColourInfo.Name = "lblColourInfo";
-            this.lblColourInfo.Size = new System.Drawing.Size(333, 34);
+            this.lblColourInfo.Size = new System.Drawing.Size(287, 33);
             this.lblColourInfo.TabIndex = 2;
             this.lblColourInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
@@ -411,7 +416,7 @@ namespace BasicGiffer
             this.lblCurFrame.Font = new System.Drawing.Font("Segoe UI Semibold", 8.883117F, System.Drawing.FontStyle.Bold, System.Drawing.GraphicsUnit.Point);
             this.lblCurFrame.Location = new System.Drawing.Point(3, 0);
             this.lblCurFrame.Name = "lblCurFrame";
-            this.lblCurFrame.Size = new System.Drawing.Size(64, 44);
+            this.lblCurFrame.Size = new System.Drawing.Size(58, 49);
             this.lblCurFrame.TabIndex = 3;
             this.lblCurFrame.Text = "1";
             this.lblCurFrame.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
@@ -423,9 +428,9 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkLabel1.AutoSize = true;
             this.linkLabel1.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.linkLabel1.Location = new System.Drawing.Point(984, 0);
+            this.linkLabel1.Location = new System.Drawing.Point(901, 0);
             this.linkLabel1.Name = "linkLabel1";
-            this.linkLabel1.Size = new System.Drawing.Size(65, 44);
+            this.linkLabel1.Size = new System.Drawing.Size(61, 49);
             this.linkLabel1.TabIndex = 4;
             this.linkLabel1.TabStop = true;
             this.linkLabel1.Text = "info";
@@ -440,9 +445,10 @@ namespace BasicGiffer
             this.btnLoop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnLoop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnLoop.Image = global::Giffit.Properties.Resources.loopbv;
-            this.btnLoop.Location = new System.Drawing.Point(504, 3);
+            this.btnLoop.Location = new System.Drawing.Point(456, 2);
+            this.btnLoop.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnLoop.Name = "btnLoop";
-            this.btnLoop.Size = new System.Drawing.Size(43, 38);
+            this.btnLoop.Size = new System.Drawing.Size(50, 45);
             this.btnLoop.TabIndex = 2;
             this.ttip.SetToolTip(this.btnLoop, "Loopback: add duplicate all frames in reverse order");
             this.btnLoop.UseVisualStyleBackColor = false;
@@ -455,9 +461,10 @@ namespace BasicGiffer
             this.btnPreview.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnPreview.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPreview.Image = global::Giffit.Properties.Resources.preview;
-            this.btnPreview.Location = new System.Drawing.Point(553, 3);
+            this.btnPreview.Location = new System.Drawing.Point(508, 2);
+            this.btnPreview.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnPreview.Name = "btnPreview";
-            this.btnPreview.Size = new System.Drawing.Size(43, 38);
+            this.btnPreview.Size = new System.Drawing.Size(50, 45);
             this.btnPreview.TabIndex = 7;
             this.ttip.SetToolTip(this.btnPreview, "Zoom to 100% (Z)");
             this.btnPreview.UseVisualStyleBackColor = true;
@@ -467,11 +474,11 @@ namespace BasicGiffer
             // 
             this.tbFrames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbFrames.Enabled = false;
-            this.tbFrames.Location = new System.Drawing.Point(3, 711);
+            this.tbFrames.Location = new System.Drawing.Point(3, 670);
             this.tbFrames.Maximum = 1;
             this.tbFrames.Minimum = 1;
             this.tbFrames.Name = "tbFrames";
-            this.tbFrames.Size = new System.Drawing.Size(1052, 39);
+            this.tbFrames.Size = new System.Drawing.Size(965, 54);
             this.tbFrames.TabIndex = 3;
             this.tbFrames.Value = 1;
             this.tbFrames.ValueChanged += new System.EventHandler(this.tbFrames_ValueChanged);
@@ -505,16 +512,17 @@ namespace BasicGiffer
             // Gifit
             // 
             this.AllowDrop = true;
-            this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
+            this.AutoScaleDimensions = new System.Drawing.SizeF(10F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.AutoSize = true;
             this.BackColor = System.Drawing.SystemColors.Control;
-            this.ClientSize = new System.Drawing.Size(1058, 873);
+            this.ClientSize = new System.Drawing.Size(971, 852);
             this.Controls.Add(this.tableLayoutPanel1);
+            this.DoubleBuffered = true;
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
             this.MaximizeBox = false;
-            this.MaximumSize = new System.Drawing.Size(2340, 1500);
-            this.MinimumSize = new System.Drawing.Size(646, 547);
+            this.MaximumSize = new System.Drawing.Size(2123, 1478);
+            this.MinimumSize = new System.Drawing.Size(583, 524);
             this.Name = "Gifit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
             this.Text = "Giffit";
