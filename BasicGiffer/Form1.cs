@@ -73,14 +73,11 @@ namespace BasicGiffer
             bool result = true;
             List<string> names = null;
 
-            string[] data = Directory.GetFiles(folder);
-            names = AllowedFiles(data, out folderDrop);
+          //  string[] data = Directory.GetFiles(folder);
+            names = AllowedFiles(new string[] { folder }, out folderDrop);
 
             if (names == null)
                 result = false;
-
-
-
             names.Sort();
             filenames = names.ToArray();
             return result;
@@ -316,9 +313,6 @@ namespace BasicGiffer
 
             using (var stream = new MemoryStream())
             {
-                //GifEncoder enc = new GifEncoder(stream, new Size(imageArray.First().Width, imageArray.First().Height));
-                //enc.RepeatCount = (int)nudRepeat.Value;
-
                 var progresseReporter = new TaskConfig();
                 progresseReporter.Progress = new SaveProgress(saveGIF.FileName, UpdateInfo);
 
@@ -806,7 +800,7 @@ namespace BasicGiffer
         {
             Stop();
             saveGIF.FileName = Path.GetFileName(animationFolder);
-            saveGIF.InitialDirectory = Directory.GetParent(animationFolder).FullName;
+            saveGIF.InitialDirectory = folderDrop? Directory.GetParent(animationFolder).FullName : animationFolder;
 
             if (saveGIF.ShowDialog() == DialogResult.OK)
             {

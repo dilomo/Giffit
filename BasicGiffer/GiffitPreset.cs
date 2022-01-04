@@ -29,18 +29,18 @@ namespace Giffit
         "Polka Dot (1bpp)",
         "Medium Dot (1bpp)",
         "Small Dot (1bpp)",
-        "Vintage (4bpp)",
+        "Vintage (4bppA)",
         "Mono Pop (4bpp)",
         "Midnight Blues (4bpp)",
         "Half Grey (4bpp)",
         "Grayscale (8bpp)",
         "B&W Film (8bpp)",
-        "Rough Colour (4bpp)",
-        "Filmic (8bpp)",
-        "Octree #256 (8bpp)",
-        "Colour #332 (opaque 8bpp)",
-        "Windows '98 (8bpp)",
-        "High Fidelity (additive 8bpp)"
+        "Rough Colour (4bppA)",
+        "Filmic (8bppA)",
+        "Octree #256 (8bppA)",
+        "Colour #332 (8bpp)",
+        "Windows '98 (8bppA)",
+        "Fidelity+ (additive 8bppA)"
         };
 
 
@@ -52,6 +52,7 @@ namespace Giffit
             {
                 _sindex = value;
                 HighQuality = false;
+                OptimisedQuantizer = false;
 
                 switch (value)
                 {
@@ -133,6 +134,8 @@ namespace Giffit
                         quantizer = PredefinedColorsQuantizer.FromCustomPalette(colour9, Background, AlphaThold);
                         pixFormat = PixelFormat.Format4bppIndexed;
                         ditherer = new InterleavedGradientNoiseDitherer();
+                        // not optimised but use this for setting delta frames to true as we have transparency
+                        OptimisedQuantizer = true;
                         break;
                     case 12: // filmic
                         quantizer = OptimizedPaletteQuantizer.Octree(32, Background, AlphaThold);

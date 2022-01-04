@@ -168,10 +168,8 @@ namespace BasicGiffer
             this.cmsRecents.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsRecents.ImeMode = System.Windows.Forms.ImeMode.Off;
             this.cmsRecents.Name = "cmsRecents";
-            this.cmsRecents.OwnerItem = this.recentfoldersToolStripMenuItem;
             this.cmsRecents.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsRecents.ShowImageMargin = false;
-            this.cmsRecents.ShowItemToolTips = false;
             this.cmsRecents.Size = new System.Drawing.Size(36, 4);
             // 
             // clearrecentToolStripMenuItem
@@ -514,8 +512,8 @@ namespace BasicGiffer
             this.ClientSize = new System.Drawing.Size(1058, 873);
             this.Controls.Add(this.tableLayoutPanel1);
             this.Icon = ((System.Drawing.Icon)(resources.GetObject("$this.Icon")));
+            this.MaximizeBox = false;
             this.MaximumSize = new System.Drawing.Size(2340, 1500);
-            this.MinimizeBox = false;
             this.MinimumSize = new System.Drawing.Size(646, 547);
             this.Name = "Gifit";
             this.StartPosition = System.Windows.Forms.FormStartPosition.CenterScreen;
