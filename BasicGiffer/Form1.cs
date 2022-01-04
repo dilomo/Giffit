@@ -73,7 +73,6 @@ namespace BasicGiffer
             bool result = true;
             List<string> names = null;
 
-          //  string[] data = Directory.GetFiles(folder);
             names = AllowedFiles(new string[] { folder }, out folderDrop);
 
             if (names == null)
@@ -297,6 +296,7 @@ namespace BasicGiffer
             agf.ReportOverallProgress = true;
             agf.ReplaceZeroDelays = false;
             agf.AllowDeltaFrames = false;
+            agf.EncodeTransparentBorders = true;
 
             if (settings.OptimisedQuantizer)
                 agf.AllowDeltaFrames = true;
