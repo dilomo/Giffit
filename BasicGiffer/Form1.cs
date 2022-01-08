@@ -203,7 +203,14 @@ namespace BasicGiffer
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 filenames = ofd.FileNames;
-                AddFiles();
+                if (loopback)
+                {
+                    Loop(false);
+                    AddFiles();
+                    Loop(true);
+                }
+                else
+                  AddFiles();
             }
         }
         private void AddRecent(string[] filenames)
@@ -212,6 +219,13 @@ namespace BasicGiffer
             var dir = filenames.First();
             if (!recentFolders.Contains(Path.GetDirectoryName(dir)))
                 recentFolders.Add(Path.GetDirectoryName(dir));
+
+            // add gif as recent entry 
+            if (filenames.Count() == 1 && Path.GetExtension(filenames.First()) == ".gif")
+            {
+                if (!recentFolders.Contains(dir))
+                    recentFolders.Add(dir);
+            }
         }
         protected void LoadImages()
         {
@@ -584,7 +598,17 @@ namespace BasicGiffer
         }
         public void UpdateInfo()
         {
-            lblResult.Text = $"from {tbFrames.Maximum} frames = {tbFrames.Maximum / GetFPS():F}s";
+            string fullInfo = $"from {tbFrames.Maximum} frames = {tbFrames.Maximum / GetFPS():F}s";
+
+            if (lblResult.Width < System.Windows.Forms.TextRenderer.MeasureText(fullInfo,
+                 new Font(lblResult.Font.FontFamily, lblResult.Font.Size, lblResult.Font.Style)).Width)
+            {
+                lblResult.Text = $"x{tbFrames.Maximum}={tbFrames.Maximum / GetFPS():F1}s";
+            }
+            else
+            {
+                lblResult.Text = fullInfo;
+            }
             tAnimation.Interval = (int)Math.Round(1000 / GetFPS(), MidpointRounding.AwayFromZero);
         }
         public void Loop( bool loop)
@@ -928,7 +952,7 @@ namespace BasicGiffer
             // adjust button size for better fit
             if (this.DeviceDpi <= 100)
             {
-                tableLayoutPanel1.RowStyles[2].Height = 44;
+                tableLayoutPanel1.RowStyles[2].Height = 43;
                 tableLayoutPanel1.RowStyles[3].Height = 37;
                 tableLayoutPanel3.ColumnStyles[2].Width = 37;
                 tableLayoutPanel3.ColumnStyles[3].Width = 37;
@@ -940,7 +964,7 @@ namespace BasicGiffer
             }
             else if (this.DeviceDpi > 100 && this.DeviceDpi < 190)
             {
-                tableLayoutPanel1.RowStyles[2].Height = 55;
+                tableLayoutPanel1.RowStyles[2].Height = 51;
                 tableLayoutPanel1.RowStyles[3].Height = 48;
                 tableLayoutPanel3.ColumnStyles[2].Width = 42;
                 tableLayoutPanel3.ColumnStyles[3].Width = 42;
@@ -1073,7 +1097,14 @@ namespace BasicGiffer
 
             foreach (var folder in recentFolders)
             {
-                if (Directory.Exists(folder) && Directory.GetFiles(folder).Length > 0)
+                if (Path.GetExtension(folder) == ".gif")
+                {
+                    ToolStripMenuItem rf = new ToolStripMenuItem(Path.GetFileName(folder.TrimEnd(Path.DirectorySeparatorChar)));
+                    rf.ToolTipText = folder;
+                    rf.Click += Rf_Click;
+                    cmsRecents.Items.Add(rf);
+                }
+                else if (Directory.Exists(folder) && Directory.GetFiles(folder).Length > 0)
                 {
                     ToolStripMenuItem rf = new ToolStripMenuItem(Path.GetFileName(folder.TrimEnd(Path.DirectorySeparatorChar)));
                     rf.ToolTipText = folder;
@@ -1103,6 +1134,7 @@ namespace BasicGiffer
                 oneToOne = false;
                 btnPreview.PerformClick();
             }
+            UpdateInfo();
         }
         private void copyStripMenuItem_Click(object sender, EventArgs e)
         {

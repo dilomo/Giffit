@@ -88,7 +88,7 @@ namespace BasicGiffer
             this.label1.Padding = new System.Windows.Forms.Padding(30, 15, 30, 15);
             this.label1.Size = new System.Drawing.Size(459, 77);
             this.label1.TabIndex = 2;
-            this.label1.Text = "©2021 Anton Kerezov, All Rights Reserved.";
+            this.label1.Text = "©2022 Anton Kerezov, All Rights Reserved.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
             // 
             // InfoForm

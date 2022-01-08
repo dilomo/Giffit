@@ -4,7 +4,7 @@
     <OutputType>WinExe</OutputType>
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
-    <Version>0.2.2</Version>
+    <Version>0.2.3</Version>
     <Copyright>©2022 Anton Kerezov, All Rights Reserved.</Copyright>
     <Authors>Anton Kerezov</Authors>
     <Company>ANKERE</Company>
@@ -20,8 +20,8 @@
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
     <AssemblyName>Giffit</AssemblyName>
     <RootNamespace>Giffit</RootNamespace>
-    <AssemblyVersion>0.2.2.0</AssemblyVersion>
-    <FileVersion>0.2.2.0</FileVersion>
+    <AssemblyVersion>0.2.3.0</AssemblyVersion>
+    <FileVersion>0.2.3.0</FileVersion>
     <Win32Resource />
   </PropertyGroup>
 
