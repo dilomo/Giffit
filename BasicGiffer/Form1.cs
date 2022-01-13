@@ -385,7 +385,7 @@ namespace BasicGiffer
         }
         protected void SaveGifFrame()
         {
-            pbImage.Image.Save(saveGIF.FileName, ImageFormat.Gif);
+            ImageExtensions.SaveAsGif(pbImage.Image, saveGIF.FileName);
         }
         protected void SavePNGFrame()
         {
@@ -952,7 +952,7 @@ namespace BasicGiffer
             // adjust button size for better fit
             if (this.DeviceDpi <= 100)
             {
-                tableLayoutPanel1.RowStyles[2].Height = 43;
+                tableLayoutPanel1.RowStyles[2].Height = 44;
                 tableLayoutPanel1.RowStyles[3].Height = 37;
                 tableLayoutPanel3.ColumnStyles[2].Width = 37;
                 tableLayoutPanel3.ColumnStyles[3].Width = 37;
@@ -964,7 +964,7 @@ namespace BasicGiffer
             }
             else if (this.DeviceDpi > 100 && this.DeviceDpi < 190)
             {
-                tableLayoutPanel1.RowStyles[2].Height = 51;
+                tableLayoutPanel1.RowStyles[2].Height = 52;
                 tableLayoutPanel1.RowStyles[3].Height = 48;
                 tableLayoutPanel3.ColumnStyles[2].Width = 42;
                 tableLayoutPanel3.ColumnStyles[3].Width = 42;
@@ -974,16 +974,16 @@ namespace BasicGiffer
             }
             else
             {
-                tableLayoutPanel1.RowStyles[2].Height = 70;
-                tableLayoutPanel1.RowStyles[3].Height = 62;
-                tableLayoutPanel3.ColumnStyles[2].Width = 60;
-                tableLayoutPanel3.ColumnStyles[3].Width = 60;
-                tableLayoutPanel3.ColumnStyles[4].Width = 60;
-                tableLayoutPanel3.ColumnStyles[5].Width = 60;
-                tableLayoutPanel3.ColumnStyles[6].Width = 60;
+                tableLayoutPanel1.RowStyles[2].Height = 72;
+                tableLayoutPanel1.RowStyles[3].Height = 68;
+                tableLayoutPanel3.ColumnStyles[2].Width = 64;
+                tableLayoutPanel3.ColumnStyles[3].Width = 64;
+                tableLayoutPanel3.ColumnStyles[4].Width = 64;
+                tableLayoutPanel3.ColumnStyles[5].Width = 64;
+                tableLayoutPanel3.ColumnStyles[6].Width = 64;
             }
 
-
+            cbFPS.Text = "1";
             lblResult.Text = "";
         }
         private void Gifit_FormClosing(object sender, FormClosingEventArgs e)
@@ -1097,7 +1097,7 @@ namespace BasicGiffer
 
             foreach (var folder in recentFolders)
             {
-                if (Path.GetExtension(folder) == ".gif")
+                if (Path.GetExtension(folder) == ".gif" && File.Exists(folder))
                 {
                     ToolStripMenuItem rf = new ToolStripMenuItem(Path.GetFileName(folder.TrimEnd(Path.DirectorySeparatorChar)));
                     rf.ToolTipText = folder;
@@ -1134,7 +1134,8 @@ namespace BasicGiffer
                 oneToOne = false;
                 btnPreview.PerformClick();
             }
-            UpdateInfo();
+            if (previewImages.Count > 0)
+                UpdateInfo();
         }
         private void copyStripMenuItem_Click(object sender, EventArgs e)
         {
