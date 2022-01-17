@@ -293,7 +293,7 @@ namespace BasicGiffer
             double percentMultiplier = 100 / previewImages.Count;
             IEnumerable<IReadableBitmapData> imageArray;
 
-            if (settings.HighQuality)
+            if (settings.HighQuality || preview == false)
             {
                 List<Image> allframes = new List<Image>();
                 allframes.AddRange(originalImages);
@@ -324,6 +324,7 @@ namespace BasicGiffer
                 agf.Quantizer = settings.quantizer;
                 agf.Ditherer = settings.ditherer;
             }
+    
 
             using (var stream = new MemoryStream())
             {
@@ -828,7 +829,11 @@ namespace BasicGiffer
 
             if (saveGIF.ShowDialog() == DialogResult.OK)
             {
-                UpdateInfo($"Writing file ...");
+                if (preview)
+                    UpdateInfo($"Writing file ...");
+                else
+                    UpdateInfo($"Applying '{Giffit.GiffitPreset.StyleNames[settings.StyleIndex]}' ...");
+
                 DisableActions();
                 if (saveGIF.FilterIndex == 1)
                 {
@@ -934,9 +939,11 @@ namespace BasicGiffer
             cbFPS.SelectedIndex = (int)Giffit.Properties.Settings.Default["FPS"];
             recentFolders = (System.Collections.Specialized.StringCollection)Giffit.Properties.Settings.Default["Recents"];
             settings.Scaling = (decimal)Giffit.Properties.Settings.Default["Scaling"];
-            preserveStyle = (bool)Giffit.Properties.Settings.Default["KeepStyle"];
             settings.Background = (Color)Giffit.Properties.Settings.Default["BackgroundC"];
             settings.StyleIndex = (int)Giffit.Properties.Settings.Default["StyleIndex"];
+            preserveStyle = (bool)Giffit.Properties.Settings.Default["KeepStyle"];
+            preview = (bool)Giffit.Properties.Settings.Default["DontPreview"];
+
 
             if (!preserveStyle)
             {
@@ -983,7 +990,7 @@ namespace BasicGiffer
                 tableLayoutPanel3.ColumnStyles[6].Width = 64;
             }
 
-            cbFPS.Text = "1";
+            //cbFPS.Text = "1";
             lblResult.Text = "";
         }
         private void Gifit_FormClosing(object sender, FormClosingEventArgs e)
@@ -995,6 +1002,7 @@ namespace BasicGiffer
             Giffit.Properties.Settings.Default["StyleIndex"] = settings.StyleIndex;
             Giffit.Properties.Settings.Default["BackgroundC"] = settings.Background;
             Giffit.Properties.Settings.Default["KeepStyle"] = preserveStyle;
+            Giffit.Properties.Settings.Default["DontPreview"] = preview;
             Giffit.Properties.Settings.Default.Save(); // Saves settings in application configuration file
         }
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1036,19 +1044,22 @@ namespace BasicGiffer
             sets.h = originalImages[0].Size.Height;
             sets.w = originalImages[0].Size.Width;
             sets.defI = settings.DefaultStyle;
+            sets.cbDontPreview.Checked = preview;
 
             if (sets.ShowDialog() == DialogResult.OK)
             {
                 if (settings.StyleIndex != sets.cbStyle.SelectedIndex || 
                     settings.Scaling != (decimal)sets.tbSize.Value / 100 || 
                     sets.cbUseDefault.Checked == preserveStyle ||
-                    settings.Background != sets.Background)
+                    settings.Background != sets.Background ||
+                    sets.cbDontPreview.Checked != preview)
                 {
                     settings.Scaling = (decimal)sets.tbSize.Value / 100;
                     settings.Background = sets.Background; // set background before index otherwise we cannot use it in this run
                     settings.StyleIndex = sets.cbStyle.SelectedIndex;
                     preserveStyle = !sets.cbUseDefault.Checked;
-                    
+                    preview = sets.cbDontPreview.Checked;
+
                     PreviewEffects(preview);
                     UpdateInfo();
                 }

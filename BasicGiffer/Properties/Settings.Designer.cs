@@ -108,5 +108,17 @@ namespace Giffit.Properties {
                 this["BackgroundC"] = value;
             }
         }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("False")]
+        public bool DontPreview {
+            get {
+                return ((bool)(this["DontPreview"]));
+            }
+            set {
+                this["DontPreview"] = value;
+            }
+        }
     }
 }

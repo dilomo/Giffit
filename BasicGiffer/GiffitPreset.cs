@@ -44,7 +44,7 @@ namespace Giffit
         };
 
 
-        public int DefaultStyle { get => 14; }
+        public int DefaultStyle { get => 13; }
         public int StyleIndex
         {
             get { return _sindex; }
@@ -133,7 +133,7 @@ namespace Giffit
                         };
                         quantizer = PredefinedColorsQuantizer.FromCustomPalette(colour9, Background, AlphaThold);
                         pixFormat = PixelFormat.Format4bppIndexed;
-                        ditherer = new InterleavedGradientNoiseDitherer();
+                        ditherer = OrderedDitherer.BlueNoise;
                         // not optimised but use this for setting delta frames to true as we have transparency
                         OptimisedQuantizer = true;
                         break;

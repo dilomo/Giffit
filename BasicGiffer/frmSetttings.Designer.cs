@@ -40,6 +40,7 @@ namespace Giffit
             this.cbStyle = new System.Windows.Forms.ComboBox();
             this.cbUseDefault = new System.Windows.Forms.CheckBox();
             this.cd = new System.Windows.Forms.ColorDialog();
+            this.cbDontPreview = new System.Windows.Forms.CheckBox();
             this.groupBox1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbSize)).BeginInit();
             this.groupBox2.SuspendLayout();
@@ -49,7 +50,7 @@ namespace Giffit
             // 
             this.btnStore.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Right)));
             this.btnStore.DialogResult = System.Windows.Forms.DialogResult.OK;
-            this.btnStore.Location = new System.Drawing.Point(112, 320);
+            this.btnStore.Location = new System.Drawing.Point(112, 354);
             this.btnStore.Name = "btnStore";
             this.btnStore.Size = new System.Drawing.Size(172, 42);
             this.btnStore.TabIndex = 0;
@@ -60,7 +61,7 @@ namespace Giffit
             // btnReset
             // 
             this.btnReset.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left)));
-            this.btnReset.Location = new System.Drawing.Point(9, 320);
+            this.btnReset.Location = new System.Drawing.Point(9, 354);
             this.btnReset.Name = "btnReset";
             this.btnReset.Size = new System.Drawing.Size(95, 42);
             this.btnReset.TabIndex = 1;
@@ -163,23 +164,34 @@ namespace Giffit
             // cbUseDefault
             // 
             this.cbUseDefault.AutoSize = true;
-            this.cbUseDefault.Location = new System.Drawing.Point(21, 257);
+            this.cbUseDefault.Location = new System.Drawing.Point(9, 295);
             this.cbUseDefault.Name = "cbUseDefault";
-            this.cbUseDefault.Size = new System.Drawing.Size(244, 29);
+            this.cbUseDefault.Size = new System.Drawing.Size(208, 29);
             this.cbUseDefault.TabIndex = 1;
-            this.cbUseDefault.Text = "Apply defaults on restart";
+            this.cbUseDefault.Text = "Restart with defaults";
             this.cbUseDefault.UseVisualStyleBackColor = true;
             // 
             // cd
             // 
             this.cd.Color = System.Drawing.Color.White;
             // 
+            // cbDontPreview
+            // 
+            this.cbDontPreview.AutoSize = true;
+            this.cbDontPreview.Location = new System.Drawing.Point(9, 260);
+            this.cbDontPreview.Name = "cbDontPreview";
+            this.cbDontPreview.Size = new System.Drawing.Size(248, 29);
+            this.cbDontPreview.TabIndex = 7;
+            this.cbDontPreview.Text = "Generate preview frames";
+            this.cbDontPreview.UseVisualStyleBackColor = true;
+            // 
             // frmSettings
             // 
             this.AcceptButton = this.btnStore;
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(294, 374);
+            this.ClientSize = new System.Drawing.Size(294, 408);
+            this.Controls.Add(this.cbDontPreview);
             this.Controls.Add(this.cbUseDefault);
             this.Controls.Add(this.groupBox2);
             this.Controls.Add(this.groupBox1);
@@ -212,5 +224,6 @@ namespace Giffit
         private System.Windows.Forms.Label label2;
         private System.Windows.Forms.Label label1;
         private System.Windows.Forms.ColorDialog cd;
+        public System.Windows.Forms.CheckBox cbDontPreview;
     }
 }

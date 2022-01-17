@@ -32,6 +32,7 @@ namespace Giffit
             tbSize.Value = 100;
             cbStyle.SelectedIndex = defI;
             cbUseDefault.Checked = true;
+            cbDontPreview.Checked = true;
 
             var nw = w * tbSize.Value / 100;
             var nh = h * tbSize.Value / 100;
