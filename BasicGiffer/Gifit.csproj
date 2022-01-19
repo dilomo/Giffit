@@ -61,7 +61,16 @@
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="KGySoft.Drawing" Version="6.2.0" />
+    <PackageReference Include="System.Drawing.Common" Version="6.0.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Reference Include="KGySoft.CoreLibraries">
+      <HintPath>..\..\KGySoft.CoreLibraries\KGySoft.CoreLibraries\bin\Release\net5.0\KGySoft.CoreLibraries.dll</HintPath>
+    </Reference>
+    <Reference Include="KGySoft.Drawing">
+      <HintPath>..\..\KGySoft.Drawing\KGySoft.Drawing\bin\Release\net5.0\KGySoft.Drawing.dll</HintPath>
+    </Reference>
   </ItemGroup>
 
   <ItemGroup>

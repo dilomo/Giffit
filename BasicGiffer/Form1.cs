@@ -159,7 +159,8 @@ namespace BasicGiffer
             tbFrames.Maximum = previewImages.Count();
             pbImage.Image = null;
             btnSettings.Enabled = true;
-            PreviewEffects(preview);
+            if (preview)
+                  PreviewEffects(preview);
             pbImage.SizeMode = PictureBoxSizeMode.Zoom;
             pbImage.Image = previewImages.First();   
             AdjustWindowToImage();
@@ -186,7 +187,7 @@ namespace BasicGiffer
                 Thread.Sleep(0);
             }
             tbFrames.Maximum = previewImages.Count();
-            PreviewEffects(true);
+            PreviewEffects(preview);
             UpdateInfo();
             EnableActions();
         }
@@ -433,14 +434,21 @@ namespace BasicGiffer
         public void PreviewEffects(bool active)
         {
             UpdateTitleBar("");
-            Image currenticon = btnSettings.Image;
-            Color border = btnSettings.FlatAppearance.BorderColor;
-            btnSettings.Image = Giffit.Properties.Resources.spinner_20;
-            btnSettings.FlatAppearance.BorderColor = Color.OrangeRed;
             Stop();
             DisableActions();
-            UpdateInfo($"Applying '{Giffit.GiffitPreset.StyleNames[settings.StyleIndex]}' ... ");
-           
+
+            Image currenticon = null;
+            Color border = Color.Red;
+
+            if (preview)
+            {
+                currenticon = btnSettings.Image;
+                border = btnSettings.FlatAppearance.BorderColor;
+                btnSettings.Image = Giffit.Properties.Resources.spinner_20;
+                btnSettings.FlatAppearance.BorderColor = Color.OrangeRed;
+                UpdateInfo($"Applying '{Giffit.GiffitPreset.StyleNames[settings.StyleIndex]}' ... ");
+            }
+            
 
             var previewThread = new Thread(() => GeneratePreview(active));
             previewThread.Start();
@@ -451,8 +459,12 @@ namespace BasicGiffer
             }
 
             EnableActions();
-            btnSettings.FlatAppearance.BorderColor = border;
-            btnSettings.Image = currenticon;
+            if (preview)
+            {
+                btnSettings.FlatAppearance.BorderColor = border;
+                btnSettings.Image = currenticon;
+            }
+
             SetFrame();
         }
         private void EnableActions()
@@ -1015,8 +1027,9 @@ namespace BasicGiffer
                 info += $"Image info will be availabe after you load frames.\n\n";
 
                 info += $"{Application.ProductName} version: {Application.ProductVersion}\n" +
-                $"KGySoft module: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.Drawing.Imaging.AnimatedGifConfiguration)).GetName().Version.ToString()}\n" +
-                $"License: Freeware";
+                $"C: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.CoreLibraries.ArrayExtensions)).GetName().Version.ToString()} " +
+                $"D: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.Drawing.Imaging.AnimatedGifConfiguration)).GetName().Version.ToString()} (KGySoft)\n" +
+                $"License: Advanced";
 
             // $"©2021 Anton Kerezov, All Rights Reserved.";
 
