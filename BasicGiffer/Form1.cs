@@ -157,11 +157,14 @@ namespace BasicGiffer
       
             tbFrames.Value = 1;
             tbFrames.Maximum = previewImages.Count();
+            // fix random crash and dissappearing of preview images 
             pbImage.Image = null;
             btnSettings.Enabled = true;
             if (preview)
                   PreviewEffects(preview);
             pbImage.SizeMode = PictureBoxSizeMode.Zoom;
+            if (!zoom)
+               btnPreview.PerformClick();
             pbImage.Image = previewImages.First();   
             AdjustWindowToImage();
             pbImage.BackgroundImage = null;
@@ -218,15 +221,15 @@ namespace BasicGiffer
         {
             clearrecentToolStripMenuItem.Enabled = true;
             var dir = filenames.First();
-            if (!recentFolders.Contains(Path.GetDirectoryName(dir)))
-                recentFolders.Add(Path.GetDirectoryName(dir));
-
+           
             // add gif as recent entry 
             if (filenames.Count() == 1 && Path.GetExtension(filenames.First()) == ".gif")
             {
                 if (!recentFolders.Contains(dir))
                     recentFolders.Add(dir);
             }
+            else if (!recentFolders.Contains(Path.GetDirectoryName(dir)))
+                recentFolders.Add(Path.GetDirectoryName(dir));
         }
         protected void LoadImages()
         {
@@ -313,11 +316,9 @@ namespace BasicGiffer
             agf.AllowDeltaFrames = false;
             agf.EncodeTransparentBorders = true;
 
-            if (settings.OptimisedQuantizer)
-                agf.AllowDeltaFrames = true;
-
-            // grayscale bugfix for now
-            if (settings.StyleIndex == 9) agf.Quantizer = settings.quantizer;
+            // do not use delta frames for size reduction for now
+            // if (settings.UseDeltaFrames && settings.StyleIndex != 14)
+            //     agf.AllowDeltaFrames = true;
 
             if (settings.HighQuality)
             {
@@ -325,7 +326,7 @@ namespace BasicGiffer
                 agf.Quantizer = settings.quantizer;
                 agf.Ditherer = settings.ditherer;
             }
-    
+
 
             using (var stream = new MemoryStream())
             {
@@ -954,7 +955,7 @@ namespace BasicGiffer
             settings.Background = (Color)Giffit.Properties.Settings.Default["BackgroundC"];
             settings.StyleIndex = (int)Giffit.Properties.Settings.Default["StyleIndex"];
             preserveStyle = (bool)Giffit.Properties.Settings.Default["KeepStyle"];
-            preview = (bool)Giffit.Properties.Settings.Default["DontPreview"];
+            preview = (bool)Giffit.Properties.Settings.Default["Preview"];
 
 
             if (!preserveStyle)
@@ -1014,7 +1015,7 @@ namespace BasicGiffer
             Giffit.Properties.Settings.Default["StyleIndex"] = settings.StyleIndex;
             Giffit.Properties.Settings.Default["BackgroundC"] = settings.Background;
             Giffit.Properties.Settings.Default["KeepStyle"] = preserveStyle;
-            Giffit.Properties.Settings.Default["DontPreview"] = preview;
+            Giffit.Properties.Settings.Default["Preview"] = preview;
             Giffit.Properties.Settings.Default.Save(); // Saves settings in application configuration file
         }
         private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
@@ -1053,7 +1054,7 @@ namespace BasicGiffer
             sets.cbStyle.SelectedIndex = settings.StyleIndex;
             sets.tbSize.Value = (int) Math.Ceiling(settings.Scaling * 100);
             sets.Background = settings.Background;
-            sets.cbUseDefault.Checked = !preserveStyle;
+            sets.cbUseDefault.Checked = preserveStyle;
             sets.h = originalImages[0].Size.Height;
             sets.w = originalImages[0].Size.Width;
             sets.defI = settings.DefaultStyle;
@@ -1063,14 +1064,14 @@ namespace BasicGiffer
             {
                 if (settings.StyleIndex != sets.cbStyle.SelectedIndex || 
                     settings.Scaling != (decimal)sets.tbSize.Value / 100 || 
-                    sets.cbUseDefault.Checked == preserveStyle ||
+                    sets.cbUseDefault.Checked != preserveStyle ||
                     settings.Background != sets.Background ||
                     sets.cbDontPreview.Checked != preview)
                 {
                     settings.Scaling = (decimal)sets.tbSize.Value / 100;
                     settings.Background = sets.Background; // set background before index otherwise we cannot use it in this run
                     settings.StyleIndex = sets.cbStyle.SelectedIndex;
-                    preserveStyle = !sets.cbUseDefault.Checked;
+                    preserveStyle = sets.cbUseDefault.Checked;
                     preview = sets.cbDontPreview.Checked;
 
                     PreviewEffects(preview);

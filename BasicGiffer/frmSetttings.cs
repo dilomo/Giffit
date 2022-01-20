@@ -31,7 +31,7 @@ namespace Giffit
             label1.BackColor = Color.White;
             tbSize.Value = 100;
             cbStyle.SelectedIndex = defI;
-            cbUseDefault.Checked = true;
+            cbUseDefault.Checked = false;
             cbDontPreview.Checked = true;
 
             var nw = w * tbSize.Value / 100;

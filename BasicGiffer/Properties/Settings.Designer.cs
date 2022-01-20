@@ -111,13 +111,13 @@ namespace Giffit.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("False")]
-        public bool DontPreview {
+        [global::System.Configuration.DefaultSettingValueAttribute("True")]
+        public bool Preview {
             get {
-                return ((bool)(this["DontPreview"]));
+                return ((bool)(this["Preview"]));
             }
             set {
-                this["DontPreview"] = value;
+                this["Preview"] = value;
             }
         }
     }

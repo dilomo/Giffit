@@ -166,9 +166,9 @@ namespace Giffit
             this.cbUseDefault.AutoSize = true;
             this.cbUseDefault.Location = new System.Drawing.Point(9, 295);
             this.cbUseDefault.Name = "cbUseDefault";
-            this.cbUseDefault.Size = new System.Drawing.Size(208, 29);
+            this.cbUseDefault.Size = new System.Drawing.Size(236, 29);
             this.cbUseDefault.TabIndex = 1;
-            this.cbUseDefault.Text = "Restart with defaults";
+            this.cbUseDefault.Text = "Keep settings on restart";
             this.cbUseDefault.UseVisualStyleBackColor = true;
             // 
             // cd
