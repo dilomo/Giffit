@@ -69,7 +69,7 @@
       <HintPath>..\..\KGySoft.CoreLibraries\KGySoft.CoreLibraries\bin\Release\net5.0\KGySoft.CoreLibraries.dll</HintPath>
     </Reference>
     <Reference Include="KGySoft.Drawing">
-      <HintPath>..\..\KGySoft.Drawing\KGySoft.Drawing\bin\Release\net5.0\KGySoft.Drawing.dll</HintPath>
+      <HintPath>external\KGySoft.Drawing.dll</HintPath>
     </Reference>
   </ItemGroup>
 

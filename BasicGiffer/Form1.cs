@@ -317,8 +317,8 @@ namespace BasicGiffer
             agf.EncodeTransparentBorders = true;
 
             // do not use delta frames for size reduction for now
-            // if (settings.UseDeltaFrames && settings.StyleIndex != 14)
-            //     agf.AllowDeltaFrames = true;
+             if (settings.UseDeltaFrames)
+                 agf.AllowDeltaFrames = true;
 
             if (settings.HighQuality)
             {
