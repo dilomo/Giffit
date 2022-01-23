@@ -38,6 +38,7 @@ namespace Giffit
         "Rough Colour (4bppA)",
         "Old Photo (4bppA)",
         "Filmic (8bppA)",
+        "Manga (8bpp)",
         "Octree #256 (8bppA)",
         "Colour #332 (8bpp)",
         "Windows '98 (8bppA)",
@@ -45,7 +46,7 @@ namespace Giffit
         };
 
 
-        public int DefaultStyle { get => 14; }
+        public int DefaultStyle { get => 15; }
         public int StyleIndex
         {
             get { return _sindex; }
@@ -135,8 +136,6 @@ namespace Giffit
                         quantizer = PredefinedColorsQuantizer.FromCustomPalette(colour9, Background, AlphaThold);
                         pixFormat = PixelFormat.Format4bppIndexed;
                         ditherer = ErrorDiffusionDitherer.Stucki;
-                        // not optimised but use this for setting delta frames to true as we have transparency
-                        //UseDeltaFrames = true;
                         break;
                     case 12: // old colour 
                         quantizer = OptimizedPaletteQuantizer.MedianCut(16, Background, AlphaThold);
@@ -150,23 +149,28 @@ namespace Giffit
                         ditherer = OrderedDitherer.BlueNoise.ConfigureStrength(.88f);
                         UseDeltaFrames = true;
                         break;
-                    case 14: // full index
+                    case 14: // manga 332
+                        quantizer = PredefinedColorsQuantizer.Rgb332(Background, true);
+                        pixFormat = PixelFormat.Format8bppIndexed;
+                        ditherer = null;
+                        break;
+                    case 15: // full index
                         quantizer = OptimizedPaletteQuantizer.Octree(256, Background, AlphaThold);
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise;
                         UseDeltaFrames = true;
                         break;
-                    case 15: // 332
+                    case 16: // 332
                         quantizer = PredefinedColorsQuantizer.Rgb332(Background, true);
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = ErrorDiffusionDitherer.FloydSteinberg;
                         break;
-                     case 16: // system default
+                     case 17: // system default
                         quantizer = PredefinedColorsQuantizer.SystemDefault8BppPalette(Background, AlphaThold);
                         pixFormat = PixelFormat.Format8bppIndexed;
                         ditherer = OrderedDitherer.BlueNoise;
                         break;
-                    case 17: // High fidelity
+                    case 18: // High fidelity
                         HighQuality = true;
                         quantizer = OptimizedPaletteQuantizer.Wu(256, Background, AlphaThold);
                         pixFormat = PixelFormat.Format8bppIndexed;
