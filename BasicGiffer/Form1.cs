@@ -37,7 +37,12 @@ namespace BasicGiffer
         bool preserveStyle = false;
         bool zoom = true;
         bool oneToOne = false;
-        int repeats = 1; 
+        int repeats = 1;
+        bool crop = false;
+        bool cropped = false;
+        bool cropDrag = false;
+        Point cropOrigin = Point.Empty;
+        Rectangle cropArea;
         protected bool validData;
         protected string[] filenames;
         protected Thread getImageThread;
@@ -154,7 +159,7 @@ namespace BasicGiffer
                 Application.DoEvents();
                 Thread.Sleep(0);
             }
-      
+            
             tbFrames.Value = 1;
             tbFrames.Maximum = previewImages.Count();
             // fix random crash and dissappearing of preview images 
@@ -315,6 +320,7 @@ namespace BasicGiffer
             agf.ReplaceZeroDelays = false;
             agf.AllowDeltaFrames = false;
             agf.EncodeTransparentBorders = true;
+            
 
             // do not use delta frames for size reduction for now
              if (settings.UseDeltaFrames)
@@ -478,6 +484,7 @@ namespace BasicGiffer
             btnStop.Enabled = true;
             btnSave.Enabled = true;
             tbFrames.Enabled = true;
+            btnCrop.Enabled = true;
             processing = false;
         }
         private void DisableActions()
@@ -489,6 +496,7 @@ namespace BasicGiffer
             cmsActions.Enabled = false;
             btnSave.Enabled = false;
             tbFrames.Enabled = false;
+            btnCrop.Enabled = false;
             processing = true;
         }
         private void GeneratePreview(bool active)
@@ -666,6 +674,100 @@ namespace BasicGiffer
             btnLoop.BackColor = loopback ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;
             UpdateInfo();
         }
+        public void Crop()
+        {
+            UpdateInfo("Cropping frames ...");
+            Application.DoEvents();
+
+            int imgWidth = pbImage.Image.Width;
+            int imgHeight = pbImage.Image.Height;
+            int boxWidth = pbImage.Size.Width;
+            int boxHeight = pbImage.Size.Height;
+            Rectangle scaleR;
+
+            ////This variable will hold the result
+            //float X = e.X;
+            //float Y = e.Y;
+            //Comparing the aspect ratio of both the control and the image itself.
+            if ((float)imgWidth / imgHeight > (float) boxWidth / boxHeight)
+            {
+                //If true, that means that the image is stretched through the width of the control.
+                //'In other words: the image is limited by the width.
+
+                //The scale of the image in the Picture Box.
+                float scale = (float) boxWidth / imgWidth;
+
+                //Since the image is in the middle, this code is used to determinate the empty space in the height
+                //'by getting the difference between the box height and the image actual displayed height and dividing it by 2.
+                float blankPart = (boxHeight - scale * imgHeight) / 2;
+
+                //   Y -= blankPart;
+                //Scaling the results.
+                // X /= scale;
+                //  Y /= scale;
+                scaleR = new Rectangle(Convert.ToInt32(cropArea.X / scale), Convert.ToInt32((cropArea.Y - blankPart) / scale), 
+                    Convert.ToInt32(cropArea.Width / scale), Convert.ToInt32((cropArea.Height) / scale));
+            }
+            else
+            {
+                //If true, that means that the image is stretched through the height of the control.
+                //'In other words: the image is limited by the height.
+
+                //The scale of the image in the Picture Box.
+                float scale = (float) boxHeight / imgHeight;
+
+                //Since the image is in the middle, this code is used to determinate the empty space in the width
+                //'by getting the difference between the box width and the image actual displayed width and dividing it by 2.
+                float blankPart = (boxWidth - scale * imgWidth) / 2;
+                //X -= blankPart;
+
+                ////Scaling the results.
+                //X /= scale;
+                //Y /= scale;
+                scaleR = new Rectangle(Convert.ToInt32((cropArea.X - blankPart) / scale), Convert.ToInt32((cropArea.Y) / scale), 
+                    Convert.ToInt32((cropArea.Width) / scale), Convert.ToInt32((cropArea.Height) / scale));
+            }
+
+
+            try
+            {
+                for (int i = 0; i < previewImages.Count; i++)
+                {
+                    Bitmap bmpImage = new Bitmap(previewImages[i]);
+                    previewImages[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
+                    previewImages[i].Tag = bmpImage.Tag;
+                }
+                for (int i = 0; i < previewImagesLoopBack.Count; i++)
+                {
+                    Bitmap bmpImage = new Bitmap(previewImagesLoopBack[i]);
+                    previewImagesLoopBack[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
+                    previewImagesLoopBack[i].Tag = bmpImage.Tag;
+                }
+                for (int i = 0; i < originalImages.Count; i++)
+                {
+                    Bitmap bmpImage = new Bitmap(originalImages[i]);
+                    originalImages[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
+                    originalImages[i].Tag = bmpImage.Tag;
+                }
+                for (int i = 0; i < originalImagesLoopBack.Count; i++)
+                {
+                    Bitmap bmpImage = new Bitmap(originalImagesLoopBack[i]);
+                    originalImagesLoopBack[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
+                    originalImagesLoopBack[i].Tag = bmpImage.Tag;
+                }
+                cropArea = Rectangle.Empty;
+                pbImage.Refresh();
+                AdjustWindowToImage();
+                UpdateInfo();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(this, "Cropping rectangle was out of frame image bounds", "Redraw the cropping area", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                btnCrop.PerformClick();
+            }
+            UpdateInfo();
+        }
+
         public void Play()
         {
             if (tbFrames.Value == previewImages.Count)
@@ -793,7 +895,15 @@ namespace BasicGiffer
                         else Play();
                     }
                     return true; // signal that we've processed this key
-
+                case Keys.Enter:
+                    if (crop)
+                    {
+                        Crop();
+                        lblApply.Visible = false;
+                        btnCrop.PerformClick();
+                        SetFrame();
+                    }
+                    return true;
                 case Keys.Control | Keys.S:
                     if (previewImages.Count > 0)
                     {
@@ -817,6 +927,10 @@ namespace BasicGiffer
                 case Keys.S:
                     if (previewImages.Count > 0)
                         btnSettings.PerformClick();
+                    return true;
+                case Keys.C:
+                    if (previewImages.Count > 0)
+                        btnCrop.PerformClick();
                     return true;
                 case Keys.Left:
                     MoveLeft();
@@ -977,8 +1091,10 @@ namespace BasicGiffer
                 tableLayoutPanel3.ColumnStyles[2].Width = 37;
                 tableLayoutPanel3.ColumnStyles[3].Width = 37;
                 tableLayoutPanel3.ColumnStyles[4].Width = 37;
-                tableLayoutPanel3.ColumnStyles[5].Width = 37;
+                tableLayoutPanel3.ColumnStyles[5].Width = 7;
                 tableLayoutPanel3.ColumnStyles[6].Width = 37;
+                tableLayoutPanel3.ColumnStyles[7].Width = 37;
+                tableLayoutPanel3.ColumnStyles[8].Width = 37;
 
 
             }
@@ -989,8 +1105,10 @@ namespace BasicGiffer
                 tableLayoutPanel3.ColumnStyles[2].Width = 42;
                 tableLayoutPanel3.ColumnStyles[3].Width = 42;
                 tableLayoutPanel3.ColumnStyles[4].Width = 42;
-                tableLayoutPanel3.ColumnStyles[5].Width = 42;
+                tableLayoutPanel3.ColumnStyles[5].Width = 10;
                 tableLayoutPanel3.ColumnStyles[6].Width = 42;
+                tableLayoutPanel3.ColumnStyles[7].Width = 42;
+                tableLayoutPanel3.ColumnStyles[8].Width = 42;
             }
             else
             {
@@ -999,8 +1117,10 @@ namespace BasicGiffer
                 tableLayoutPanel3.ColumnStyles[2].Width = 64;
                 tableLayoutPanel3.ColumnStyles[3].Width = 64;
                 tableLayoutPanel3.ColumnStyles[4].Width = 64;
-                tableLayoutPanel3.ColumnStyles[5].Width = 64;
+                tableLayoutPanel3.ColumnStyles[5].Width = 12;
                 tableLayoutPanel3.ColumnStyles[6].Width = 64;
+                tableLayoutPanel3.ColumnStyles[7].Width = 64;
+                tableLayoutPanel3.ColumnStyles[8].Width = 64;
             }
 
             //cbFPS.Text = "1";
@@ -1030,9 +1150,9 @@ namespace BasicGiffer
                 info += $"{Application.ProductName} version: {Application.ProductVersion}\n" +
                 $"C: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.CoreLibraries.ArrayExtensions)).GetName().Version.ToString()} " +
                 $"D: { System.Reflection.Assembly.GetAssembly(typeof(KGySoft.Drawing.Imaging.AnimatedGifConfiguration)).GetName().Version.ToString()} (KGySoft)\n" +
-                $"License: Advanced";
+                $"Features: Advanced";
 
-            // $"©2021 Anton Kerezov, All Rights Reserved.";
+            // $"©2022 Anton Kerezov, All Rights Reserved.";
 
             InfoForm frm = new InfoForm();
             frm.urlAdress = "https://www.ankere.co/news/giffit-the-animated-gif-tool-for-architects/";
@@ -1188,6 +1308,35 @@ namespace BasicGiffer
         }
         private void pbImage_MouseUp(object sender, MouseEventArgs e)
         {
+
+            if (crop && pbImage.Image != null)
+            {
+                cropDrag = false;
+                cropArea = new Rectangle(cropOrigin.X, cropOrigin.Y, 1, 1);
+                cropArea.Width = e.X - cropArea.X;
+                cropArea.Height = e.Y - cropArea.Y;
+
+                if (cropArea.Width < 0 && cropArea.Height < 0)
+                {
+                    cropArea = new Rectangle(e.X, e.Y, cropOrigin.X - e.X, cropOrigin.Y - e.Y);
+                }
+                else if (cropArea.Height < 0)
+                {
+                    cropArea = new Rectangle(cropOrigin.X, e.Y, e.X - cropOrigin.X, cropOrigin.Y - e.Y);
+
+                }
+                else if (cropArea.Width < 0)
+                {
+                    cropArea = new Rectangle(e.X, cropOrigin.Y, cropOrigin.X - e.X, e.Y - cropOrigin.Y);
+                }
+
+                pbImage.Refresh();
+                lblApply.Visible = true;
+            }
+            else
+                cropArea = Rectangle.Empty;
+
+
             //if (!processing && pbImage.Image != null)
             //{
             //    //Color c = GetPixel(new Point( Location.X + e.Location.X, Location.Y + e.Location.Y));
@@ -1198,6 +1347,88 @@ namespace BasicGiffer
             //    /////  
             //    //lblColourInfo.BackColor = c;
             //}
+        }
+        private void pbImage_MouseDown(object sender, MouseEventArgs e)
+        {
+            if (crop && !cropped && pbImage.Image != null && e.Button == MouseButtons.Left)
+            {
+                cropOrigin = new Point(e.X, e.Y);
+                cropArea = new Rectangle(e.X, e.Y, 1,1);
+                cropDrag = true;
+            }
+
+        }
+        private void tableLayoutPanel3_Paint(object sender, PaintEventArgs e)
+        {
+
+        }
+
+        private void btnCrop_Click(object sender, EventArgs e)
+        {
+            crop = !crop;
+            cropDrag = false;
+            if (!zoom)
+                btnPreview.PerformClick();
+
+            if (crop)
+            {
+                btnPreview.Enabled = false;
+                pbImage.Cursor = System.Windows.Forms.Cursors.Cross;
+            }
+            else
+            {
+                btnPreview.Enabled = true;
+                lblApply.Visible = false;
+                pbImage.Cursor = System.Windows.Forms.Cursors.Default;
+            }
+
+            btnCrop.BackColor = crop ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;       
+        }
+
+        private void pbImage_Paint(object sender, PaintEventArgs e)
+        {
+            if (!cropArea.IsEmpty)
+            {
+                using (Pen pen = new Pen(Color.Red, 2))
+                {
+                    e.Graphics.DrawRectangle(pen, cropArea);
+                }
+            }
+        }
+
+        private void pbImage_MouseMove(object sender, MouseEventArgs e)
+        {
+
+            if (crop && cropDrag && pbImage.Image != null)
+            {
+                cropArea = new Rectangle(cropOrigin.X, cropOrigin.Y, 1, 1);
+                cropArea.Width = e.X - cropArea.X;
+                cropArea.Height = e.Y - cropArea.Y;
+
+                if (cropArea.Width < 0 && cropArea.Height < 0)
+                {
+                    cropArea = new Rectangle(e.X, e.Y, cropOrigin.X - e.X, cropOrigin.Y - e.Y);
+                }
+                else if (cropArea.Height < 0)
+                {
+                    cropArea = new Rectangle(cropOrigin.X, e.Y, e.X - cropOrigin.X, cropOrigin.Y - e.Y);
+
+                }
+                else if (cropArea.Width < 0)
+                {
+                    cropArea = new Rectangle(e.X, cropOrigin.Y, cropOrigin.X - e.X, e.Y - cropOrigin.Y);
+                }
+
+                pbImage.Refresh();
+            }
+        }
+
+        private void lblApply_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Crop();
+            lblApply.Visible = false;
+            btnCrop.PerformClick();
+            SetFrame();
         }
     }
 }

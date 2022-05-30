@@ -33,6 +33,7 @@ namespace BasicGiffer
             this.lblInfo = new System.Windows.Forms.Label();
             this.linkSupport = new System.Windows.Forms.LinkLabel();
             this.label1 = new System.Windows.Forms.Label();
+            this.linkLabel1 = new System.Windows.Forms.LinkLabel();
             this.SuspendLayout();
             // 
             // btnClose
@@ -57,7 +58,7 @@ namespace BasicGiffer
             this.lblInfo.Margin = new System.Windows.Forms.Padding(30);
             this.lblInfo.Name = "lblInfo";
             this.lblInfo.Padding = new System.Windows.Forms.Padding(30);
-            this.lblInfo.Size = new System.Drawing.Size(459, 252);
+            this.lblInfo.Size = new System.Drawing.Size(459, 214);
             this.lblInfo.TabIndex = 2;
             this.lblInfo.Text = "label1   ";
             // 
@@ -67,7 +68,7 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.linkSupport.AutoSize = true;
             this.linkSupport.BackColor = System.Drawing.SystemColors.ControlLightLight;
-            this.linkSupport.Location = new System.Drawing.Point(0, 244);
+            this.linkSupport.Location = new System.Drawing.Point(0, 245);
             this.linkSupport.Name = "linkSupport";
             this.linkSupport.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
             this.linkSupport.Size = new System.Drawing.Size(287, 25);
@@ -82,20 +83,36 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Left) 
             | System.Windows.Forms.AnchorStyles.Right)));
             this.label1.BackColor = System.Drawing.SystemColors.Window;
-            this.label1.Location = new System.Drawing.Point(0, 244);
+            this.label1.Location = new System.Drawing.Point(0, 209);
             this.label1.Margin = new System.Windows.Forms.Padding(30, 15, 30, 15);
             this.label1.Name = "label1";
             this.label1.Padding = new System.Windows.Forms.Padding(30, 15, 30, 15);
-            this.label1.Size = new System.Drawing.Size(459, 77);
+            this.label1.Size = new System.Drawing.Size(459, 112);
             this.label1.TabIndex = 2;
             this.label1.Text = "©2022 Anton Kerezov, All Rights Reserved.";
             this.label1.TextAlign = System.Drawing.ContentAlignment.BottomLeft;
+            // 
+            // linkLabel1
+            // 
+            this.linkLabel1.Anchor = ((System.Windows.Forms.AnchorStyles)(((System.Windows.Forms.AnchorStyles.Bottom | System.Windows.Forms.AnchorStyles.Left) 
+            | System.Windows.Forms.AnchorStyles.Right)));
+            this.linkLabel1.AutoSize = true;
+            this.linkLabel1.BackColor = System.Drawing.SystemColors.ControlLightLight;
+            this.linkLabel1.Location = new System.Drawing.Point(0, 219);
+            this.linkLabel1.Name = "linkLabel1";
+            this.linkLabel1.Padding = new System.Windows.Forms.Padding(30, 0, 0, 0);
+            this.linkLabel1.Size = new System.Drawing.Size(200, 25);
+            this.linkLabel1.TabIndex = 4;
+            this.linkLabel1.TabStop = true;
+            this.linkLabel1.Text = "License agreement";
+            this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
             // InfoForm
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(11F, 25F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(459, 387);
+            this.Controls.Add(this.linkLabel1);
             this.Controls.Add(this.linkSupport);
             this.Controls.Add(this.label1);
             this.Controls.Add(this.lblInfo);
@@ -117,5 +134,6 @@ namespace BasicGiffer
         private System.Windows.Forms.LinkLabel linkSupport;
         public System.Windows.Forms.Label lblInfo;
         public System.Windows.Forms.Label label1;
+        private System.Windows.Forms.LinkLabel linkLabel1;
     }
 }

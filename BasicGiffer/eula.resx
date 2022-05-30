@@ -57,9 +57,60 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <metadata name="cd.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
-    <value>17, 17</value>
-  </metadata>
+  <data name="richTextBox1.Text" xml:space="preserve">
+    <value>END-USER LICENSE AGREEMENT OF GIFFIT
+
+This End-User License Agreement ("EULA") is a legal agreement between you and ANKERE. 
+This EULA agreement governs your acquisition and use of our Giffit software ("Software") directly from ANKERE or indirectly through a ANKERE authorized Distributor or distributor (a "Distributor"). 
+
+Please read this EULA agreement carefully before completing the installation process and using the Giffit software. It provides a license to use the Giffit software and contains warranty information and liability disclaimers.
+
+If you are entering into this EULA agreement on behalf of a company or other legal entity, you represent that you have the authority to bind such entity and its affiliates to these terms and conditions. If you do not have such authority or if you do not agree with the terms and conditions of this EULA agreement, do not install or use the Software, and you must not accept this EULA agreement.
+
+This EULA agreement shall apply only to the Software supplied by ANKERE herewith regardless of whether other software is referred to or described herein. The terms also apply to any ANKERE updates, supplements, Internet-based services, and support services for the Software, unless other terms accompany those items on delivery. If so, those terms apply.
+
+LICENSE GRANT
+
+ANKERE hereby grants you one free personal, non-transferable, non-exclusive licence to use the Giffit software on your devices in accordance with the terms of this EULA agreement.
+You are permitted to load the Giffit software (on PC or Mac) under your control. You are responsible for ensuring your device meets the minimum requirements of the Giffit software.
+
+You are not permitted to:
+
+Edit, alter, modify, adapt, translate or otherwise change the whole or any part of the Software nor permit the whole or any part of the Software to be combined with or become incorporated in any other software, nor decompile, disassemble or reverse engineer the Software or attempt to do any such things
+
+Reproduce, copy, distribute, resell or otherwise use the Software for any commercial purpose
+
+Allow any third party to use the Software on behalf of or for the benefit of any third party
+
+Use the Software in any way which breaches any applicable local, national or international law
+
+use the Software for any purpose that ANKERE considers is a breach of this EULA agreement
+
+INTELLECTUAL PROPERTY AND OWNERSHIP
+
+ANKERE as represented by Anton Kerezov shall at all times retain ownership of the Software as originally downloaded by you and all subsequent downloads of the Software by you. The Software (and the copyright, and other intellectual property rights of whatever nature in the Software, including any modifications made thereto) are and shall remain the property of ANKERE.
+
+ANKERE reserves the right to grant licences to use the Software to third parties.
+
+DISCLAIMER OF WARRANTY
+
+THERE IS NO WARRANTY FOR THE PROGRAM, TO THE EXTENT PERMITTED BY APPLICABLE LAW. EXCEPT WHEN OTHERWISE STATED IN WRITING THE COPYRIGHT HOLDERS AND/OR OTHER PARTIES PROVIDE THE PROGRAM “AS IS” WITHOUT WARRANTY OF ANY KIND, EITHER EXPRESSED OR IMPLIED, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE. THE ENTIRE RISK AS TO THE QUALITY AND PERFORMANCE OF THE PROGRAM IS WITH YOU. SHOULD THE PROGRAM PROVE DEFECTIVE, YOU ASSUME THE COST OF ALL NECESSARY SERVICING, REPAIR OR CORRECTION.
+
+LIMITATION OF LIABILITY
+
+IN NO EVENT UNLESS REQUIRED BY APPLICABLE LAW OR AGREED TO IN WRITING WILL ANY COPYRIGHT HOLDER, OR ANY OTHER PARTY WHO MODIFIES AND/OR CONVEYS THE PROGRAM AS PERMITTED ABOVE, BE LIABLE TO YOU FOR DAMAGES, INCLUDING ANY GENERAL, SPECIAL, INCIDENTAL OR CONSEQUENTIAL DAMAGES ARISING OUT OF THE USE OR INABILITY TO USE THE PROGRAM (INCLUDING BUT NOT LIMITED TO LOSS OF DATA OR DATA BEING RENDERED INACCURATE OR LOSSES SUSTAINED BY YOU OR THIRD PARTIES OR A FAILURE OF THE PROGRAM TO OPERATE WITH ANY OTHER PROGRAMS), EVEN IF SUCH HOLDER OR OTHER PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.
+
+TERMINATION
+
+This EULA agreement is effective from the date you first use the Software and shall continue until terminated. You may terminate it at any time upon written notice to ANKERE.
+It will also terminate immediately if you fail to comply with any term of this EULA agreement. Upon such termination, the licenses granted by this EULA agreement will immediately terminate and you agree to stop all access and use of the Software. The provisions that by their nature continue and survive will survive any termination of this EULA agreement.
+
+GOVERNING LAW
+
+This EULA agreement, and any dispute arising out of or in connection with this EULA agreement, shall be governed by and construed in accordance with the laws of Japan.
+
+</value>
+  </data>
   <assembly alias="System.Drawing" name="System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a" />
   <data name="$this.Icon" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
     <value>

@@ -74,6 +74,18 @@ namespace Giffit
                 label1.BackColor = value;
             }
         }
+        protected override bool ProcessCmdKey(ref Message message, Keys keys)
+        {
+            switch (keys)
+            {
+                case Keys.Escape:
+                    this.Close();
+                    return true; // signal that we've processed this key
+            }
+
+            // run base implementation
+            return base.ProcessCmdKey(ref message, keys);
+        }
 
         private void label1_MouseEnter(object sender, EventArgs e)
         {

@@ -1,0 +1,11 @@
+- crop
+- add brightness control
+
+- add ovelay image/text 
+- export all frames in one image like index print
+- gradient fade
+- video import
+- add resize last operation option
+- set start end frames with context menu and sign on frame (when video is supported)
+
+-slo mo at some frame by deleting other 

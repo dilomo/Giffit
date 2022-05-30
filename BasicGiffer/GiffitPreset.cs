@@ -22,6 +22,7 @@ namespace Giffit
         public bool HighQuality = false;
         public System.Drawing.Color Background = System.Drawing.Color.White;
         public byte AlphaThold = 128;
+        public bool Crop = false; //do not save this its only for argument passing
 
         public static List<string> StyleNames = new List<string>{
         "Graphix (1bpp)",

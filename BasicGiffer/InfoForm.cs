@@ -39,5 +39,11 @@ using System.Diagnostics;
         {
             Process.Start(new ProcessStartInfo { FileName = urlAdress, UseShellExecute = true });
         }
+
+        private void linkLabel1_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
+        {
+            Form el = new Giffit.eula();
+            el.ShowDialog();
+        }
     }
 }
