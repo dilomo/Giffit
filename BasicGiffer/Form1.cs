@@ -43,6 +43,7 @@ namespace BasicGiffer
         bool cropDrag = false;
         Point cropOrigin = Point.Empty;
         Rectangle cropArea;
+        Rectangle oldCropArea = Rectangle.Empty;
         protected bool validData;
         protected string[] filenames;
         protected Thread getImageThread;
@@ -316,6 +317,7 @@ namespace BasicGiffer
             var agf = new AnimatedGifConfiguration(imageArray, TimeSpan.FromMilliseconds(time));
             agf.AnimationMode = (AnimationMode)nudRepeat.Value;
             agf.SizeHandling = AnimationFramesSizeHandling.Center;
+
             agf.ReportOverallProgress = true;
             agf.ReplaceZeroDelays = false;
             agf.AllowDeltaFrames = false;
@@ -674,13 +676,64 @@ namespace BasicGiffer
             btnLoop.BackColor = loopback ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;
             UpdateInfo();
         }
-        public void Crop()
+        public bool Crop()
         {
             UpdateInfo("Cropping frames ...");
             Application.DoEvents();
 
-            int imgWidth = pbImage.Image.Width;
-            int imgHeight = pbImage.Image.Height;
+            Rectangle scaleR;
+
+            try
+            {
+                for (int i = 0; i < previewImages.Count; i++)
+                {
+                    scaleR = GetScaledCropArea(previewImages[i]);
+                    Bitmap bmpImage = new Bitmap(previewImages[i]);
+                    previewImages[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
+                    previewImages[i].Tag = bmpImage.Tag;
+                }
+                for (int i = 0; i < previewImagesLoopBack.Count; i++)
+                {
+                    scaleR = GetScaledCropArea(previewImagesLoopBack[i]);
+                    Bitmap bmpImage = new Bitmap(previewImagesLoopBack[i]);
+                    previewImagesLoopBack[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
+                    previewImagesLoopBack[i].Tag = bmpImage.Tag;
+                }
+                for (int i = 0; i < originalImages.Count; i++)
+                {
+                    scaleR = GetScaledCropArea(originalImages[i]);
+                    Bitmap bmpImage = new Bitmap(originalImages[i]);
+                    originalImages[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
+                    originalImages[i].Tag = bmpImage.Tag;
+                }
+                for (int i = 0; i < originalImagesLoopBack.Count; i++)
+                {
+                    scaleR = GetScaledCropArea(originalImagesLoopBack[i]);
+                    Bitmap bmpImage = new Bitmap(originalImagesLoopBack[i]);
+                    originalImagesLoopBack[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
+                    originalImagesLoopBack[i].Tag = bmpImage.Tag;
+                }
+                cropArea = Rectangle.Empty;
+                oldCropArea = cropArea;
+                pbImage.Refresh();
+                AdjustWindowToImage();
+                UpdateInfo();
+            }
+            catch (Exception)
+            {
+                MessageBox.Show(this, "Cropping rectangle was out of frame image bounds", "Redraw the cropping area", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                oldCropArea = cropArea;
+                cropArea = Rectangle.Empty;
+                return false;
+            }
+            UpdateInfo();
+            return true;
+        }
+
+        private Rectangle GetScaledCropArea(Image img)
+        {
+            int imgWidth = img.Width;
+            int imgHeight = img.Height;
             int boxWidth = pbImage.Size.Width;
             int boxHeight = pbImage.Size.Height;
             Rectangle scaleR;
@@ -689,13 +742,13 @@ namespace BasicGiffer
             //float X = e.X;
             //float Y = e.Y;
             //Comparing the aspect ratio of both the control and the image itself.
-            if ((float)imgWidth / imgHeight > (float) boxWidth / boxHeight)
+            if ((float)imgWidth / imgHeight > (float)boxWidth / boxHeight)
             {
                 //If true, that means that the image is stretched through the width of the control.
                 //'In other words: the image is limited by the width.
 
                 //The scale of the image in the Picture Box.
-                float scale = (float) boxWidth / imgWidth;
+                float scale = (float)boxWidth / imgWidth;
 
                 //Since the image is in the middle, this code is used to determinate the empty space in the height
                 //'by getting the difference between the box height and the image actual displayed height and dividing it by 2.
@@ -705,7 +758,7 @@ namespace BasicGiffer
                 //Scaling the results.
                 // X /= scale;
                 //  Y /= scale;
-                scaleR = new Rectangle(Convert.ToInt32(cropArea.X / scale), Convert.ToInt32((cropArea.Y - blankPart) / scale), 
+                scaleR = new Rectangle(Convert.ToInt32(cropArea.X / scale), Convert.ToInt32((cropArea.Y - blankPart) / scale),
                     Convert.ToInt32(cropArea.Width / scale), Convert.ToInt32((cropArea.Height) / scale));
             }
             else
@@ -714,7 +767,7 @@ namespace BasicGiffer
                 //'In other words: the image is limited by the height.
 
                 //The scale of the image in the Picture Box.
-                float scale = (float) boxHeight / imgHeight;
+                float scale = (float)boxHeight / imgHeight;
 
                 //Since the image is in the middle, this code is used to determinate the empty space in the width
                 //'by getting the difference between the box width and the image actual displayed width and dividing it by 2.
@@ -724,48 +777,11 @@ namespace BasicGiffer
                 ////Scaling the results.
                 //X /= scale;
                 //Y /= scale;
-                scaleR = new Rectangle(Convert.ToInt32((cropArea.X - blankPart) / scale), Convert.ToInt32((cropArea.Y) / scale), 
+                scaleR = new Rectangle(Convert.ToInt32((cropArea.X - blankPart) / scale), Convert.ToInt32((cropArea.Y) / scale),
                     Convert.ToInt32((cropArea.Width) / scale), Convert.ToInt32((cropArea.Height) / scale));
             }
 
-
-            try
-            {
-                for (int i = 0; i < previewImages.Count; i++)
-                {
-                    Bitmap bmpImage = new Bitmap(previewImages[i]);
-                    previewImages[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
-                    previewImages[i].Tag = bmpImage.Tag;
-                }
-                for (int i = 0; i < previewImagesLoopBack.Count; i++)
-                {
-                    Bitmap bmpImage = new Bitmap(previewImagesLoopBack[i]);
-                    previewImagesLoopBack[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
-                    previewImagesLoopBack[i].Tag = bmpImage.Tag;
-                }
-                for (int i = 0; i < originalImages.Count; i++)
-                {
-                    Bitmap bmpImage = new Bitmap(originalImages[i]);
-                    originalImages[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
-                    originalImages[i].Tag = bmpImage.Tag;
-                }
-                for (int i = 0; i < originalImagesLoopBack.Count; i++)
-                {
-                    Bitmap bmpImage = new Bitmap(originalImagesLoopBack[i]);
-                    originalImagesLoopBack[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
-                    originalImagesLoopBack[i].Tag = bmpImage.Tag;
-                }
-                cropArea = Rectangle.Empty;
-                pbImage.Refresh();
-                AdjustWindowToImage();
-                UpdateInfo();
-            }
-            catch (Exception)
-            {
-                MessageBox.Show(this, "Cropping rectangle was out of frame image bounds", "Redraw the cropping area", MessageBoxButtons.OK, MessageBoxIcon.Error);
-                btnCrop.PerformClick();
-            }
-            UpdateInfo();
+            return scaleR;
         }
 
         public void Play()
@@ -1380,6 +1396,8 @@ namespace BasicGiffer
                 btnPreview.Enabled = true;
                 lblApply.Visible = false;
                 pbImage.Cursor = System.Windows.Forms.Cursors.Default;
+                cropArea = Rectangle.Empty;
+                pbImage.Refresh();
             }
 
             btnCrop.BackColor = crop ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;       
@@ -1392,6 +1410,13 @@ namespace BasicGiffer
                 using (Pen pen = new Pen(Color.Red, 2))
                 {
                     e.Graphics.DrawRectangle(pen, cropArea);
+                }
+            }
+            if (!oldCropArea.IsEmpty)
+            {
+                using (Pen pen = new Pen(Color.DarkRed, 1))
+                {
+                    e.Graphics.DrawRectangle(pen, oldCropArea);    
                 }
             }
         }
@@ -1425,10 +1450,18 @@ namespace BasicGiffer
 
         private void lblApply_LinkClicked(object sender, LinkLabelLinkClickedEventArgs e)
         {
-            Crop();
-            lblApply.Visible = false;
-            btnCrop.PerformClick();
-            SetFrame();
+            if (Crop())
+            {
+                lblApply.Visible = false;
+                btnCrop.PerformClick();
+                SetFrame();
+            }
+            else
+            {
+                pbImage.Refresh();
+
+            }
+         
         }
     }
 }
