@@ -685,33 +685,38 @@ namespace BasicGiffer
 
             try
             {
+                object tag; 
                 for (int i = 0; i < previewImages.Count; i++)
                 {
                     scaleR = GetScaledCropArea(previewImages[i]);
-                    Bitmap bmpImage = new Bitmap(previewImages[i]);
+                    Bitmap bmpImage = (Bitmap) previewImages[i];
+                    tag = bmpImage.Tag;
                     previewImages[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
-                    previewImages[i].Tag = bmpImage.Tag;
+                    previewImages[i].Tag = tag;
                 }
                 for (int i = 0; i < previewImagesLoopBack.Count; i++)
                 {
                     scaleR = GetScaledCropArea(previewImagesLoopBack[i]);
-                    Bitmap bmpImage = new Bitmap(previewImagesLoopBack[i]);
+                    Bitmap bmpImage = (Bitmap)previewImages[i];
+                    tag = bmpImage.Tag;
                     previewImagesLoopBack[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
-                    previewImagesLoopBack[i].Tag = bmpImage.Tag;
+                    previewImagesLoopBack[i].Tag = tag;
                 }
                 for (int i = 0; i < originalImages.Count; i++)
                 {
                     scaleR = GetScaledCropArea(originalImages[i]);
-                    Bitmap bmpImage = new Bitmap(originalImages[i]);
+                    Bitmap bmpImage = (Bitmap)originalImages[i];
+                    tag = bmpImage.Tag;
                     originalImages[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
-                    originalImages[i].Tag = bmpImage.Tag;
+                    originalImages[i].Tag = tag;
                 }
                 for (int i = 0; i < originalImagesLoopBack.Count; i++)
                 {
                     scaleR = GetScaledCropArea(originalImagesLoopBack[i]);
-                    Bitmap bmpImage = new Bitmap(originalImagesLoopBack[i]);
+                    Bitmap bmpImage = (Bitmap) originalImagesLoopBack[i];
+                    tag = bmpImage.Tag;
                     originalImagesLoopBack[i] = (Image)bmpImage.Clone(scaleR, bmpImage.PixelFormat);
-                    originalImagesLoopBack[i].Tag = bmpImage.Tag;
+                    originalImagesLoopBack[i].Tag = tag;
                 }
                 cropArea = Rectangle.Empty;
                 oldCropArea = cropArea;
