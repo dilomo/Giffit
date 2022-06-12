@@ -316,14 +316,16 @@ namespace BasicGiffer
 
             var agf = new AnimatedGifConfiguration(imageArray, TimeSpan.FromMilliseconds(time));
             agf.AnimationMode = (AnimationMode)nudRepeat.Value;
-            agf.SizeHandling = AnimationFramesSizeHandling.Center;
-
+            if (cropped)
+                agf.SizeHandling = AnimationFramesSizeHandling.Resize;
+            else
+                agf.SizeHandling = AnimationFramesSizeHandling.Center;
             agf.ReportOverallProgress = true;
             agf.ReplaceZeroDelays = false;
             agf.AllowDeltaFrames = false;
             agf.EncodeTransparentBorders = true;
             
-
+           
             // do not use delta frames for size reduction for now
              if (settings.UseDeltaFrames)
                  agf.AllowDeltaFrames = true;
@@ -418,7 +420,7 @@ namespace BasicGiffer
                 image = ((Bitmap)image).Resize(new Size((int)(image.Width * preset.Scaling), (int)(image.Height * preset.Scaling)), ScalingMode.Lanczos2, true);
 
             if (!preset.HighQuality)
-            {
+            {   
                 image = image.ConvertPixelFormat(preset.pixFormat, preset.quantizer,preset.ditherer);
             }  
             return image;
@@ -1371,7 +1373,7 @@ namespace BasicGiffer
         }
         private void pbImage_MouseDown(object sender, MouseEventArgs e)
         {
-            if (crop && !cropped && pbImage.Image != null && e.Button == MouseButtons.Left)
+            if (crop && pbImage.Image != null && e.Button == MouseButtons.Left)
             {
                 cropOrigin = new Point(e.X, e.Y);
                 cropArea = new Rectangle(e.X, e.Y, 1,1);
@@ -1457,6 +1459,7 @@ namespace BasicGiffer
         {
             if (Crop())
             {
+                cropped = true;
                 lblApply.Visible = false;
                 btnCrop.PerformClick();
                 SetFrame();
