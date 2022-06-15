@@ -20,6 +20,7 @@ using System.Diagnostics;
 using System.Drawing.Imaging;
 using KGySoft.Drawing;
 using KGySoft.Drawing.Imaging;
+using System.Windows.Input;
 
 namespace BasicGiffer
 {
@@ -50,6 +51,7 @@ namespace BasicGiffer
         protected Giffit.GiffitPreset settings = new Giffit.GiffitPreset();
         string animationFolder = "animation";
         bool folderDrop = false;
+        bool controlHold = false;
 
         public Gifit()
         {
@@ -140,7 +142,29 @@ namespace BasicGiffer
                 pbImage.Image = previewImages[tbFrames.Value - 1];
                 lblCurFrame.Text = tbFrames.Value.ToString();
             }
-            else pbImage.Image = null;
+            else
+            {
+                UpdateInfo("Frame not found! Please contact support.");
+                pbImage.Image = null;
+            }
+        }
+        public void SetFrame(int index)
+        {
+            if ( previewImages.Count >= index && index > 0)
+            {
+                tbFrames.Value = index;
+                SetFrame();
+            }
+            //else if (previewImages.Count >= index && index == 0)
+            //{
+            //    tbFrames.Value = 1;
+            //    SetFrame();
+            //}
+            else
+            {
+                UpdateInfo("Frame not found! Please contact support.");
+                pbImage.Image = null;
+            }
         }
         protected void OpenFiles()
         {
@@ -178,6 +202,8 @@ namespace BasicGiffer
             copyStripMenuItem.Enabled = true;
             saveGIFToolStripMenuItem.Enabled = true;
             addToolStripMenuItem.Enabled = true;
+            multiplyStripMenuItem.Enabled = true;
+            deleteStripMenuItem.Enabled = true;
             UpdateInfo();
             EnableActions();
         }
@@ -195,7 +221,10 @@ namespace BasicGiffer
                 Application.DoEvents();
                 Thread.Sleep(0);
             }
-            tbFrames.Maximum = previewImages.Count();
+            SetFrame(tbFrames.Maximum);
+            tbFrames.Maximum = previewImages.Count();            
+            if (tbFrames.Maximum > 1)
+                deleteStripMenuItem.Enabled = true;
             PreviewEffects(preview);
             UpdateInfo();
             EnableActions();
@@ -324,7 +353,9 @@ namespace BasicGiffer
             agf.ReplaceZeroDelays = false;
             agf.AllowDeltaFrames = false;
             agf.EncodeTransparentBorders = true;
-            
+
+           
+
            
             // do not use delta frames for size reduction for now
              if (settings.UseDeltaFrames)
@@ -340,6 +371,8 @@ namespace BasicGiffer
 
             using (var stream = new MemoryStream())
             {
+                var enc = new GifEncoder(stream, originalImages[0].Size);
+
                 var progresseReporter = new TaskConfig();
                 progresseReporter.Progress = new SaveProgress(saveGIF.FileName, UpdateInfo);
 
@@ -912,7 +945,7 @@ namespace BasicGiffer
             {
                 case Keys.Space:
                     if (previewImages.Count > 0)
-                    {
+                    { 
                         if (tAnimation.Enabled)
                             Stop();
                         else Play();
@@ -939,6 +972,9 @@ namespace BasicGiffer
                 case Keys.Control | Keys.I:
                     AddWithDialog();
                     return true;
+                case Keys.Control | Keys.M:
+                    DuplicateFrame();
+                    return true;
                 case Keys.Control | Keys.C:
                     if (previewImages.Count > 0)
                         Clipboard.SetDataObject(pbImage.Image);
@@ -960,6 +996,15 @@ namespace BasicGiffer
                     return true;
                 case Keys.Right:
                     MoveRight();
+                    return true;
+                case Keys.Delete:
+                    DeleteFrame();
+                    return true;
+                case Keys.End:
+                    SetFrame(tbFrames.Maximum);
+                    return true;
+                case Keys.Home:
+                    SetFrame(1);
                     return true;
             }
 
@@ -1032,7 +1077,10 @@ namespace BasicGiffer
         {
             if (validData && !processing)
             {
-                OpenFiles();
+                if (ModifierKeys.HasFlag(Keys.Control))
+                    AddFiles();
+                else
+                    OpenFiles();
                 this.Activate();
             }
             else
@@ -1470,6 +1518,109 @@ namespace BasicGiffer
 
             }
          
+        }
+
+        private void multiplyStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DuplicateFrame();
+        }
+
+        private void DuplicateFrame()
+        {
+            var mDialog = new Giffit.ImageMultiplier();
+            if (mDialog.ShowDialog() == DialogResult.OK)
+            {
+                DisableActions();
+                UpdateInfo("Duplicating frames ...");
+                Application.DoEvents();
+
+                if (loopback)
+                {
+                    MessageBox.Show("Multiplying frames does not support loopbacks yet");
+                }
+                else
+                {
+                    // just add 
+
+                    var image = originalImages[tbFrames.Value - 1];
+                    var imageP = previewImages[tbFrames.Value - 1];
+
+                    for (int i = 0; i < mDialog.nudFrames.Value - 1; i++)
+                    {
+                        originalImages.Insert(tbFrames.Value - 1, new Bitmap(image));
+                        previewImages.Insert(tbFrames.Value - 1, new Bitmap(imageP));
+                    }
+
+                    RenumberFrames();
+                }
+                tbFrames.Maximum = previewImages.Count();
+
+                EnableActions();
+                UpdateInfo();
+            }
+        }
+
+        private void DeleteFrame(bool backwards = false)
+        {
+            // must always have at least one frame
+            if (previewImages.Count > 1)
+            {
+                var frame = tbFrames.Value - 1;
+
+                if (loopback)
+                {
+                    MessageBox.Show("Deleting frames does not support loopbacks yet");
+                }
+                else
+                {
+                    originalImages.RemoveAt(frame);
+                    previewImages.RemoveAt(frame);
+                    RenumberFrames();
+                }
+                
+                tbFrames.Maximum = previewImages.Count();
+                if (backwards)
+                    SetFrame(frame); // this is one index less
+                else
+                    SetFrame();
+                UpdateInfo();
+            }
+            else
+            {
+                deleteStripMenuItem.Enabled = false;
+            }
+        }
+
+        private void RenumberFrames()
+        {
+            for (int i = 0; i < originalImages.Count; i++)
+                originalImages[i].Tag = i;
+            for (int i = 0; i < previewImages.Count; i++)
+                previewImages[i].Tag = i;
+        }
+
+        private void recentfoldersToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+
+        }
+
+        private void deleteStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DeleteFrame();
+        }
+
+        private void Gifit_KeyDown(object sender, KeyEventArgs e)
+        {
+            if (e.KeyCode == Keys.Control)
+            {
+                controlHold = true;
+            }
+        }
+
+        private void Gifit_KeyUp(object sender, KeyEventArgs e)
+        { 
+            if (e.KeyCode == Keys.Control)
+                controlHold = false;  
         }
     }
 }
