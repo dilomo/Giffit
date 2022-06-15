@@ -33,11 +33,14 @@ namespace BasicGiffer
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Gifit));
             this.pbImage = new System.Windows.Forms.PictureBox();
             this.cmsActions = new System.Windows.Forms.ContextMenuStrip(this.components);
-            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.saveGIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.copyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
+            this.multiplyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.deleteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.insertStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveGIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.newToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.recentfoldersToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.cmsRecents = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.clearrecentToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -65,9 +68,6 @@ namespace BasicGiffer
             this.tAnimation = new System.Windows.Forms.Timer(this.components);
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.ttip = new System.Windows.Forms.ToolTip(this.components);
-            this.multiplyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.deleteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.cmsActions.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -105,52 +105,21 @@ namespace BasicGiffer
             // 
             this.cmsActions.ImageScalingSize = new System.Drawing.Size(24, 24);
             this.cmsActions.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.newToolStripMenuItem,
-            this.addToolStripMenuItem,
-            this.recentfoldersToolStripMenuItem,
-            this.clearrecentToolStripMenuItem,
-            this.toolStripSeparator2,
-            this.saveGIFToolStripMenuItem,
-            this.toolStripSeparator1,
             this.copyStripMenuItem,
             this.multiplyStripMenuItem,
-            this.deleteStripMenuItem});
+            this.deleteStripMenuItem,
+            this.addToolStripMenuItem,
+            this.insertStripMenuItem,
+            this.saveGIFToolStripMenuItem,
+            this.toolStripSeparator2,
+            this.newToolStripMenuItem,
+            this.recentfoldersToolStripMenuItem,
+            this.clearrecentToolStripMenuItem});
             this.cmsActions.Name = "cmsActions";
             this.cmsActions.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsActions.ShowImageMargin = false;
-            this.cmsActions.ShowItemToolTips = false;
-            this.cmsActions.Size = new System.Drawing.Size(263, 272);
+            this.cmsActions.Size = new System.Drawing.Size(269, 298);
             this.cmsActions.Opening += new System.ComponentModel.CancelEventHandler(this.cmsActions_Opening_1);
-            // 
-            // newToolStripMenuItem
-            // 
-            this.newToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
-            this.newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
-            this.newToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
-            this.newToolStripMenuItem.Text = "&New Animation ...";
-            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
-            // 
-            // addToolStripMenuItem
-            // 
-            this.addToolStripMenuItem.Enabled = false;
-            this.addToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
-            this.addToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+I";
-            this.addToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
-            this.addToolStripMenuItem.Text = "&Add Images ...";
-            this.addToolStripMenuItem.ToolTipText = "Ctrl+I";
-            this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
-            // 
-            // saveGIFToolStripMenuItem
-            // 
-            this.saveGIFToolStripMenuItem.Enabled = false;
-            this.saveGIFToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.saveGIFToolStripMenuItem.Name = "saveGIFToolStripMenuItem";
-            this.saveGIFToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
-            this.saveGIFToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
-            this.saveGIFToolStripMenuItem.Text = "&Export ...";
-            this.saveGIFToolStripMenuItem.Click += new System.EventHandler(this.saveGIFToolStripMenuItem_Click);
             // 
             // copyStripMenuItem
             // 
@@ -158,23 +127,88 @@ namespace BasicGiffer
             this.copyStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.copyStripMenuItem.Name = "copyStripMenuItem";
             this.copyStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
-            this.copyStripMenuItem.Size = new System.Drawing.Size(262, 32);
+            this.copyStripMenuItem.Size = new System.Drawing.Size(268, 32);
             this.copyStripMenuItem.Text = "&Copy Frame";
-            this.copyStripMenuItem.ToolTipText = "Ctrl+C";
+            this.copyStripMenuItem.ToolTipText = "Copy the bitmap data to clipboard";
             this.copyStripMenuItem.Click += new System.EventHandler(this.copyStripMenuItem_Click);
             // 
-            // toolStripSeparator1
+            // multiplyStripMenuItem
             // 
-            this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(259, 6);
+            this.multiplyStripMenuItem.Enabled = false;
+            this.multiplyStripMenuItem.Name = "multiplyStripMenuItem";
+            this.multiplyStripMenuItem.ShortcutKeyDisplayString = "Ctrl+D";
+            this.multiplyStripMenuItem.Size = new System.Drawing.Size(268, 32);
+            this.multiplyStripMenuItem.Text = "&Duplicate Frame ...";
+            this.multiplyStripMenuItem.ToolTipText = "Create variable number of duplicates";
+            this.multiplyStripMenuItem.Click += new System.EventHandler(this.multiplyStripMenuItem_Click_1);
+            // 
+            // deleteStripMenuItem
+            // 
+            this.deleteStripMenuItem.Enabled = false;
+            this.deleteStripMenuItem.Name = "deleteStripMenuItem";
+            this.deleteStripMenuItem.ShortcutKeyDisplayString = "Del";
+            this.deleteStripMenuItem.Size = new System.Drawing.Size(268, 32);
+            this.deleteStripMenuItem.Text = "&Remove Frame";
+            this.deleteStripMenuItem.ToolTipText = "Deletes the current frame";
+            this.deleteStripMenuItem.Click += new System.EventHandler(this.deleteStripMenuItem_Click_1);
+            // 
+            // addToolStripMenuItem
+            // 
+            this.addToolStripMenuItem.Enabled = false;
+            this.addToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.addToolStripMenuItem.Name = "addToolStripMenuItem";
+            this.addToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+A";
+            this.addToolStripMenuItem.Size = new System.Drawing.Size(268, 32);
+            this.addToolStripMenuItem.Text = "&Append Frames ...";
+            this.addToolStripMenuItem.ToolTipText = "Add frames at the end of the timeline and sets the playback cursor to first inser" +
+    "ted frame\r\nControl+Drag performs the same action.\r\n";
+            this.addToolStripMenuItem.Click += new System.EventHandler(this.addToolStripMenuItem_Click);
+            // 
+            // insertStripMenuItem
+            // 
+            this.insertStripMenuItem.Enabled = false;
+            this.insertStripMenuItem.Name = "insertStripMenuItem";
+            this.insertStripMenuItem.ShortcutKeyDisplayString = "Ctrl+I";
+            this.insertStripMenuItem.Size = new System.Drawing.Size(268, 32);
+            this.insertStripMenuItem.Text = "&Insert Frames";
+            this.insertStripMenuItem.ToolTipText = "Insert frames after the current frame\r\nControl+Shift+Drag performs the same actio" +
+    "n.";
+            this.insertStripMenuItem.Click += new System.EventHandler(this.insertStripMenuItem_Click);
+            // 
+            // saveGIFToolStripMenuItem
+            // 
+            this.saveGIFToolStripMenuItem.Enabled = false;
+            this.saveGIFToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.saveGIFToolStripMenuItem.Name = "saveGIFToolStripMenuItem";
+            this.saveGIFToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+S";
+            this.saveGIFToolStripMenuItem.Size = new System.Drawing.Size(268, 32);
+            this.saveGIFToolStripMenuItem.Text = "&Export ...";
+            this.saveGIFToolStripMenuItem.ToolTipText = "Save the animation to disk";
+            this.saveGIFToolStripMenuItem.Click += new System.EventHandler(this.saveGIFToolStripMenuItem_Click);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(265, 6);
+            // 
+            // newToolStripMenuItem
+            // 
+            this.newToolStripMenuItem.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.newToolStripMenuItem.Name = "newToolStripMenuItem";
+            this.newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
+            this.newToolStripMenuItem.Size = new System.Drawing.Size(268, 32);
+            this.newToolStripMenuItem.Text = "&New Animation ...";
+            this.newToolStripMenuItem.ToolTipText = "Create new animation";
+            this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // recentfoldersToolStripMenuItem
             // 
             this.recentfoldersToolStripMenuItem.DropDown = this.cmsRecents;
             this.recentfoldersToolStripMenuItem.Enabled = false;
             this.recentfoldersToolStripMenuItem.Name = "recentfoldersToolStripMenuItem";
-            this.recentfoldersToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
+            this.recentfoldersToolStripMenuItem.Size = new System.Drawing.Size(268, 32);
             this.recentfoldersToolStripMenuItem.Text = "Recents";
+            this.recentfoldersToolStripMenuItem.ToolTipText = "Recently loaded files and folders";
             // 
             // cmsRecents
             // 
@@ -189,7 +223,7 @@ namespace BasicGiffer
             // clearrecentToolStripMenuItem
             // 
             this.clearrecentToolStripMenuItem.Name = "clearrecentToolStripMenuItem";
-            this.clearrecentToolStripMenuItem.Size = new System.Drawing.Size(262, 32);
+            this.clearrecentToolStripMenuItem.Size = new System.Drawing.Size(268, 32);
             this.clearrecentToolStripMenuItem.Text = "Clear Recents";
             this.clearrecentToolStripMenuItem.Click += new System.EventHandler(this.clearrecentToolStripMenuItem_Click);
             // 
@@ -563,27 +597,6 @@ namespace BasicGiffer
             this.ttip.AutomaticDelay = 900;
             this.ttip.BackColor = System.Drawing.SystemColors.HighlightText;
             // 
-            // multiplyStripMenuItem
-            // 
-            this.multiplyStripMenuItem.Enabled = false;
-            this.multiplyStripMenuItem.Name = "multiplyStripMenuItem";
-            this.multiplyStripMenuItem.ShortcutKeyDisplayString = "Ctrl+D";
-            this.multiplyStripMenuItem.Size = new System.Drawing.Size(262, 32);
-            this.multiplyStripMenuItem.Text = "&Duplicate Frame";
-            // 
-            // deleteStripMenuItem
-            // 
-            this.deleteStripMenuItem.Enabled = false;
-            this.deleteStripMenuItem.Name = "deleteStripMenuItem";
-            this.deleteStripMenuItem.ShortcutKeyDisplayString = "Del";
-            this.deleteStripMenuItem.Size = new System.Drawing.Size(262, 32);
-            this.deleteStripMenuItem.Text = "&Remove Frame";
-            // 
-            // toolStripSeparator2
-            // 
-            this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(259, 6);
-            // 
             // Gifit
             // 
             this.AllowDrop = true;
@@ -649,7 +662,6 @@ namespace BasicGiffer
         private System.Windows.Forms.ToolStripMenuItem newToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem addToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem saveGIFToolStripMenuItem;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripMenuItem recentfoldersToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem clearrecentToolStripMenuItem;
         private System.Windows.Forms.ContextMenuStrip cmsRecents;
@@ -663,6 +675,7 @@ namespace BasicGiffer
         private System.Windows.Forms.ToolStripMenuItem multiplyStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem deleteStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripMenuItem insertStripMenuItem;
         //private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         //private System.Windows.Forms.ToolStripMenuItem multiplyStripMenuItem;
         //private System.Windows.Forms.ToolStripMenuItem deleteStripMenuItem;

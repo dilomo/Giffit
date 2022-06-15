@@ -27,8 +27,10 @@ namespace BasicGiffer
     public partial class Gifit : Form
     {
         List<Image> originalImages = new List<Image>();
+        List<Image> originalImagesInsert = new List<Image>();
         List<Image> originalImagesLoopBack = new List<Image>();
         List<Image> previewImages = new List<Image>();
+        List<Image> previewImagesInsert = new List<Image>();
         List<Image> previewImagesLoopBack = new List<Image>();
         System.Collections.Specialized.StringCollection recentFolders 
             = new System.Collections.Specialized.StringCollection();
@@ -51,7 +53,7 @@ namespace BasicGiffer
         protected Giffit.GiffitPreset settings = new Giffit.GiffitPreset();
         string animationFolder = "animation";
         bool folderDrop = false;
-        bool controlHold = false;
+        int fileThreadingTrigger = 3;
 
         public Gifit()
         {
@@ -176,6 +178,7 @@ namespace BasicGiffer
 
             animationFolder = Path.GetDirectoryName(filenames[0]);
 
+
             getImageThread = new Thread(new ThreadStart(LoadImages));
             getImageThread.Start();
 
@@ -184,7 +187,8 @@ namespace BasicGiffer
                 Application.DoEvents();
                 Thread.Sleep(0);
             }
-            
+
+
             tbFrames.Value = 1;
             tbFrames.Maximum = previewImages.Count();
             // fix random crash and dissappearing of preview images 
@@ -203,6 +207,7 @@ namespace BasicGiffer
             saveGIFToolStripMenuItem.Enabled = true;
             addToolStripMenuItem.Enabled = true;
             multiplyStripMenuItem.Enabled = true;
+            insertStripMenuItem.Enabled = true;
             deleteStripMenuItem.Enabled = true;
             UpdateInfo();
             EnableActions();
@@ -221,13 +226,67 @@ namespace BasicGiffer
                 Application.DoEvents();
                 Thread.Sleep(0);
             }
-            SetFrame(tbFrames.Maximum);
-            tbFrames.Maximum = previewImages.Count();            
+
+            //  pbImage.Image = previewImages[tbFrames.Value - 2];
+            if (preview)
+                PreviewEffects(preview);
+            //  pbImage.Image = previewImages[tbFrames.Value-1];
+
+            var lastPos = tbFrames.Maximum;
+            tbFrames.Maximum = previewImages.Count();
             if (tbFrames.Maximum > 1)
                 deleteStripMenuItem.Enabled = true;
-            PreviewEffects(preview);
+            SetFrame(lastPos+1);
+           
             UpdateInfo();
             EnableActions();
+        }
+        protected void InsertFiles()
+        {
+            DisableActions();
+            UpdateInfo($"{filenames.Count().ToString()} files are loading ... ");
+            AddRecent(filenames);
+
+            originalImagesInsert.Clear();
+            previewImagesInsert.Clear();
+
+
+            getImageThread = new Thread(new ThreadStart(LoadInsertImages));
+            getImageThread.Start();
+
+            while (getImageThread.IsAlive)
+            {
+                Application.DoEvents();
+                Thread.Sleep(0);
+            }
+
+            originalImages.InsertRange(tbFrames.Value - 1, originalImagesInsert);
+            previewImages.InsertRange(tbFrames.Value - 1, previewImagesInsert);
+            originalImagesInsert.Clear();
+            previewImagesInsert.Clear();
+
+            //tbFrames.Maximum = previewImages.Count();
+            //if (tbFrames.Maximum > 1)
+            //    deleteStripMenuItem.Enabled = true;
+            //pbImage.Image = null;
+            //PreviewEffects(preview);
+            //pbImage.Image = previewImages[tbFrames.Value - 1];
+            //UpdateInfo();
+            //EnableActions();
+
+            //  pbImage.Image = previewImages[tbFrames.Value - 2];
+            if (preview)
+                PreviewEffects(preview);
+            //  pbImage.Image = previewImages[tbFrames.Value-1];
+
+            tbFrames.Maximum = previewImages.Count();
+            if (tbFrames.Maximum > 1)
+                deleteStripMenuItem.Enabled = true;
+            SetFrame(tbFrames.Value);
+
+            UpdateInfo();
+            EnableActions();
+
         }
         private void OpenWithDialog()
         {
@@ -237,7 +296,7 @@ namespace BasicGiffer
                 OpenFiles();
             }
         }
-        private void AddWithDialog()
+        private void AddWithDialog(bool insert = false)
         {
             if (ofd.ShowDialog() == DialogResult.OK)
             {
@@ -245,11 +304,19 @@ namespace BasicGiffer
                 if (loopback)
                 {
                     Loop(false);
-                    AddFiles();
+                    if (insert)
+                        InsertFiles();
+                    else
+                        AddFiles();
                     Loop(true);
                 }
                 else
-                  AddFiles();
+                {
+                    if (insert)
+                        InsertFiles();
+                    else
+                        AddFiles();
+                }
             }
         }
         private void AddRecent(string[] filenames)
@@ -291,6 +358,39 @@ namespace BasicGiffer
                         previewImages.Add(previewImg);
                         i++;
                         UpdateInfo($"Adding frame {i}");
+                    }
+                }
+            }
+        }
+
+        /// <summary>
+        /// Add to temporary location
+        /// </summary>
+        protected void LoadInsertImages()
+        {
+            int i = previewImages.Count;
+            foreach (var name in filenames)
+            {
+                Image previewImg;
+                Image originalImg;
+                // release file lock
+                using (var temp = (Bitmap)Image.FromFile(name, true))
+                {
+                    var possibleFrames = BitmapExtensions.ExtractBitmaps(temp);
+
+                    foreach (var tempFrame in possibleFrames)
+                    {
+                        // store original files for non destructive editing
+                        originalImg = tempFrame.CloneCurrentFrame();
+                        originalImg.Tag = i;
+                        originalImagesInsert.Add(originalImg);
+
+                        // store preview image
+                        previewImg = tempFrame.CloneCurrentFrame();
+                        previewImg.Tag = i;
+                        previewImagesInsert.Add(previewImg);
+                        i++;
+                        UpdateInfo($"Inserting frame {i}");
                     }
                 }
             }
@@ -969,10 +1069,13 @@ namespace BasicGiffer
                 case Keys.Control | Keys.N:
                     OpenWithDialog();
                     return true;
-                case Keys.Control | Keys.I:
+                case Keys.Control | Keys.A:
                     AddWithDialog();
+                    return true;         
+                case Keys.Control | Keys.I:
+                    AddWithDialog(true);
                     return true;
-                case Keys.Control | Keys.M:
+                case Keys.Control | Keys.D:
                     DuplicateFrame();
                     return true;
                 case Keys.Control | Keys.C:
@@ -1077,7 +1180,10 @@ namespace BasicGiffer
         {
             if (validData && !processing)
             {
-                if (ModifierKeys.HasFlag(Keys.Control))
+             
+                if (ModifierKeys.HasFlag(Keys.Control | Keys.Shift))
+                    InsertFiles();
+                else if (ModifierKeys.HasFlag(Keys.Control))
                     AddFiles();
                 else
                     OpenFiles();
@@ -1520,11 +1626,6 @@ namespace BasicGiffer
          
         }
 
-        private void multiplyStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DuplicateFrame();
-        }
-
         private void DuplicateFrame()
         {
             var mDialog = new Giffit.ImageMultiplier();
@@ -1599,28 +1700,29 @@ namespace BasicGiffer
                 previewImages[i].Tag = i;
         }
 
-        private void recentfoldersToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void deleteStripMenuItem_Click(object sender, EventArgs e)
-        {
-            DeleteFrame();
-        }
-
         private void Gifit_KeyDown(object sender, KeyEventArgs e)
         {
-            if (e.KeyCode == Keys.Control)
-            {
-                controlHold = true;
-            }
+
         }
 
         private void Gifit_KeyUp(object sender, KeyEventArgs e)
         { 
-            if (e.KeyCode == Keys.Control)
-                controlHold = false;  
+ 
+        }
+
+        private void insertStripMenuItem_Click(object sender, EventArgs e)
+        {
+            AddWithDialog(true);
+        }
+
+        private void deleteStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            DeleteFrame();
+        }
+
+        private void multiplyStripMenuItem_Click_1(object sender, EventArgs e)
+        {
+            DuplicateFrame();
         }
     }
 }
