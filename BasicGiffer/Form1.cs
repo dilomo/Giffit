@@ -1073,10 +1073,12 @@ namespace BasicGiffer
                     AddWithDialog();
                     return true;         
                 case Keys.Control | Keys.I:
-                    AddWithDialog(true);
+                    if (previewImages.Count > 0)
+                        AddWithDialog(true);
                     return true;
                 case Keys.Control | Keys.D:
-                    DuplicateFrame();
+                    if (previewImages.Count > 0)
+                        DuplicateFrame();
                     return true;
                 case Keys.Control | Keys.C:
                     if (previewImages.Count > 0)
@@ -1095,19 +1097,24 @@ namespace BasicGiffer
                         btnCrop.PerformClick();
                     return true;
                 case Keys.Left:
-                    MoveLeft();
+                    if (previewImages.Count > 0)
+                        MoveLeft();
                     return true;
                 case Keys.Right:
-                    MoveRight();
+                    if (previewImages.Count > 0)
+                        MoveRight();
                     return true;
                 case Keys.Delete:
-                    DeleteFrame();
+                    if (previewImages.Count > 0)
+                        DeleteFrame();
                     return true;
                 case Keys.End:
-                    SetFrame(tbFrames.Maximum);
+                    if (previewImages.Count > 0)
+                        SetFrame(tbFrames.Maximum);
                     return true;
                 case Keys.Home:
-                    SetFrame(1);
+                    if (previewImages.Count > 0)
+                        SetFrame(1);
                     return true;
             }
 
@@ -1637,7 +1644,7 @@ namespace BasicGiffer
 
                 if (loopback)
                 {
-                    MessageBox.Show("Multiplying frames does not support loopbacks yet");
+                    MessageBox.Show("Loopback is on. Turn it off and edit the frames and then turn it on again.");
                 }
                 else
                 {
@@ -1646,7 +1653,7 @@ namespace BasicGiffer
                     var image = originalImages[tbFrames.Value - 1];
                     var imageP = previewImages[tbFrames.Value - 1];
 
-                    for (int i = 0; i < mDialog.nudFrames.Value - 1; i++)
+                    for (int i = 0; i < mDialog.nudFrames.Value; i++)
                     {
                         originalImages.Insert(tbFrames.Value - 1, new Bitmap(image));
                         previewImages.Insert(tbFrames.Value - 1, new Bitmap(imageP));

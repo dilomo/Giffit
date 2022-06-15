@@ -27,5 +27,10 @@ namespace Giffit
            button1.Select();
            // nudFrames.Select();
         }
+
+        private void label1_Click(object sender, EventArgs e)
+        {
+
+        }
     }
 }
