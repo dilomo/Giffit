@@ -214,6 +214,12 @@ namespace BasicGiffer
         }
         protected void AddFiles()
         {
+            if (loopback)
+            {
+                MessageBox.Show("Loopback is on. Turn it off to add frames.", "Oops");
+                return;
+            }
+
             DisableActions();
             UpdateInfo($"{filenames.Count().ToString()} files are loading ... ");
             AddRecent(filenames);
@@ -243,6 +249,12 @@ namespace BasicGiffer
         }
         protected void InsertFiles()
         {
+            if (loopback)
+            {
+                MessageBox.Show("Loopback is on. Turn it off to insert frames.", "Oops");
+                return;
+            }
+
             DisableActions();
             UpdateInfo($"{filenames.Count().ToString()} files are loading ... ");
             AddRecent(filenames);
@@ -298,6 +310,12 @@ namespace BasicGiffer
         }
         private void AddWithDialog(bool insert = false)
         {
+            if (loopback)
+            {
+                MessageBox.Show("Loopback is on. Turn it off to edit the frames.", "Oops");
+                return;
+            }
+
             if (ofd.ShowDialog() == DialogResult.OK)
             {
                 filenames = ofd.FileNames;
@@ -1635,6 +1653,13 @@ namespace BasicGiffer
 
         private void DuplicateFrame()
         {
+            if (loopback)
+            {
+                MessageBox.Show("Loopback is on. Turn it off to edit the frames.", "Oops");
+                return;
+            }
+
+
             var mDialog = new Giffit.ImageMultiplier();
             if (mDialog.ShowDialog() == DialogResult.OK)
             {
@@ -1642,25 +1667,18 @@ namespace BasicGiffer
                 UpdateInfo("Duplicating frames ...");
                 Application.DoEvents();
 
-                if (loopback)
+                // just add 
+                var image = originalImages[tbFrames.Value - 1];
+                var imageP = previewImages[tbFrames.Value - 1];
+
+                for (int i = 0; i < mDialog.nudFrames.Value; i++)
                 {
-                    MessageBox.Show("Loopback is on. Turn it off and edit the frames and then turn it on again.");
+                    originalImages.Insert(tbFrames.Value - 1, new Bitmap(image));
+                    previewImages.Insert(tbFrames.Value - 1, new Bitmap(imageP));
                 }
-                else
-                {
-                    // just add 
 
-                    var image = originalImages[tbFrames.Value - 1];
-                    var imageP = previewImages[tbFrames.Value - 1];
+                RenumberFrames();
 
-                    for (int i = 0; i < mDialog.nudFrames.Value; i++)
-                    {
-                        originalImages.Insert(tbFrames.Value - 1, new Bitmap(image));
-                        previewImages.Insert(tbFrames.Value - 1, new Bitmap(imageP));
-                    }
-
-                    RenumberFrames();
-                }
                 tbFrames.Maximum = previewImages.Count();
 
                 EnableActions();
@@ -1670,6 +1688,12 @@ namespace BasicGiffer
 
         private void DeleteFrame(bool backwards = false)
         {
+            if (loopback)
+            {
+                MessageBox.Show(this, "Loopback is on. Turn it off to edit the frames.", "Oops");
+                return;
+            }
+
             // must always have at least one frame
             if (previewImages.Count > 1)
             {

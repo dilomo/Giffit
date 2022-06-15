@@ -536,7 +536,7 @@ namespace BasicGiffer
             this.btnCrop.Name = "btnCrop";
             this.btnCrop.Size = new System.Drawing.Size(50, 45);
             this.btnCrop.TabIndex = 8;
-            this.ttip.SetToolTip(this.btnCrop, "Enter crop mode");
+            this.ttip.SetToolTip(this.btnCrop, "Enter crop mode (C)");
             this.btnCrop.UseVisualStyleBackColor = true;
             this.btnCrop.Click += new System.EventHandler(this.btnCrop_Click);
             // 
