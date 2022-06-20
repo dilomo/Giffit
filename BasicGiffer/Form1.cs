@@ -54,7 +54,8 @@ namespace BasicGiffer
         string animationFolder = "animation";
         bool folderDrop = false;
         int inFrame = 0; 
-        int outFrame = 0; 
+        int outFrame = 0;
+        bool IOset = false;
 
         public Gifit()
         {
@@ -169,6 +170,11 @@ namespace BasicGiffer
                 pbImage.Image = null;
             }
         }
+
+        public void DisplayInOut()
+        {
+            lblInOut.Text = $"[{inFrame}-{outFrame}]";   
+        }
         protected void OpenFiles()
         {
           
@@ -211,9 +217,18 @@ namespace BasicGiffer
             insertStripMenuItem.Enabled = true;
             deleteStripMenuItem.Enabled = true;
             loopStripMenuItem.Enabled = true;
+
+            
             UpdateInfo();
             EnableActions();
         }
+        public void UpdateInOut()
+        {
+            inFrame = 1;
+            outFrame = tbFrames.Maximum;
+            DisplayInOut();
+        }
+
         protected void AddFiles()
         {
             if (loopback)
@@ -787,6 +802,7 @@ namespace BasicGiffer
                 lblResult.Text = fullInfo;
             }
             tAnimation.Interval = (int)Math.Round(1000 / GetFPS(), MidpointRounding.AwayFromZero);
+            UpdateInOut();
         }
         public void Loop( bool loop)
         {
@@ -846,6 +862,29 @@ namespace BasicGiffer
 
             previewImages.AddRange(previewImagesLoopBack);
             originalImages.AddRange(originalImagesLoopBack);
+
+            RenumberFrames();
+
+            tbFrames.Maximum = previewImages.Count();
+            EnableActions();
+            UpdateInfo();
+        }
+        public void DuplucateIOInReverse()
+        {
+            DisableActions();
+            UpdateInfo("Creating loopback ...");
+            Application.DoEvents();
+
+            for (int i = inFrame - 1; i < outFrame; i++)
+            {
+                previewImagesLoopBack.Add((Image)new Bitmap(previewImages[i]));
+                originalImagesLoopBack.Add((Image)new Bitmap(originalImages[i]));
+            }
+            previewImagesLoopBack.Reverse();
+            originalImagesLoopBack.Reverse();
+
+            previewImages.InsertRange(outFrame,previewImagesLoopBack);
+            originalImages.InsertRange(outFrame, originalImagesLoopBack);
 
             RenumberFrames();
 
@@ -1137,12 +1176,23 @@ namespace BasicGiffer
                     return true;
 
                 case Keys.I:
-                    if (previewImages.Count > 0)
-                       inFrame = ;
+                    SetIn(tbFrames.Value);
                     return true;
+                case Keys.O:
+                    SetOut(tbFrames.Value);
+                    return true;
+                case Keys.Alt|Keys.I:
+                    ClearInOut();
+                    return true;
+
                 case Keys.B:
                     if (previewImages.Count > 0)
-                        DuplucateAllInReverse();
+                    {
+                        if (!IOset)
+                            DuplucateAllInReverse();
+                        else
+                            DuplucateIOInReverse();
+                    }
                     return true;
                 case Keys.S:
                     if (previewImages.Count > 0)
@@ -1736,17 +1786,11 @@ namespace BasicGiffer
             {
                 var frame = tbFrames.Value - 1;
 
-                if (loopback)
-                {
-                    MessageBox.Show("Deleting frames does not support loopbacks yet");
-                }
-                else
-                {
-                    originalImages.RemoveAt(frame);
-                    previewImages.RemoveAt(frame);
-                    RenumberFrames();
-                }
-                
+                originalImages.RemoveAt(frame);
+                previewImages.RemoveAt(frame);
+                RenumberFrames();
+
+
                 tbFrames.Maximum = previewImages.Count();
                 if (backwards)
                     SetFrame(frame); // this is one index less
@@ -1795,7 +1839,52 @@ namespace BasicGiffer
 
         private void loopStripMenuItem_Click(object sender, EventArgs e)
         {
-            DuplucateAllInReverse();
+            if (!IOset)
+                DuplucateAllInReverse();
+            else
+                DuplucateIOInReverse();
+        }
+
+        private void setInToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetIn(tbFrames.Value);
+        }
+
+        private void setOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            SetOut(tbFrames.Value);
+        }
+        public void SetIn(int value)
+        {
+            if (previewImages.Count > 0)
+            {
+                inFrame = value;
+                IOset = true;
+                DisplayInOut();
+            }
+        }
+        public void SetOut(int value)
+        {
+            if (previewImages.Count > 0)
+            {
+                outFrame = value;
+                IOset = true;
+                DisplayInOut();
+            }
+        }
+        public void ClearInOut()
+        {
+            if (previewImages.Count > 0)
+            {
+                inFrame = 1;
+                outFrame = tbFrames.Maximum;
+                IOset = false;
+                DisplayInOut();
+            }
+        }
+        private void clearInOutToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            ClearInOut();
         }
     }
 }

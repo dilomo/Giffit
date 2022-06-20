@@ -35,8 +35,8 @@ namespace BasicGiffer
             this.cmsActions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiplyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
-            this.loopStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loopStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.saveGIFToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -68,6 +68,10 @@ namespace BasicGiffer
             this.tAnimation = new System.Windows.Forms.Timer(this.components);
             this.ofd = new System.Windows.Forms.OpenFileDialog();
             this.ttip = new System.Windows.Forms.ToolTip(this.components);
+            this.cmsInOut = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.setInToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.setOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.clearInOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.cmsActions.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -75,6 +79,7 @@ namespace BasicGiffer
             this.tableLayoutPanel1.SuspendLayout();
             this.tableLayoutPanel3.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbFrames)).BeginInit();
+            this.cmsInOut.SuspendLayout();
             this.SuspendLayout();
             // 
             // pbImage
@@ -119,7 +124,7 @@ namespace BasicGiffer
             this.cmsActions.Name = "cmsActions";
             this.cmsActions.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsActions.ShowImageMargin = false;
-            this.cmsActions.Size = new System.Drawing.Size(269, 363);
+            this.cmsActions.Size = new System.Drawing.Size(269, 330);
             this.cmsActions.Opening += new System.ComponentModel.CancelEventHandler(this.cmsActions_Opening_1);
             // 
             // copyStripMenuItem
@@ -143,16 +148,6 @@ namespace BasicGiffer
             this.multiplyStripMenuItem.ToolTipText = "Create variable number of duplicates";
             this.multiplyStripMenuItem.Click += new System.EventHandler(this.multiplyStripMenuItem_Click_1);
             // 
-            // loopStripMenuItem
-            // 
-            this.loopStripMenuItem.Enabled = false;
-            this.loopStripMenuItem.Name = "loopStripMenuItem";
-            this.loopStripMenuItem.ShortcutKeyDisplayString = "B";
-            this.loopStripMenuItem.Size = new System.Drawing.Size(268, 32);
-            this.loopStripMenuItem.Text = "Loopback";
-            this.loopStripMenuItem.ToolTipText = "Duplicate the frames in reverse order";
-            this.loopStripMenuItem.Click += new System.EventHandler(this.loopStripMenuItem_Click);
-            // 
             // deleteStripMenuItem
             // 
             this.deleteStripMenuItem.Enabled = false;
@@ -162,6 +157,16 @@ namespace BasicGiffer
             this.deleteStripMenuItem.Text = "&Remove Frame";
             this.deleteStripMenuItem.ToolTipText = "Deletes the current frame";
             this.deleteStripMenuItem.Click += new System.EventHandler(this.deleteStripMenuItem_Click_1);
+            // 
+            // loopStripMenuItem
+            // 
+            this.loopStripMenuItem.Enabled = false;
+            this.loopStripMenuItem.Name = "loopStripMenuItem";
+            this.loopStripMenuItem.ShortcutKeyDisplayString = "B";
+            this.loopStripMenuItem.Size = new System.Drawing.Size(268, 32);
+            this.loopStripMenuItem.Text = "Loopback";
+            this.loopStripMenuItem.ToolTipText = "Duplicate the frames in reverse order";
+            this.loopStripMenuItem.Click += new System.EventHandler(this.loopStripMenuItem_Click);
             // 
             // addToolStripMenuItem
             // 
@@ -489,14 +494,14 @@ namespace BasicGiffer
             // lblInOut
             // 
             this.lblInOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblInOut.Font = new System.Drawing.Font("Segoe UI", 7.948052F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblInOut.Font = new System.Drawing.Font("Segoe UI", 9F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
             this.lblInOut.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
             this.lblInOut.Location = new System.Drawing.Point(64, 8);
             this.lblInOut.Margin = new System.Windows.Forms.Padding(0);
             this.lblInOut.Name = "lblInOut";
             this.lblInOut.Size = new System.Drawing.Size(285, 33);
             this.lblInOut.TabIndex = 2;
-            this.lblInOut.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblInOut.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
             // 
             // lblApply
             // 
@@ -552,6 +557,7 @@ namespace BasicGiffer
             // 
             // tbFrames
             // 
+            this.tbFrames.ContextMenuStrip = this.cmsInOut;
             this.tbFrames.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tbFrames.Enabled = false;
             this.tbFrames.Location = new System.Drawing.Point(3, 670);
@@ -590,6 +596,41 @@ namespace BasicGiffer
             this.ttip.AutomaticDelay = 900;
             this.ttip.BackColor = System.Drawing.SystemColors.HighlightText;
             // 
+            // cmsInOut
+            // 
+            this.cmsInOut.ImageScalingSize = new System.Drawing.Size(24, 24);
+            this.cmsInOut.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.setInToolStripMenuItem,
+            this.setOutToolStripMenuItem,
+            this.clearInOutToolStripMenuItem});
+            this.cmsInOut.Name = "cmsInOut";
+            this.cmsInOut.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
+            this.cmsInOut.Size = new System.Drawing.Size(271, 100);
+            // 
+            // setInToolStripMenuItem
+            // 
+            this.setInToolStripMenuItem.Name = "setInToolStripMenuItem";
+            this.setInToolStripMenuItem.ShortcutKeyDisplayString = "I";
+            this.setInToolStripMenuItem.Size = new System.Drawing.Size(270, 32);
+            this.setInToolStripMenuItem.Text = "Set In";
+            this.setInToolStripMenuItem.Click += new System.EventHandler(this.setInToolStripMenuItem_Click);
+            // 
+            // setOutToolStripMenuItem
+            // 
+            this.setOutToolStripMenuItem.Name = "setOutToolStripMenuItem";
+            this.setOutToolStripMenuItem.ShortcutKeyDisplayString = "O";
+            this.setOutToolStripMenuItem.Size = new System.Drawing.Size(270, 32);
+            this.setOutToolStripMenuItem.Text = "Set Out";
+            this.setOutToolStripMenuItem.Click += new System.EventHandler(this.setOutToolStripMenuItem_Click);
+            // 
+            // clearInOutToolStripMenuItem
+            // 
+            this.clearInOutToolStripMenuItem.Name = "clearInOutToolStripMenuItem";
+            this.clearInOutToolStripMenuItem.ShortcutKeyDisplayString = "Alt+X";
+            this.clearInOutToolStripMenuItem.Size = new System.Drawing.Size(270, 32);
+            this.clearInOutToolStripMenuItem.Text = "Clear In and Out";
+            this.clearInOutToolStripMenuItem.Click += new System.EventHandler(this.clearInOutToolStripMenuItem_Click);
+            // 
             // Gifit
             // 
             this.AllowDrop = true;
@@ -625,6 +666,7 @@ namespace BasicGiffer
             this.tableLayoutPanel3.ResumeLayout(false);
             this.tableLayoutPanel3.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)(this.tbFrames)).EndInit();
+            this.cmsInOut.ResumeLayout(false);
             this.ResumeLayout(false);
 
         }
@@ -669,6 +711,10 @@ namespace BasicGiffer
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem insertStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem loopStripMenuItem;
+        private System.Windows.Forms.ContextMenuStrip cmsInOut;
+        private System.Windows.Forms.ToolStripMenuItem setInToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem setOutToolStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem clearInOutToolStripMenuItem;
         //private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         //private System.Windows.Forms.ToolStripMenuItem multiplyStripMenuItem;
         //private System.Windows.Forms.ToolStripMenuItem deleteStripMenuItem;
