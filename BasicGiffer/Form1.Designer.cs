@@ -35,6 +35,7 @@ namespace BasicGiffer
             this.cmsActions = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.copyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.multiplyStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.loopStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.deleteStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.addToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.insertStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
@@ -58,11 +59,10 @@ namespace BasicGiffer
             this.btnStop = new System.Windows.Forms.Button();
             this.lblCurFrame = new System.Windows.Forms.Label();
             this.linkLabel1 = new System.Windows.Forms.LinkLabel();
-            this.btnPreview = new System.Windows.Forms.Button();
-            this.lblColourInfo = new System.Windows.Forms.Label();
+            this.lblInOut = new System.Windows.Forms.Label();
             this.lblApply = new System.Windows.Forms.LinkLabel();
             this.btnCrop = new System.Windows.Forms.Button();
-            this.btnLoop = new System.Windows.Forms.Button();
+            this.btnPreview = new System.Windows.Forms.Button();
             this.tbFrames = new System.Windows.Forms.TrackBar();
             this.saveGIF = new System.Windows.Forms.SaveFileDialog();
             this.tAnimation = new System.Windows.Forms.Timer(this.components);
@@ -108,6 +108,7 @@ namespace BasicGiffer
             this.copyStripMenuItem,
             this.multiplyStripMenuItem,
             this.deleteStripMenuItem,
+            this.loopStripMenuItem,
             this.addToolStripMenuItem,
             this.insertStripMenuItem,
             this.saveGIFToolStripMenuItem,
@@ -118,7 +119,7 @@ namespace BasicGiffer
             this.cmsActions.Name = "cmsActions";
             this.cmsActions.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsActions.ShowImageMargin = false;
-            this.cmsActions.Size = new System.Drawing.Size(269, 298);
+            this.cmsActions.Size = new System.Drawing.Size(269, 363);
             this.cmsActions.Opening += new System.ComponentModel.CancelEventHandler(this.cmsActions_Opening_1);
             // 
             // copyStripMenuItem
@@ -141,6 +142,16 @@ namespace BasicGiffer
             this.multiplyStripMenuItem.Text = "&Duplicate Frame ...";
             this.multiplyStripMenuItem.ToolTipText = "Create variable number of duplicates";
             this.multiplyStripMenuItem.Click += new System.EventHandler(this.multiplyStripMenuItem_Click_1);
+            // 
+            // loopStripMenuItem
+            // 
+            this.loopStripMenuItem.Enabled = false;
+            this.loopStripMenuItem.Name = "loopStripMenuItem";
+            this.loopStripMenuItem.ShortcutKeyDisplayString = "B";
+            this.loopStripMenuItem.Size = new System.Drawing.Size(268, 32);
+            this.loopStripMenuItem.Text = "Loopback";
+            this.loopStripMenuItem.ToolTipText = "Duplicate the frames in reverse order";
+            this.loopStripMenuItem.Click += new System.EventHandler(this.loopStripMenuItem_Click);
             // 
             // deleteStripMenuItem
             // 
@@ -349,7 +360,7 @@ namespace BasicGiffer
             this.btnSettings.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnSettings.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnSettings.Image = global::Giffit.Properties.Resources.magic_wand;
-            this.btnSettings.Location = new System.Drawing.Point(485, 2);
+            this.btnSettings.Location = new System.Drawing.Point(454, 2);
             this.btnSettings.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnSettings.Name = "btnSettings";
             this.btnSettings.Size = new System.Drawing.Size(50, 45);
@@ -381,28 +392,27 @@ namespace BasicGiffer
             // 
             // tableLayoutPanel3
             // 
-            this.tableLayoutPanel3.ColumnCount = 11;
+            this.tableLayoutPanel3.ColumnCount = 9;
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 64F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 10F));
-            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 52F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Percent, 50F));
             this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 71F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
+            this.tableLayoutPanel3.ColumnStyles.Add(new System.Windows.Forms.ColumnStyle(System.Windows.Forms.SizeType.Absolute, 20F));
             this.tableLayoutPanel3.Controls.Add(this.btnPlay, 2, 0);
             this.tableLayoutPanel3.Controls.Add(this.btnStop, 3, 0);
             this.tableLayoutPanel3.Controls.Add(this.lblCurFrame, 0, 0);
-            this.tableLayoutPanel3.Controls.Add(this.linkLabel1, 10, 0);
-            this.tableLayoutPanel3.Controls.Add(this.btnPreview, 4, 0);
-            this.tableLayoutPanel3.Controls.Add(this.lblColourInfo, 1, 0);
-            this.tableLayoutPanel3.Controls.Add(this.lblApply, 9, 0);
-            this.tableLayoutPanel3.Controls.Add(this.btnCrop, 8, 0);
-            this.tableLayoutPanel3.Controls.Add(this.btnLoop, 7, 0);
-            this.tableLayoutPanel3.Controls.Add(this.btnSettings, 6, 0);
+            this.tableLayoutPanel3.Controls.Add(this.linkLabel1, 8, 0);
+            this.tableLayoutPanel3.Controls.Add(this.lblInOut, 1, 0);
+            this.tableLayoutPanel3.Controls.Add(this.lblApply, 7, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnSettings, 4, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnCrop, 6, 0);
+            this.tableLayoutPanel3.Controls.Add(this.btnPreview, 5, 0);
             this.tableLayoutPanel3.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tableLayoutPanel3.Location = new System.Drawing.Point(3, 730);
             this.tableLayoutPanel3.Name = "tableLayoutPanel3";
@@ -419,7 +429,7 @@ namespace BasicGiffer
             this.btnPlay.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnPlay.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnPlay.Image = global::Giffit.Properties.Resources.play;
-            this.btnPlay.Location = new System.Drawing.Point(319, 2);
+            this.btnPlay.Location = new System.Drawing.Point(350, 2);
             this.btnPlay.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnPlay.Name = "btnPlay";
             this.btnPlay.Size = new System.Drawing.Size(50, 45);
@@ -437,7 +447,7 @@ namespace BasicGiffer
             this.btnStop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnStop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnStop.Image = global::Giffit.Properties.Resources.stop;
-            this.btnStop.Location = new System.Drawing.Point(371, 2);
+            this.btnStop.Location = new System.Drawing.Point(402, 2);
             this.btnStop.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnStop.Name = "btnStop";
             this.btnStop.Size = new System.Drawing.Size(50, 45);
@@ -476,33 +486,17 @@ namespace BasicGiffer
             this.linkLabel1.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             this.linkLabel1.LinkClicked += new System.Windows.Forms.LinkLabelLinkClickedEventHandler(this.linkLabel1_LinkClicked);
             // 
-            // btnPreview
+            // lblInOut
             // 
-            this.btnPreview.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnPreview.Enabled = false;
-            this.btnPreview.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-            this.btnPreview.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnPreview.Image = global::Giffit.Properties.Resources.zoomm;
-            this.btnPreview.Location = new System.Drawing.Point(423, 2);
-            this.btnPreview.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
-            this.btnPreview.Name = "btnPreview";
-            this.btnPreview.Size = new System.Drawing.Size(50, 45);
-            this.btnPreview.TabIndex = 7;
-            this.ttip.SetToolTip(this.btnPreview, "Zoom to 100% (Z)");
-            this.btnPreview.UseVisualStyleBackColor = true;
-            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
-            // 
-            // lblColourInfo
-            // 
-            this.lblColourInfo.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
-            this.lblColourInfo.Font = new System.Drawing.Font("Segoe UI", 7.948052F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblColourInfo.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
-            this.lblColourInfo.Location = new System.Drawing.Point(64, 8);
-            this.lblColourInfo.Margin = new System.Windows.Forms.Padding(0);
-            this.lblColourInfo.Name = "lblColourInfo";
-            this.lblColourInfo.Size = new System.Drawing.Size(254, 33);
-            this.lblColourInfo.TabIndex = 2;
-            this.lblColourInfo.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
+            this.lblInOut.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Left | System.Windows.Forms.AnchorStyles.Right)));
+            this.lblInOut.Font = new System.Drawing.Font("Segoe UI", 7.948052F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
+            this.lblInOut.ForeColor = System.Drawing.SystemColors.ControlDarkDark;
+            this.lblInOut.Location = new System.Drawing.Point(64, 8);
+            this.lblInOut.Margin = new System.Windows.Forms.Padding(0);
+            this.lblInOut.Name = "lblInOut";
+            this.lblInOut.Size = new System.Drawing.Size(285, 33);
+            this.lblInOut.TabIndex = 2;
+            this.lblInOut.TextAlign = System.Drawing.ContentAlignment.MiddleRight;
             // 
             // lblApply
             // 
@@ -511,11 +505,11 @@ namespace BasicGiffer
             | System.Windows.Forms.AnchorStyles.Right)));
             this.lblApply.AutoSize = true;
             this.lblApply.Font = new System.Drawing.Font("Segoe UI", 8.883117F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point);
-            this.lblApply.Location = new System.Drawing.Point(648, 0);
+            this.lblApply.Location = new System.Drawing.Point(617, 0);
             this.lblApply.Margin = new System.Windows.Forms.Padding(8, 0, 3, 0);
             this.lblApply.Name = "lblApply";
             this.lblApply.Padding = new System.Windows.Forms.Padding(0, 0, 0, 3);
-            this.lblApply.Size = new System.Drawing.Size(243, 49);
+            this.lblApply.Size = new System.Drawing.Size(274, 49);
             this.lblApply.TabIndex = 4;
             this.lblApply.TabStop = true;
             this.lblApply.Text = "Apply crop";
@@ -531,7 +525,7 @@ namespace BasicGiffer
             this.btnCrop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
             this.btnCrop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
             this.btnCrop.Image = global::Giffit.Properties.Resources.preview;
-            this.btnCrop.Location = new System.Drawing.Point(589, 2);
+            this.btnCrop.Location = new System.Drawing.Point(558, 2);
             this.btnCrop.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
             this.btnCrop.Name = "btnCrop";
             this.btnCrop.Size = new System.Drawing.Size(50, 45);
@@ -540,22 +534,21 @@ namespace BasicGiffer
             this.btnCrop.UseVisualStyleBackColor = true;
             this.btnCrop.Click += new System.EventHandler(this.btnCrop_Click);
             // 
-            // btnLoop
+            // btnPreview
             // 
-            this.btnLoop.BackColor = System.Drawing.SystemColors.Control;
-            this.btnLoop.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.btnLoop.Enabled = false;
-            this.btnLoop.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
-            this.btnLoop.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
-            this.btnLoop.Image = global::Giffit.Properties.Resources.loopbv;
-            this.btnLoop.Location = new System.Drawing.Point(537, 2);
-            this.btnLoop.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
-            this.btnLoop.Name = "btnLoop";
-            this.btnLoop.Size = new System.Drawing.Size(50, 45);
-            this.btnLoop.TabIndex = 2;
-            this.ttip.SetToolTip(this.btnLoop, "Loopback: add duplicate all frames in reverse order");
-            this.btnLoop.UseVisualStyleBackColor = false;
-            this.btnLoop.Click += new System.EventHandler(this.btnLoop_Click);
+            this.btnPreview.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.btnPreview.Enabled = false;
+            this.btnPreview.FlatAppearance.BorderColor = System.Drawing.Color.DimGray;
+            this.btnPreview.FlatStyle = System.Windows.Forms.FlatStyle.Flat;
+            this.btnPreview.Image = global::Giffit.Properties.Resources.zoomm;
+            this.btnPreview.Location = new System.Drawing.Point(506, 2);
+            this.btnPreview.Margin = new System.Windows.Forms.Padding(1, 2, 1, 2);
+            this.btnPreview.Name = "btnPreview";
+            this.btnPreview.Size = new System.Drawing.Size(50, 45);
+            this.btnPreview.TabIndex = 7;
+            this.ttip.SetToolTip(this.btnPreview, "Zoom to 100% (Z)");
+            this.btnPreview.UseVisualStyleBackColor = true;
+            this.btnPreview.Click += new System.EventHandler(this.btnPreview_Click);
             // 
             // tbFrames
             // 
@@ -667,8 +660,7 @@ namespace BasicGiffer
         private System.Windows.Forms.ContextMenuStrip cmsRecents;
         private System.Windows.Forms.ToolStripMenuItem copyStripMenuItem;
         private System.Windows.Forms.ComboBox cbFPS;
-        private System.Windows.Forms.Label lblColourInfo;
-        private System.Windows.Forms.Button btnLoop;
+        private System.Windows.Forms.Label lblInOut;
         private System.Windows.Forms.Button btnPreview;
         private System.Windows.Forms.Button btnCrop;
         private System.Windows.Forms.LinkLabel lblApply;
@@ -676,6 +668,7 @@ namespace BasicGiffer
         private System.Windows.Forms.ToolStripMenuItem deleteStripMenuItem;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         private System.Windows.Forms.ToolStripMenuItem insertStripMenuItem;
+        private System.Windows.Forms.ToolStripMenuItem loopStripMenuItem;
         //private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
         //private System.Windows.Forms.ToolStripMenuItem multiplyStripMenuItem;
         //private System.Windows.Forms.ToolStripMenuItem deleteStripMenuItem;

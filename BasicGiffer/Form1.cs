@@ -53,7 +53,8 @@ namespace BasicGiffer
         protected Giffit.GiffitPreset settings = new Giffit.GiffitPreset();
         string animationFolder = "animation";
         bool folderDrop = false;
-        int fileThreadingTrigger = 3;
+        int inFrame = 0; 
+        int outFrame = 0; 
 
         public Gifit()
         {
@@ -209,6 +210,7 @@ namespace BasicGiffer
             multiplyStripMenuItem.Enabled = true;
             insertStripMenuItem.Enabled = true;
             deleteStripMenuItem.Enabled = true;
+            loopStripMenuItem.Enabled = true;
             UpdateInfo();
             EnableActions();
         }
@@ -632,8 +634,7 @@ namespace BasicGiffer
         private void EnableActions()
         {
             btnSave.Enabled = true;
-            btnPlay.Enabled = true;
-            btnLoop.Enabled = true;
+            btnPlay.Enabled = true;     
             cmsActions.Enabled = true;
             btnPreview.Enabled = true;
             btnStop.Enabled = true;
@@ -645,7 +646,6 @@ namespace BasicGiffer
         private void DisableActions()
         {
             btnPlay.Enabled = false;
-            btnLoop.Enabled = false;
             btnPreview.Enabled = false;
             btnStop.Enabled = false;
             cmsActions.Enabled = false;
@@ -826,9 +826,35 @@ namespace BasicGiffer
                      tbFrames.Value = previewImages.Count;
             }          
             tbFrames.Maximum = previewImages.Count();
-            btnLoop.BackColor = loopback ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;
+            //btnLoop.BackColor = loopback ? System.Drawing.SystemColors.ControlDark : System.Drawing.SystemColors.Control;
             UpdateInfo();
         }
+
+        public void DuplucateAllInReverse()
+        {
+            DisableActions();
+            UpdateInfo("Creating loopback ...");
+            Application.DoEvents();
+
+            // creat loopbacks for the two sets of data
+            previewImagesLoopBack = previewImages.Select(i => (Image)new Bitmap(i)).ToList();
+            previewImagesLoopBack.Reverse();
+
+            // and now for the originasl
+            originalImagesLoopBack = originalImages.Select(i => (Image)new Bitmap(i)).ToList();
+            originalImagesLoopBack.Reverse();
+
+            previewImages.AddRange(previewImagesLoopBack);
+            originalImages.AddRange(originalImagesLoopBack);
+
+            RenumberFrames();
+
+            tbFrames.Maximum = previewImages.Count();
+            EnableActions();
+            UpdateInfo();
+        }
+
+
         public bool Crop()
         {
             UpdateInfo("Cropping frames ...");
@@ -1094,6 +1120,9 @@ namespace BasicGiffer
                     if (previewImages.Count > 0)
                         AddWithDialog(true);
                     return true;
+
+
+              
                 case Keys.Control | Keys.D:
                     if (previewImages.Count > 0)
                         DuplicateFrame();
@@ -1105,6 +1134,15 @@ namespace BasicGiffer
                 case Keys.Z:
                     if (previewImages.Count > 0)
                         btnPreview.PerformClick();
+                    return true;
+
+                case Keys.I:
+                    if (previewImages.Count > 0)
+                       inFrame = ;
+                    return true;
+                case Keys.B:
+                    if (previewImages.Count > 0)
+                        DuplucateAllInReverse();
                     return true;
                 case Keys.S:
                     if (previewImages.Count > 0)
@@ -1293,10 +1331,10 @@ namespace BasicGiffer
                 tableLayoutPanel3.ColumnStyles[2].Width = 37;
                 tableLayoutPanel3.ColumnStyles[3].Width = 37;
                 tableLayoutPanel3.ColumnStyles[4].Width = 37;
-                tableLayoutPanel3.ColumnStyles[5].Width = 7;
+                //tableLayoutPanel3.ColumnStyles[5].Width = 7;
+                tableLayoutPanel3.ColumnStyles[5].Width = 37;
                 tableLayoutPanel3.ColumnStyles[6].Width = 37;
-                tableLayoutPanel3.ColumnStyles[7].Width = 37;
-                tableLayoutPanel3.ColumnStyles[8].Width = 37;
+                //tableLayoutPanel3.ColumnStyles[8].Width = 37;
 
 
             }
@@ -1307,10 +1345,10 @@ namespace BasicGiffer
                 tableLayoutPanel3.ColumnStyles[2].Width = 42;
                 tableLayoutPanel3.ColumnStyles[3].Width = 42;
                 tableLayoutPanel3.ColumnStyles[4].Width = 42;
-                tableLayoutPanel3.ColumnStyles[5].Width = 10;
+                //tableLayoutPanel3.ColumnStyles[5].Width = 10;
+                tableLayoutPanel3.ColumnStyles[5].Width = 42;
                 tableLayoutPanel3.ColumnStyles[6].Width = 42;
-                tableLayoutPanel3.ColumnStyles[7].Width = 42;
-                tableLayoutPanel3.ColumnStyles[8].Width = 42;
+                //tableLayoutPanel3.ColumnStyles[8].Width = 42;
             }
             else
             {
@@ -1319,10 +1357,10 @@ namespace BasicGiffer
                 tableLayoutPanel3.ColumnStyles[2].Width = 64;
                 tableLayoutPanel3.ColumnStyles[3].Width = 64;
                 tableLayoutPanel3.ColumnStyles[4].Width = 64;
-                tableLayoutPanel3.ColumnStyles[5].Width = 12;
+                //tableLayoutPanel3.ColumnStyles[5].Width = 12;
+                tableLayoutPanel3.ColumnStyles[5].Width = 64;
                 tableLayoutPanel3.ColumnStyles[6].Width = 64;
-                tableLayoutPanel3.ColumnStyles[7].Width = 64;
-                tableLayoutPanel3.ColumnStyles[8].Width = 64;
+                //tableLayoutPanel3.ColumnStyles[8].Width = 64;
             }
 
             //cbFPS.Text = "1";
@@ -1659,7 +1697,6 @@ namespace BasicGiffer
                 return;
             }
 
-
             var mDialog = new Giffit.ImageMultiplier();
             if (mDialog.ShowDialog() == DialogResult.OK)
             {
@@ -1754,6 +1791,11 @@ namespace BasicGiffer
         private void multiplyStripMenuItem_Click_1(object sender, EventArgs e)
         {
             DuplicateFrame();
+        }
+
+        private void loopStripMenuItem_Click(object sender, EventArgs e)
+        {
+            DuplucateAllInReverse();
         }
     }
 }
