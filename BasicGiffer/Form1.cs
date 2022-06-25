@@ -171,9 +171,12 @@ namespace BasicGiffer
             }
         }
 
-        public void DisplayInOut()
+        public void DisplayInOut(bool hide =false)
         {
-            lblInOut.Text = $"[{inFrame}-{outFrame}]";   
+            if (!hide)
+                     lblInOut.Text = $"[{inFrame}-{outFrame}]";   
+            else
+                lblInOut.Text = "";
         }
         protected void OpenFiles()
         {
@@ -222,11 +225,11 @@ namespace BasicGiffer
             UpdateInfo();
             EnableActions();
         }
-        public void UpdateInOut()
+        public void UpdateInOut(bool hide = false)
         {
             inFrame = 1;
             outFrame = tbFrames.Maximum;
-            DisplayInOut();
+            DisplayInOut(hide);
         }
 
         protected void AddFiles()
@@ -293,6 +296,8 @@ namespace BasicGiffer
             previewImages.InsertRange(tbFrames.Value - 1, previewImagesInsert);
             originalImagesInsert.Clear();
             previewImagesInsert.Clear();
+
+            RenumberFrames();
 
             //tbFrames.Maximum = previewImages.Count();
             //if (tbFrames.Maximum > 1)
@@ -802,7 +807,7 @@ namespace BasicGiffer
                 lblResult.Text = fullInfo;
             }
             tAnimation.Interval = (int)Math.Round(1000 / GetFPS(), MidpointRounding.AwayFromZero);
-            UpdateInOut();
+            UpdateInOut(!IOset);
         }
         public void Loop( bool loop)
         {
@@ -874,6 +879,8 @@ namespace BasicGiffer
             DisableActions();
             UpdateInfo("Creating loopback ...");
             Application.DoEvents();
+            previewImagesLoopBack.Clear();
+            originalImagesLoopBack.Clear();
 
             for (int i = inFrame - 1; i < outFrame; i++)
             {
@@ -889,6 +896,7 @@ namespace BasicGiffer
             RenumberFrames();
 
             tbFrames.Maximum = previewImages.Count();
+            SetFrame(outFrame);
             EnableActions();
             UpdateInfo();
         }
@@ -1181,7 +1189,7 @@ namespace BasicGiffer
                 case Keys.O:
                     SetOut(tbFrames.Value);
                     return true;
-                case Keys.Alt|Keys.I:
+                case Keys.Alt | Keys.X:
                     ClearInOut();
                     return true;
 
@@ -1212,7 +1220,10 @@ namespace BasicGiffer
                     return true;
                 case Keys.Delete:
                     if (previewImages.Count > 0)
-                        DeleteFrame();
+                        if (!IOset)
+                            DeleteFrame();
+                        else
+                            DeleteFrames(inFrame, outFrame);
                     return true;
                 case Keys.End:
                     if (previewImages.Count > 0)
@@ -1775,15 +1786,10 @@ namespace BasicGiffer
 
         private void DeleteFrame(bool backwards = false)
         {
-            if (loopback)
-            {
-                MessageBox.Show(this, "Loopback is on. Turn it off to edit the frames.", "Oops");
-                return;
-            }
-
             // must always have at least one frame
             if (previewImages.Count > 1)
             {
+              
                 var frame = tbFrames.Value - 1;
 
                 originalImages.RemoveAt(frame);
@@ -1803,6 +1809,32 @@ namespace BasicGiffer
                 deleteStripMenuItem.Enabled = false;
             }
         }
+        public void DeleteFrames(int start, int end)
+        {
+            // must always have at least one frame
+            if (previewImages.Count > 1)
+            {
+
+                var frame = tbFrames.Value - 1;
+                for (int i = end; i >= start; i--)
+                {
+                    originalImages.RemoveAt(i-1);
+                    previewImages.RemoveAt(i-1);
+                }
+
+                RenumberFrames();
+
+
+                tbFrames.Maximum = previewImages.Count();
+                SetFrame();
+                UpdateInfo();
+            }
+            else
+            {
+                deleteStripMenuItem.Enabled = false;
+            }
+        }
+        
 
         private void RenumberFrames()
         {
@@ -1879,7 +1911,7 @@ namespace BasicGiffer
                 inFrame = 1;
                 outFrame = tbFrames.Maximum;
                 IOset = false;
-                DisplayInOut();
+                DisplayInOut(true);
             }
         }
         private void clearInOutToolStripMenuItem_Click(object sender, EventArgs e)
