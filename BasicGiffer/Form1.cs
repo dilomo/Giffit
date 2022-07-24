@@ -34,6 +34,8 @@ namespace BasicGiffer
         List<Image> previewImagesLoopBack = new List<Image>();
         System.Collections.Specialized.StringCollection recentFolders 
             = new System.Collections.Specialized.StringCollection();
+        Image buffer = null;
+
         bool loopback = false;
         bool preview = true;
         bool processing = false;
@@ -726,6 +728,18 @@ namespace BasicGiffer
                 }
             }
         }
+
+        public void InstantPreview(int style)
+        {
+            Giffit.GiffitPreset gp = new Giffit.GiffitPreset(settings);
+            gp.StyleIndex = style;
+            pbImage.Image = pbImage.Image = ApplyEffects(buffer, gp);
+        }
+        public void ResetPreview()
+        {
+            pbImage.Image = pbImage.Image = ApplyEffects(buffer, settings); 
+        }
+
         private static void CloneAdd(List<Image> list, Image frame)
         {
             var mod = new Bitmap(frame);
@@ -1142,15 +1156,6 @@ namespace BasicGiffer
                         else Play();
                     }
                     return true; // signal that we've processed this key
-                case Keys.Enter:
-                    if (crop)
-                    {
-                        Crop();
-                        lblApply.Visible = false;
-                        btnCrop.PerformClick();
-                        SetFrame();
-                    }
-                    return true;
                 case Keys.Control | Keys.S:
                     if (previewImages.Count > 0)
                     {
@@ -1160,6 +1165,7 @@ namespace BasicGiffer
                 case Keys.Control | Keys.N:
                     OpenWithDialog();
                     return true;
+
                 case Keys.Control | Keys.A:
                     AddWithDialog();
                     return true;         
@@ -1168,8 +1174,6 @@ namespace BasicGiffer
                         AddWithDialog(true);
                     return true;
 
-
-              
                 case Keys.Control | Keys.D:
                     if (previewImages.Count > 0)
                         DuplicateFrame();
@@ -1193,7 +1197,7 @@ namespace BasicGiffer
                     ClearInOut();
                     return true;
 
-                case Keys.B:
+                case Keys.Control | Keys.B:
                     if (previewImages.Count > 0)
                     {
                         if (!IOset)
@@ -1209,6 +1213,15 @@ namespace BasicGiffer
                 case Keys.C:
                     if (previewImages.Count > 0)
                         btnCrop.PerformClick();
+                    return true;
+                case Keys.Enter:
+                    if (crop)
+                    {
+                        Crop();
+                        lblApply.Visible = false;
+                        btnCrop.PerformClick();
+                        SetFrame();
+                    }
                     return true;
                 case Keys.Left:
                     if (previewImages.Count > 0)
@@ -1480,6 +1493,10 @@ namespace BasicGiffer
             sets.w = originalImages[0].Size.Width;
             sets.defI = settings.DefaultStyle;
             sets.cbDontPreview.Checked = preview;
+            sets.MainForm = this;
+            // get the current image and allow for changes live 
+            buffer = (Image)originalImages[tbFrames.Value-1].Clone();
+
 
             if (sets.ShowDialog() == DialogResult.OK)
             {
@@ -1498,8 +1515,19 @@ namespace BasicGiffer
                     PreviewEffects(preview);
                     UpdateInfo();
                 }
+                else
+                {
+                    // only instant one
+                    ResetPreview();
+                }
+            }
+            else
+            {
+                // only instant one
+                ResetPreview();
             }
         }
+        
         private void btnPreview_Click(object sender, EventArgs e)
         {
             zoom = !zoom;
@@ -1514,11 +1542,15 @@ namespace BasicGiffer
         }
         private void newToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (ofd.ShowDialog() == DialogResult.OK)
-            {
-                filenames = ofd.FileNames;
-                OpenFiles();
-            }
+            if (previewImages.Count > 0)
+               if (MessageBox.Show("Discard any changes to current animation and create a new one?", "Make new animation", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                {
+                    if (ofd.ShowDialog() == DialogResult.OK)
+                    {
+                        filenames = ofd.FileNames;
+                        OpenFiles();
+                    }
+                }
         }
         private void addToolStripMenuItem_Click(object sender, EventArgs e)
         {

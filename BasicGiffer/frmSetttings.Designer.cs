@@ -164,6 +164,7 @@ namespace Giffit
             this.cbStyle.Size = new System.Drawing.Size(241, 33);
             this.cbStyle.TabIndex = 0;
             this.cbStyle.ValueMember = "0";
+            this.cbStyle.SelectedIndexChanged += new System.EventHandler(this.cbStyle_SelectedIndexChanged);
             // 
             // cbUseDefault
             // 
@@ -185,11 +186,12 @@ namespace Giffit
             this.cbDontPreview.AutoSize = true;
             this.cbDontPreview.Location = new System.Drawing.Point(8, 260);
             this.cbDontPreview.Name = "cbDontPreview";
-            this.cbDontPreview.Size = new System.Drawing.Size(233, 29);
+            this.cbDontPreview.Size = new System.Drawing.Size(208, 29);
             this.cbDontPreview.TabIndex = 7;
-            this.cbDontPreview.Text = "Generate preview frames";
-            this.toolTip1.SetToolTip(this.cbDontPreview, "If false the the frames will be conveted on save");
+            this.cbDontPreview.Text = "Preview selected style";
+            this.toolTip1.SetToolTip(this.cbDontPreview, "If false the frames will be conveted on save");
             this.cbDontPreview.UseVisualStyleBackColor = true;
+            this.cbDontPreview.CheckedChanged += new System.EventHandler(this.cbDontPreview_CheckedChanged);
             // 
             // frmSettings
             // 

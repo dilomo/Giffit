@@ -64,14 +64,14 @@ namespace BasicGiffer
             this.btnCrop = new System.Windows.Forms.Button();
             this.btnPreview = new System.Windows.Forms.Button();
             this.tbFrames = new System.Windows.Forms.TrackBar();
-            this.saveGIF = new System.Windows.Forms.SaveFileDialog();
-            this.tAnimation = new System.Windows.Forms.Timer(this.components);
-            this.ofd = new System.Windows.Forms.OpenFileDialog();
-            this.ttip = new System.Windows.Forms.ToolTip(this.components);
             this.cmsInOut = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.setInToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.setOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.clearInOutToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveGIF = new System.Windows.Forms.SaveFileDialog();
+            this.tAnimation = new System.Windows.Forms.Timer(this.components);
+            this.ofd = new System.Windows.Forms.OpenFileDialog();
+            this.ttip = new System.Windows.Forms.ToolTip(this.components);
             ((System.ComponentModel.ISupportInitialize)(this.pbImage)).BeginInit();
             this.cmsActions.SuspendLayout();
             this.tableLayoutPanel2.SuspendLayout();
@@ -124,7 +124,7 @@ namespace BasicGiffer
             this.cmsActions.Name = "cmsActions";
             this.cmsActions.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsActions.ShowImageMargin = false;
-            this.cmsActions.Size = new System.Drawing.Size(269, 330);
+            this.cmsActions.Size = new System.Drawing.Size(269, 363);
             this.cmsActions.Opening += new System.ComponentModel.CancelEventHandler(this.cmsActions_Opening_1);
             // 
             // copyStripMenuItem
@@ -134,8 +134,8 @@ namespace BasicGiffer
             this.copyStripMenuItem.Name = "copyStripMenuItem";
             this.copyStripMenuItem.ShortcutKeyDisplayString = "Ctrl+C";
             this.copyStripMenuItem.Size = new System.Drawing.Size(268, 32);
-            this.copyStripMenuItem.Text = "&Copy Frame";
-            this.copyStripMenuItem.ToolTipText = "Copy the bitmap data to clipboard";
+            this.copyStripMenuItem.Text = "&Copy to Clipboard";
+            this.copyStripMenuItem.ToolTipText = "Copy the bitmap data to the clipboard";
             this.copyStripMenuItem.Click += new System.EventHandler(this.copyStripMenuItem_Click);
             // 
             // multiplyStripMenuItem
@@ -155,17 +155,17 @@ namespace BasicGiffer
             this.deleteStripMenuItem.ShortcutKeyDisplayString = "Del";
             this.deleteStripMenuItem.Size = new System.Drawing.Size(268, 32);
             this.deleteStripMenuItem.Text = "&Remove Frame";
-            this.deleteStripMenuItem.ToolTipText = "Deletes the current frame";
+            this.deleteStripMenuItem.ToolTipText = "Deletes the current frame or the in/out range";
             this.deleteStripMenuItem.Click += new System.EventHandler(this.deleteStripMenuItem_Click_1);
             // 
             // loopStripMenuItem
             // 
             this.loopStripMenuItem.Enabled = false;
             this.loopStripMenuItem.Name = "loopStripMenuItem";
-            this.loopStripMenuItem.ShortcutKeyDisplayString = "B";
+            this.loopStripMenuItem.ShortcutKeyDisplayString = "Ctrl+B";
             this.loopStripMenuItem.Size = new System.Drawing.Size(268, 32);
             this.loopStripMenuItem.Text = "Loopback";
-            this.loopStripMenuItem.ToolTipText = "Duplicate the frames in reverse order";
+            this.loopStripMenuItem.ToolTipText = "Duplicate all frames in reverse order (or the in/out range)";
             this.loopStripMenuItem.Click += new System.EventHandler(this.loopStripMenuItem_Click);
             // 
             // addToolStripMenuItem
@@ -184,7 +184,7 @@ namespace BasicGiffer
             // 
             this.insertStripMenuItem.Enabled = false;
             this.insertStripMenuItem.Name = "insertStripMenuItem";
-            this.insertStripMenuItem.ShortcutKeyDisplayString = "Ctrl+I";
+            this.insertStripMenuItem.ShortcutKeyDisplayString = "Ctrl+ I";
             this.insertStripMenuItem.Size = new System.Drawing.Size(268, 32);
             this.insertStripMenuItem.Text = "&Insert Frames";
             this.insertStripMenuItem.ToolTipText = "Insert frames after the current frame\r\nControl+Shift+Drag performs the same actio" +
@@ -214,7 +214,7 @@ namespace BasicGiffer
             this.newToolStripMenuItem.ShortcutKeyDisplayString = "Ctrl+N";
             this.newToolStripMenuItem.Size = new System.Drawing.Size(268, 32);
             this.newToolStripMenuItem.Text = "&New Animation ...";
-            this.newToolStripMenuItem.ToolTipText = "Create new animation";
+            this.newToolStripMenuItem.ToolTipText = "Create new animation by disregarding any previous changes";
             this.newToolStripMenuItem.Click += new System.EventHandler(this.newToolStripMenuItem_Click);
             // 
             // recentfoldersToolStripMenuItem
@@ -569,33 +569,6 @@ namespace BasicGiffer
             this.tbFrames.Value = 1;
             this.tbFrames.ValueChanged += new System.EventHandler(this.tbFrames_ValueChanged);
             // 
-            // saveGIF
-            // 
-            this.saveGIF.DefaultExt = "gif";
-            this.saveGIF.FileName = "animation";
-            this.saveGIF.Filter = "GIF Animation |*.gif|Current frame as GIF|*.gif|Current frame as JPG|*.jpg|Curren" +
-    "t frame as PNG|*.png|Current frame as TIFF|*.tiff";
-            this.saveGIF.SupportMultiDottedExtensions = true;
-            this.saveGIF.Title = "Export GIF";
-            // 
-            // tAnimation
-            // 
-            this.tAnimation.Tick += new System.EventHandler(this.tAnimation_Tick);
-            // 
-            // ofd
-            // 
-            this.ofd.Filter = " GIF |*.gif| JPG |*.jpg| PNG |*.png| BMP |*.bmp| TIFF |*.tiff| All supported file" +
-    "s |*.gif;*.jpg;*.png;*.bmp;*.tiff";
-            this.ofd.FilterIndex = 6;
-            this.ofd.Multiselect = true;
-            this.ofd.RestoreDirectory = true;
-            this.ofd.Title = "Import Images";
-            // 
-            // ttip
-            // 
-            this.ttip.AutomaticDelay = 900;
-            this.ttip.BackColor = System.Drawing.SystemColors.HighlightText;
-            // 
             // cmsInOut
             // 
             this.cmsInOut.ImageScalingSize = new System.Drawing.Size(24, 24);
@@ -630,6 +603,33 @@ namespace BasicGiffer
             this.clearInOutToolStripMenuItem.Size = new System.Drawing.Size(270, 32);
             this.clearInOutToolStripMenuItem.Text = "Clear In and Out";
             this.clearInOutToolStripMenuItem.Click += new System.EventHandler(this.clearInOutToolStripMenuItem_Click);
+            // 
+            // saveGIF
+            // 
+            this.saveGIF.DefaultExt = "gif";
+            this.saveGIF.FileName = "animation";
+            this.saveGIF.Filter = "GIF Animation |*.gif|Current frame as GIF|*.gif|Current frame as JPG|*.jpg|Curren" +
+    "t frame as PNG|*.png|Current frame as TIFF|*.tiff";
+            this.saveGIF.SupportMultiDottedExtensions = true;
+            this.saveGIF.Title = "Export GIF";
+            // 
+            // tAnimation
+            // 
+            this.tAnimation.Tick += new System.EventHandler(this.tAnimation_Tick);
+            // 
+            // ofd
+            // 
+            this.ofd.Filter = " GIF |*.gif| JPG |*.jpg| PNG |*.png| BMP |*.bmp| TIFF |*.tiff| All supported file" +
+    "s |*.gif;*.jpg;*.png;*.bmp;*.tiff";
+            this.ofd.FilterIndex = 6;
+            this.ofd.Multiselect = true;
+            this.ofd.RestoreDirectory = true;
+            this.ofd.Title = "Import Images";
+            // 
+            // ttip
+            // 
+            this.ttip.AutomaticDelay = 900;
+            this.ttip.BackColor = System.Drawing.SystemColors.HighlightText;
             // 
             // Gifit
             // 

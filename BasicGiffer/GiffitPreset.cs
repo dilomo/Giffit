@@ -46,6 +46,23 @@ namespace Giffit
         "Fidelity+ (additive 8bppA)"
         };
 
+        public GiffitPreset()
+        {
+
+        }
+
+        public GiffitPreset(GiffitPreset other)
+        {
+            Scaling = other.Scaling;
+            Brightness = other.Brightness;
+            UseDeltaFrames = other.UseDeltaFrames;
+            HighQuality = other.HighQuality;
+            Background = other.Background;
+            AlphaThold = other.AlphaThold;
+
+            StyleIndex = other.StyleIndex;
+        }
+
 
         public int DefaultStyle { get => 15; }
         public int StyleIndex

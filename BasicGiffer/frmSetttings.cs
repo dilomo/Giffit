@@ -74,12 +74,15 @@ namespace Giffit
                 label1.BackColor = value;
             }
         }
+
+   
         protected override bool ProcessCmdKey(ref Message message, Keys keys)
         {
             switch (keys)
             {
                 case Keys.Escape:
                     this.Close();
+                    ((BasicGiffer.Gifit)MainForm)?.ResetPreview();
                     return true; // signal that we've processed this key
             }
 
@@ -90,6 +93,27 @@ namespace Giffit
         private void label1_MouseEnter(object sender, EventArgs e)
         {
             this.Cursor = System.Windows.Forms.Cursors.Cross;
+        }
+
+        public Form MainForm { get; set; }
+        private void cbStyle_SelectedIndexChanged(object sender, EventArgs e)
+        {
+            if (cbDontPreview.Checked)
+            {
+                ((BasicGiffer.Gifit)MainForm).InstantPreview(cbStyle.SelectedIndex);
+            }
+        }
+
+        private void cbDontPreview_CheckedChanged(object sender, EventArgs e)
+        {
+            if (cbDontPreview.Checked)
+            {
+                ((BasicGiffer.Gifit)MainForm)?.InstantPreview(cbStyle.SelectedIndex);
+            }
+            else
+            {
+                ((BasicGiffer.Gifit)MainForm)?.ResetPreview();
+            }
         }
     }
 }
