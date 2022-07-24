@@ -912,6 +912,7 @@ namespace BasicGiffer
             tbFrames.Maximum = previewImages.Count();
             SetFrame(outFrame);
             EnableActions();
+
             UpdateInfo();
         }
 
@@ -1860,6 +1861,16 @@ namespace BasicGiffer
                 tbFrames.Maximum = previewImages.Count();
                 SetFrame();
                 UpdateInfo();
+                
+                if (originalImages.Count == 0)
+                {
+                   // pbImage.Image.Dispose();
+                    tbFrames.Minimum = 1;
+                    tbFrames.Maximum = 1;
+                    tbFrames.Value = 1;
+                    pbImage.BackgroundImage = Giffit.Properties.Resources.drop2;
+                }
+                ClearInOut();
             }
             else
             {
@@ -1945,6 +1956,8 @@ namespace BasicGiffer
                 IOset = false;
                 DisplayInOut(true);
             }
+            else
+                DisplayInOut(true);
         }
         private void clearInOutToolStripMenuItem_Click(object sender, EventArgs e)
         {

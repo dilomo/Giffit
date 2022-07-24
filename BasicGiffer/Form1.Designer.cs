@@ -85,17 +85,18 @@ namespace BasicGiffer
             // pbImage
             // 
             this.pbImage.BackColor = System.Drawing.Color.White;
-            this.pbImage.BackgroundImage = global::Giffit.Properties.Resources.drop;
+            this.pbImage.BackgroundImage = global::Giffit.Properties.Resources.drop2;
             this.pbImage.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Center;
             this.pbImage.BorderStyle = System.Windows.Forms.BorderStyle.FixedSingle;
             this.pbImage.ContextMenuStrip = this.cmsActions;
             this.pbImage.Cursor = System.Windows.Forms.Cursors.Default;
             this.pbImage.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.pbImage.InitialImage = null;
             this.pbImage.Location = new System.Drawing.Point(4, 4);
             this.pbImage.Margin = new System.Windows.Forms.Padding(4);
             this.pbImage.Name = "pbImage";
             this.pbImage.Size = new System.Drawing.Size(963, 659);
-            this.pbImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.Zoom;
+            this.pbImage.SizeMode = System.Windows.Forms.PictureBoxSizeMode.CenterImage;
             this.pbImage.TabIndex = 4;
             this.pbImage.TabStop = false;
             this.pbImage.Tag = "dropper";
@@ -124,7 +125,7 @@ namespace BasicGiffer
             this.cmsActions.Name = "cmsActions";
             this.cmsActions.RenderMode = System.Windows.Forms.ToolStripRenderMode.System;
             this.cmsActions.ShowImageMargin = false;
-            this.cmsActions.Size = new System.Drawing.Size(269, 363);
+            this.cmsActions.Size = new System.Drawing.Size(269, 330);
             this.cmsActions.Opening += new System.ComponentModel.CancelEventHandler(this.cmsActions_Opening_1);
             // 
             // copyStripMenuItem
