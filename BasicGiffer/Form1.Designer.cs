@@ -609,8 +609,7 @@ namespace BasicGiffer
             // 
             this.saveGIF.DefaultExt = "gif";
             this.saveGIF.FileName = "animation";
-            this.saveGIF.Filter = "GIF Animation |*.gif|Current frame as GIF|*.gif|Current frame as JPG|*.jpg|Curren" +
-    "t frame as PNG|*.png|Current frame as TIFF|*.tiff";
+            this.saveGIF.Filter = resources.GetString("saveGIF.Filter");
             this.saveGIF.SupportMultiDottedExtensions = true;
             this.saveGIF.Title = "Export GIF";
             // 

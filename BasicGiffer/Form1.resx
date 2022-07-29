@@ -72,6 +72,9 @@
   <metadata name="saveGIF.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>162, 17</value>
   </metadata>
+  <data name="saveGIF.Filter" xml:space="preserve">
+    <value>GIF Animation |*.gif|All frames |*.gif|All frames |*.jpg|All frames |*.png|All frames |*.tiff|Current frame as GIF|*.gif|Current frame as JPG|*.jpg|Current frame as PNG|*.png|Current frame as TIFF|*.tiff</value>
+  </data>
   <metadata name="tAnimation.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>292, 17</value>
   </metadata>

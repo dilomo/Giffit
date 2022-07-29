@@ -589,6 +589,42 @@ namespace BasicGiffer
         {
             pbImage.Image.Save(saveGIF.FileName, ImageFormat.Tiff);
         }
+
+
+        protected void SaveGifFrames()
+        {
+            for (int i = 0; i < previewImages.Count; i++)
+            {
+                var path = Path.ChangeExtension(saveGIF.FileName, i.ToString("D3") + ".gif");
+                ImageExtensions.SaveAsGif(previewImages[i], path);
+            }
+        }
+
+        protected void SavePNGFrames()
+        {
+            for (int i = 0; i < previewImages.Count; i++)
+            {
+                var path = Path.ChangeExtension(saveGIF.FileName, i.ToString("D3") + ".png");
+                ImageExtensions.SaveAsPng(previewImages[i], path);
+            }
+        }
+        protected void SaveJPGFrames()
+        {
+            for (int i = 0; i < previewImages.Count; i++)
+            {
+                var path = Path.ChangeExtension(saveGIF.FileName, i.ToString("D3") + ".jpg");
+                ImageExtensions.SaveAsJpeg(previewImages[i], path);
+            }
+        }
+        protected void SaveTIFFFrames()
+        {
+            for (int i = 0; i < previewImages.Count; i++)
+            {
+                var path = Path.ChangeExtension(saveGIF.FileName, i.ToString("D3") + ".tiff");
+                ImageExtensions.SaveAsTiff(previewImages[i], path);
+            }
+        }
+
         public static Image ApplyEffects(Image image, Giffit.GiffitPreset preset)
         {
             if (preset.Scaling < 1)
@@ -791,7 +827,7 @@ namespace BasicGiffer
                 this.Invoke(safeWrite);
             }
             else
-                this.Text = "Giffit " + text;
+                this.Text = $"Giffit [{previewImages[0].Size.Width}x{previewImages[0].Size.Height}px] " + text;
             
         }
         public void UpdateInfo(string text)
@@ -1286,10 +1322,19 @@ namespace BasicGiffer
                 }
 
                 else if (saveGIF.FilterIndex == 2)
-                    SaveGifFrame();
+                    SaveGifFrames();
                 else if (saveGIF.FilterIndex == 3)
-                    SaveJpgFrame();
+                    SaveJPGFrames();
                 else if (saveGIF.FilterIndex == 4)
+                    SavePNGFrames();
+                else if (saveGIF.FilterIndex == 5)
+                    SaveTIFFFrames();
+
+                else if (saveGIF.FilterIndex == 6)
+                    SaveGifFrame();
+                else if (saveGIF.FilterIndex == 7)
+                    SaveJpgFrame();
+                else if (saveGIF.FilterIndex == 8)
                     SavePNGFrame();
                 else
                     SaveTIFfFrame();
@@ -1306,7 +1351,13 @@ namespace BasicGiffer
             if (validData)
             {
                 e.Effect = DragDropEffects.Copy;
-                UpdateInfo($"{filenames.Count().ToString()} files can be loaded");
+
+                if (ModifierKeys.HasFlag(Keys.Control | Keys.Shift))
+                    UpdateInfo($"{filenames.Count().ToString()} files can be inserted");
+                else if (ModifierKeys.HasFlag(Keys.Control))
+                    UpdateInfo($"{filenames.Count().ToString()} files can be appended");
+                else
+                    UpdateInfo($"{filenames.Count().ToString()} files can be loaded");
             }
             else
             {
@@ -1457,7 +1508,7 @@ namespace BasicGiffer
         {
             var info = "";
             if (previewImages.Count > 0)
-                info += $"Frame {tbFrames.Value} of {tbFrames.Maximum} is sized {previewImages[0].Size.Width}x{previewImages[0].Size.Height}px\n" +
+                info += $"Frame {tbFrames.Value} of {tbFrames.Maximum} is sized {previewImages[tbFrames.Value-1].Size.Width}x{previewImages[tbFrames.Value - 1].Size.Height}px\n" +
                     $"Encoding: {pbImage.Image.GetBitsPerPixel()}bpp ({((Bitmap)pbImage.Image).GetColorCount()} colours)\n\n";
             else
                 info += $"Image info will be availabe after you load frames.\n\n";
