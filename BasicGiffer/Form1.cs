@@ -1521,7 +1521,7 @@ namespace BasicGiffer
             // $"©2022 Anton Kerezov, All Rights Reserved.";
 
             InfoForm frm = new InfoForm();
-            frm.urlAdress = "https://www.ankere.co/news/giffit-the-animated-gif-tool-for-architects/";
+            frm.urlAdress = "https://github.com/dilomo/Giffit";
             frm.lblInfo.Text = info;
             frm.ShowDialog();
         }

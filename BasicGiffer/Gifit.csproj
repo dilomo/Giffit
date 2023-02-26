@@ -4,7 +4,7 @@
     <TargetFramework>net5.0-windows</TargetFramework>
     <UseWindowsForms>true</UseWindowsForms>
     <Version>0.3.0</Version>
-    <Copyright>©2022 Anton Kerezov, All Rights Reserved.</Copyright>
+    <Copyright>©2023 Anton Kerezov, All Rights Reserved.</Copyright>
     <Authors>Anton Kerezov</Authors>
     <Company>ANKERE</Company>
     <PackageIcon>MOOSESolver.ico</PackageIcon>
