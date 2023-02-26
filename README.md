@@ -36,7 +36,7 @@ Giffit is a small open source tool that was developed to streamline the process 
 ### Data protection
 - Complete privacy guarantee
 
-## Donate
+## Support the project
 
 As you probably know, I did this in my free time and I provide a free of charge version. If you find it useful and even love it please consider contributing to the project! 
 
