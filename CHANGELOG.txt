@@ -1,12 +1,26 @@
 Giffit changes:
 
+
+v0.3.0
+
+Add: Instant style preview
+Add: Crop animation
+Add: Insert and append frames + keyboard shortcuts and drag actions
+Add: Duplicate frames a specified number of times
+Add: Export single frame only
+Add: Selection range as context menu on the frame bar
+Mod: Loopback and deletions by using selection range
+Mod: Info dialog shows encoder dlls version
+Mod: Support link is to github page instead of own site
+Fix: Show compact status bar info if window is resized to very small dimensions
+
 v0.2.1
 
-Add: Two new colour styles: Windows and Rought colour
+Add: Two new colour styles: Windows and Rough colour
 Mod: Remove sytem rendering encoder 
 Mod: Style applies on load of images. Only high fidelity is showing real input 
 Mod: Fine tune some styles
-Mod: Speed improvements of aplying effects
+Mod: Speed improvements of aplying effects concurrently
 
 v0.2
 Add: Folder drop is supported
@@ -31,16 +45,16 @@ Fix: Repeat now update while typing
 Fix: Do not allow drop when processing
 
 v0.1.2 
-Fix: Support link adress
+Fix: Support link address
 
 v0.1.1 
-Fix: spacebar for play/pause shortcut to be app specific
-Fix: release file lock so loaded images can be deleted while used in app
-Fix: memory leak with double loading data on drag move
+Fix: Spacebar for play/pause shortcut to be app specific
+Fix: Release file lock so loaded images can be deleted while used in app
+Fix: Memory leak with double loading data on drag move
 Mod: Remove context menus for placyback control
 Add: Ctrl+S hotkey for saving 
-Add: double click animation area for import
-Add: new info dialog with support links
+Add: Double click animation area for import
+Add: New info dialog with support links
 
 v0.1 
 Inital release
